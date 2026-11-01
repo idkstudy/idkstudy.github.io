@@ -148,15 +148,15 @@ fetch('tracks.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{const playing
 <script>
 /* ===== خط زمن الدرس: 45 دقيقة، يبدأ بزر ويُحفظ وقت البدء في localStorage ===== */
 const STAGES=[
- {en:'Warm-up',min:5},
- {en:'Activity 1',min:7},
- {en:'Formative Assessment',min:2},
- {en:'Activity 2',min:7},
- {en:'Formative Assessment',min:2},
- {en:'Activity 3',min:7},
- {en:'Formative Assessment',min:2},
- {en:'Final Assessment',min:8},
- {en:'Closure',min:5}
+ {en:'Warm-up',min:4},
+ {en:'Activity 1',min:9},
+ {en:'Formative Assessment',min:3},
+ {en:'Activity 2',min:9},
+ {en:'Formative Assessment',min:3},
+ {en:'Activity 3',min:6},
+ {en:'Formative Assessment',min:3},
+ {en:'Final Assessment',min:5},
+ {en:'Closure',min:3}
 ];
 const TOTAL_S=45*60, KEY='lesson_start_ts';
 const barEl=document.getElementById('lBar'), stepsEl=document.getElementById('lSteps'),
