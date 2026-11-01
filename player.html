@@ -148,13 +148,15 @@ fetch('tracks.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{const playing
 <script>
 /* ===== خط زمن الدرس: 45 دقيقة، يبدأ بزر ويُحفظ وقت البدء في localStorage ===== */
 const STAGES=[
- {en:'Warm-up',ar:'التهيئة',min:5},
- {en:'Activity 1',ar:'النشاط الأول',min:8},
- {en:'Activity 2',ar:'النشاط الثاني',min:8},
- {en:'Activity 3',ar:'النشاط الثالث',min:8},
- {en:'Formative Assessment',ar:'التقويم التكويني',min:6},
- {en:'Final Assessment',ar:'التقويم الختامي',min:6},
- {en:'Closure',ar:'الغلق والتلخيص',min:4}
+ {en:'Warm-up',min:5},
+ {en:'Activity 1',min:7},
+ {en:'Formative Assessment',min:2},
+ {en:'Activity 2',min:7},
+ {en:'Formative Assessment',min:2},
+ {en:'Activity 3',min:7},
+ {en:'Formative Assessment',min:2},
+ {en:'Final Assessment',min:8},
+ {en:'Closure',min:5}
 ];
 const TOTAL_S=45*60, KEY='lesson_start_ts';
 const barEl=document.getElementById('lBar'), stepsEl=document.getElementById('lSteps'),
@@ -162,7 +164,7 @@ const barEl=document.getElementById('lBar'), stepsEl=document.getElementById('lS
       ptrEl=document.getElementById('lPointer'),
       startBtn=document.getElementById('lStart'), endBtn=document.getElementById('lEnd');
 barEl.innerHTML=STAGES.map(s=>`<div class="seg" style="flex-grow:${s.min}"><div class="fillseg" style="width:0%"></div></div>`).join('');
-stepsEl.innerHTML=STAGES.map((s,i)=>`<div class="step" data-i="${i}"><div class="dot">${i+1}</div><div>${s.ar} · <span dir="ltr">${s.en}</span></div><div class="mins">${s.min} د</div></div>`).join('');
+stepsEl.innerHTML=STAGES.map((s,i)=>`<div class="step" data-i="${i}"><div class="dot">${i+1}</div><div dir="ltr" style="text-align:right">${s.en}</div><div class="mins">${s.min} min</div></div>`).join('');
 const bounds=[];{let acc=0;STAGES.forEach(s=>{bounds.push([acc,acc+s.min*60]);acc+=s.min*60;});}
 function fmtClock(ts){const d=new Date(ts);let h=d.getHours();const m=String(d.getMinutes()).padStart(2,'0');const ap=h<12?'صباحًا':'مساءً';h=h%12;if(h===0)h=12;return h+':'+m+' '+ap;}
 function fmtDur(s){s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
@@ -181,7 +183,7 @@ function tick(){
   let cur=STAGES.length-1;
   for(let i=0;i<bounds.length;i++){if(elapsed<bounds[i][1]){cur=i;break;}}
   if(over){stageEl.innerHTML='انتهى الدرس<small>٤٥ دقيقة كاملة — اضغط «إنهاء الدرس» للتصفير</small>';}
-  else{stageEl.innerHTML=STAGES[cur].ar+'<small dir="ltr" style="text-align:right">'+STAGES[cur].en+' · المرحلة '+(cur+1)+' من '+STAGES.length+'</small>';}
+  else{stageEl.innerHTML='<span dir="ltr">'+STAGES[cur].en+'</span><small>Stage '+(cur+1)+' of '+STAGES.length+'</small>';}
   timeEl.innerHTML='بدأ <b>'+fmtClock(startTs)+'</b><br>مرّ <b>'+fmtDur(elapsed)+'</b><br>باقي <b>'+fmtDur(TOTAL_S-elapsed)+'</b>';
   fills.forEach((f,i)=>{const[a,b]=bounds[i];const p=elapsed<=a?0:elapsed>=b?100:(elapsed-a)/(b-a)*100;f.style.width=p+'%';});
   steps.forEach((s,i)=>{s.className='step'+(over||i<cur?' done':i===cur?' now':'');if(over||i<cur)s.querySelector('.dot').textContent='✓';else s.querySelector('.dot').textContent=i+1;});
