@@ -401,39 +401,52 @@
          and they unwrap home. Same elements throughout: while wrapped,
          the words live in a fixed layer above the seal. */
       var morphLayer = document.getElementById("morphLayer");
-      var titleState = { el: null, words: [], inLayer: false, rot: 0, rotAtWrap: 0, anchorScroll: null };
+      var titleState = { el: null, words: [], inLayer: false, rot: 0,
+                         docTop: 0, docCx: 0 };
       function restoreWords() {
         if (!titleState.inLayer || !titleState.el) { titleState.inLayer = false; return; }
-        titleState.words.forEach(function (w) {
+        titleState.el.innerHTML = "";
+        titleState.words.forEach(function (w, i) {
+          gsap.killTweensOf(w.el);
           w.el.removeAttribute("style");
           w.el.className = "w";
           titleState.el.appendChild(w.el);
-          w.qx = gsap.quickTo(w.el, "x", { duration: .3, ease: "power2.out" });
-          w.qy = gsap.quickTo(w.el, "y", { duration: .3, ease: "power2.out" });
-          w.qr = gsap.quickTo(w.el, "rotation", { duration: .3, ease: "power2.out" });
+          if (i < titleState.words.length - 1) titleState.el.appendChild(document.createTextNode(" "));
+          w.qx = gsap.quickTo(w.el, "x", { duration: .18, ease: "power2.out" });
+          w.qy = gsap.quickTo(w.el, "y", { duration: .18, ease: "power2.out" });
+          w.qr = gsap.quickTo(w.el, "rotation", { duration: .18, ease: "power2.out" });
+          w.qs = gsap.quickTo(w.el, "scaleX", { duration: .18, ease: "power2.out" });
         });
         titleState.inLayer = false;
-        titleState.anchorScroll = null;
       }
       function armTitle(el) {
         restoreWords();
         if (!el) return;
+        var cs = window.getComputedStyle(el);
+        morphLayer.style.fontFamily = cs.fontFamily;
+        morphLayer.style.fontSize = cs.fontSize;
+        morphLayer.style.fontWeight = cs.fontWeight;
         var words = el.textContent.trim().split(/\s+/);
         el.innerHTML = words.map(function (w) { return '<span class="w">' + w + "</span>"; }).join(" ");
         el.style.minHeight = el.offsetHeight + "px";
+        var sy = window.scrollY;
         var hr = el.getBoundingClientRect();
         titleState.el = el;
-        titleState.rot = 0; titleState.rotAtWrap = 0; titleState.anchorScroll = null;
+        titleState.rot = 0;
+        titleState.docTop = hr.top + sy;
+        titleState.docCx = hr.left + hr.width / 2;
         var gap = 10, acc = 0;
         var laid = Array.prototype.map.call(el.querySelectorAll(".w"), function (wEl) {
           var r = wEl.getBoundingClientRect();
           var rec = { el: wEl, w: r.width,
-            offX: (r.left + r.width / 2) - (hr.left + hr.width / 2),
-            offY: (r.top + r.height / 2) - (hr.top + hr.height / 2),
+            homeCx: r.left + r.width / 2,
+            homeDocCy: r.top + r.height / 2 + sy,
             baseCx: 0, baseCy: 0, arcC: 0,
-            qx: gsap.quickTo(wEl, "x", { duration: .3, ease: "power2.out" }),
-            qy: gsap.quickTo(wEl, "y", { duration: .3, ease: "power2.out" }),
-            qr: gsap.quickTo(wEl, "rotation", { duration: .3, ease: "power2.out" }) };
+            qx: gsap.quickTo(wEl, "x", { duration: .18, ease: "power2.out" }),
+            qy: gsap.quickTo(wEl, "y", { duration: .18, ease: "power2.out" }),
+            qr: gsap.quickTo(wEl, "rotation", { duration: .18, ease: "power2.out" }),
+            qsx: gsap.quickTo(wEl, "scaleX", { duration: .18, ease: "power2.out" }),
+            qsy: gsap.quickTo(wEl, "scaleY", { duration: .18, ease: "power2.out" }) };
           rec.arcC = acc + r.width / 2;
           acc += r.width + gap;
           return rec;
@@ -444,7 +457,8 @@
       }
       function engageLayer() {
         titleState.words.forEach(function (w) {
-          gsap.set(w.el, { x: 0, y: 0, rotation: 0 });
+          gsap.killTweensOf(w.el);
+          gsap.set(w.el, { x: 0, y: 0, rotation: 0, scaleX: 1, scaleY: 1 });
           var r = w.el.getBoundingClientRect();
           morphLayer.appendChild(w.el);
           w.el.style.left = r.left + "px";
@@ -460,29 +474,35 @@
         if (!el || el.offsetParent === null) return;
         var now = performance.now();
         var dt = Math.min(80, now - lastTickT) / 1000; lastTickT = now;
-        var sr = sealStage.getBoundingClientRect();
-        var hr = el.getBoundingClientRect();
-        var pen = sr.bottom - hr.top;
-        var m = gsap.utils.clamp(0, 1, pen / 110);
+        var sy = window.scrollY;
+        // progress is a pure function of scrollY: the title's document top
+        // against the seal's docked bottom (8px + docked size) — no rect
+        // feedback, so the return home is guaranteed at the top.
+        var dockedBottom = 8 + Math.min(window.innerWidth * 0.8, 336) * 0.65;
+        var m = gsap.utils.clamp(0, 1, (sy - (titleState.docTop - dockedBottom)) / 110);
         if (m > 0.02 && !titleState.inLayer) engageLayer();
-        if (m >= 1) titleState.rot += dt * 10.6;   // the ring's own pace: continuous, like the inscription
+        if (m >= 1) titleState.rot += dt * 10.6;   // continuous, the ring's own pace
         if (!titleState.inLayer) return;
         if (m <= 0.001) { restoreWords(); return; }
+        var sr = sealStage.getBoundingClientRect();
         var ease = m * m * (3 - 2 * m);
         var sealCx = sr.left + sr.width / 2, sealCy = sr.top + sr.height / 2;
         var R = sr.width * 0.455;
         var Rm = R * (1 + (1 - ease) * 2.4);
-        var hCx = hr.left + hr.width / 2, hCy = hr.top + hr.height / 2;
-        var midDeg = 90 + titleState.rot * ease;
+        var scaleNow = 1 - 0.34 * ease;
+        var rotN = ((titleState.rot % 360) + 360) % 360; if (rotN > 180) rotN -= 360;
+        var midDeg = 90 + rotN * ease;
         titleState.words.forEach(function (w) {
-          var phiDeg = midDeg + (w.arcC / Rm) * (180 / Math.PI);
+          var offDeg = (w.arcC * scaleNow / Rm) * (180 / Math.PI);
+          var phiDeg = midDeg + offDeg;
           var phi = phiDeg * Math.PI / 180;
           var tx = sealCx + Rm * Math.cos(phi), ty = sealCy + Rm * Math.sin(phi);
-          var hx = hCx + w.offX, hy = hCy + w.offY;
+          var hx = w.homeCx, hy = w.homeDocCy - sy;
           var fx = hx + (tx - hx) * ease, fy = hy + (ty - hy) * ease;
           w.qx(fx - w.baseCx);
           w.qy(fy - w.baseCy);
-          w.qr(-(phiDeg - 90) * ease);
+          w.qr(-offDeg * ease * 0.55);
+          w.qsx(scaleNow); w.qsy(scaleNow);
         });
       }
       gsap.ticker.add(titleTick);
