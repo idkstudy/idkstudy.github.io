@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>IDKStudy</title>
 <meta name="description" content="IDKStudy">
 <style>
@@ -14,277 +14,186 @@
   }
   :root {
     --bg1: #2b1607; --bg0: #170b02;
-    --ink: #f6ead9; --tan: #d9c3a5; --mute: #a98a63;
+    --ink: #f6ead9; --mute: #a98a63;
     --orange: #f07d1e; --line: rgba(240,125,30,.28);
-    --card: rgba(59,32,12,.42);
-    --mx: 50vw; --my: 240px; --mr: 0px;
+    --paper: #f4ead6; --paper2: #e9dcbf; --dark: #2b1607; --stamp: #c75b08;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html { color-scheme: dark; overflow-x: clip; }
   body {
     font-family: "AppFont", Georgia, serif;
-    min-height: 100vh; color: var(--ink); position: relative;
+    min-height: 100dvh; color: var(--ink); position: relative;
     background:
-      radial-gradient(1100px 550px at 85% -10%, rgba(240,125,30,.10), transparent 60%),
-      linear-gradient(160deg, var(--bg1) 0%, var(--bg0) 74%) fixed;
-    overflow-x: clip;
+      radial-gradient(900px 480px at 85% -10%, rgba(240,125,30,.10), transparent 60%),
+      linear-gradient(165deg, var(--bg1) 0%, var(--bg0) 78%) fixed;
+    overflow-x: clip; touch-action: manipulation;
   }
   body::after {
-    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 60; opacity: .05;
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: .05;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
   }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 26px 18px calc(26px + env(safe-area-inset-bottom)); }
 
-  .layer { position: relative; z-index: 1; }
-  .layer.base { filter: brightness(.62) saturate(.85); }
-  html.haunted .layer.base { filter: brightness(.27) saturate(.78); }
-  .layer.lit {
-    position: absolute; top: 0; left: 0; right: 0; z-index: 2; pointer-events: none;
-    -webkit-mask-image: radial-gradient(circle var(--mr) at var(--mx) var(--my), #000 42%, rgba(0,0,0,.55) 68%, transparent 100%);
-            mask-image: radial-gradient(circle var(--mr) at var(--mx) var(--my), #000 42%, rgba(0,0,0,.55) 68%, transparent 100%);
-  }
-  .torch-halo {
-    position: absolute; z-index: 1; pointer-events: none; width: 560px; height: 560px; border-radius: 50%;
-    left: 0; top: 0; transform: translate(-50%,-50%);
-    background: radial-gradient(circle, rgba(240,125,30,.13) 0%, rgba(240,125,30,.05) 42%, transparent 68%);
-    opacity: 0; transition: opacity 1.2s ease;
-  }
-  html.haunted .torch-halo { opacity: 1; }
-
-  .wrap { max-width: 620px; margin: 0 auto; padding: 40px 20px 30px; }
-
-  .seal-zone { display: flex; flex-direction: column; align-items: center; padding: 12px 0 4px; }
-  .seal { position: relative; width: 300px; height: 300px; max-width: 78vw; aspect-ratio: 1; }
+  header { display: flex; flex-direction: column; align-items: center; padding: 6px 0 2px; }
+  .seal { position: relative; width: 132px; height: 132px; }
   .seal svg.ring { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 46s linear infinite; direction: ltr; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .seal svg.ring text {
     font-family: "AppFont", Georgia, serif; font-size: 26.5px; font-weight: 800;
     letter-spacing: 7px; fill: #e8d3ae; direction: ltr; unicode-bidi: isolate;
   }
+  .seal .halo {
+    position: absolute; inset: 17%; border-radius: 50%;
+    border: 1px solid var(--line);
+    background: radial-gradient(circle at 50% 38%, rgba(240,125,30,.16), rgba(23,11,2,.12) 70%);
+  }
   .seal .core {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    font-size: 168px; font-weight: 900; line-height: 1; color: var(--ink);
-    text-shadow: 0 14px 44px rgba(240,125,30,.35);
+    font-size: 72px; font-weight: 900; line-height: 1; color: var(--ink);
+    text-shadow: 0 10px 30px rgba(240,125,30,.35);
   }
-  .seal .halo {
-    position: absolute; inset: 16%; border-radius: 50%;
-    border: 1px solid var(--line);
-    background: radial-gradient(circle at 50% 38%, rgba(240,125,30,.14), rgba(23,11,2,.1) 68%);
-    box-shadow: inset 0 1px 0 rgba(246,234,217,.07), 0 24px 60px rgba(0,0,0,.35);
-  }
-  h1.word { margin-top: 20px; font-size: 42px; font-weight: 900; letter-spacing: 1px; line-height: 1.25; text-align: center; }
-  .rule { width: 54px; height: 1px; background: rgba(240,125,30,.55); margin: 18px auto 0; }
+  h1.word { margin-top: 12px; font-size: 30px; font-weight: 900; letter-spacing: 1px; line-height: 1.3; }
+  .rule { width: 46px; height: 1px; background: rgba(240,125,30,.55); margin: 12px auto 0; }
 
   .sec-label {
-    display: flex; align-items: center; gap: 12px; margin: 40px 2px 16px;
+    display: flex; align-items: center; gap: 12px; margin: 30px 2px 18px;
     color: var(--orange); font-size: 12px; font-weight: 700; letter-spacing: 4px;
   }
   .sec-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 
-  .work {
-    position: relative; overflow: hidden; cursor: pointer; -webkit-tap-highlight-color: transparent;
-    background: var(--card); border: 1px solid var(--line); border-radius: 24px;
-    padding: 20px; margin-bottom: 14px;
-    box-shadow: inset 0 1px 0 rgba(246,234,217,.06), 0 12px 30px rgba(0,0,0,.28);
+  .paper {
+    position: relative; cursor: pointer; user-select: none;
+    background: linear-gradient(168deg, var(--paper) 0%, var(--paper2) 100%);
+    color: var(--dark); border-radius: 8px 14px 12px 10px;
+    padding: 18px 18px 20px; margin-bottom: 20px;
+    box-shadow: 0 18px 34px rgba(0,0,0,.45), 0 3px 0 rgba(0,0,0,.25);
+    transition: transform .45s cubic-bezier(.2,.9,.25,1.2), box-shadow .45s ease;
   }
-  .work .head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; position: relative; z-index: 2; }
-  .work h2 { font-size: 20px; font-weight: 800; }
+  .paper:nth-of-type(odd) { transform: rotate(-1.1deg); }
+  .paper:nth-of-type(even) { transform: rotate(.9deg); }
+  .paper.served {
+    transform: rotate(0deg) translateY(8px) scale(1.015) !important;
+    box-shadow: 0 30px 50px rgba(0,0,0,.55), 0 4px 0 rgba(0,0,0,.25);
+  }
+  .paper .head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .paper h2 { font-size: 19px; font-weight: 800; line-height: 1.45; }
   .chip {
     margin-inline-start: auto; flex: 0 0 auto;
-    font-size: 10.5px; font-weight: 700; letter-spacing: 2px; color: #ffb066;
-    border: 1px solid rgba(240,125,30,.5); border-radius: 999px; padding: 5px 11px;
-    background: rgba(23,11,2,.35); white-space: nowrap;
+    font-size: 10.5px; font-weight: 800; letter-spacing: 1.5px; color: var(--dark);
+    border: 1.5px solid rgba(43,22,7,.55); border-radius: 999px; padding: 4px 10px; white-space: nowrap;
   }
-  .chip.live { color: #170b02; background: var(--orange); border-color: var(--orange); }
-
-  .art { height: 128px; border-radius: 16px; position: relative; overflow: hidden;
-    background: linear-gradient(150deg, rgba(23,11,2,.65), rgba(43,22,7,.35));
-    border: 1px solid rgba(240,125,30,.16);
+  .chip.live { background: var(--orange); border-color: var(--orange); color: #170b02; }
+  .art { height: 104px; border-radius: 8px; position: relative; overflow: hidden;
+    background: linear-gradient(150deg, rgba(43,22,7,.14), rgba(43,22,7,.05));
+    border: 1px solid rgba(43,22,7,.22);
     display: flex; align-items: center; justify-content: center;
   }
-  .pages i { position: absolute; width: 74px; height: 96px; border-radius: 6px 12px 12px 6px;
-    border: 1px solid rgba(240,125,30,.4); background: linear-gradient(160deg, #3a1e0b, #241105); }
-  .pages i:nth-child(1) { transform: rotate(-9deg) translate(-16px, 4px); opacity: .55; }
-  .pages i:nth-child(2) { transform: rotate(7deg) translate(16px, 2px); opacity: .8; }
+  .pages i { position: absolute; width: 58px; height: 76px; border-radius: 5px 9px 9px 5px;
+    border: 1.5px solid rgba(43,22,7,.5); background: linear-gradient(160deg, #fdf6e3, #e9dcbf); }
+  .pages i:nth-child(1) { transform: rotate(-9deg) translate(-13px, 3px); opacity: .6; }
+  .pages i:nth-child(2) { transform: rotate(7deg) translate(13px, 2px); opacity: .85; }
   .pages i:nth-child(3) { transform: none; display: flex; align-items: center; justify-content: center;
-    font-size: 44px; font-weight: 900; color: var(--ink); font-style: normal; }
-  .lines { flex-direction: column; gap: 11px; padding: 0 34px; align-items: stretch; justify-content: center; }
-  .lines b { display: block; height: 7px; border-radius: 99px; background: rgba(217,195,165,.35); }
-  .lines b.o { background: var(--orange); box-shadow: 0 4px 16px rgba(240,125,30,.4); }
+    font-size: 34px; font-weight: 900; color: var(--dark); font-style: normal; }
+  .lines { flex-direction: column; gap: 9px; padding: 0 30px; align-items: stretch; }
+  .lines b { display: block; height: 6px; border-radius: 99px; background: rgba(43,22,7,.35); }
+  .lines b.o { background: var(--stamp); }
   .lines b:nth-child(1) { width: 62%; } .lines b:nth-child(2) { width: 88%; }
   .lines b:nth-child(3) { width: 74%; } .lines b:nth-child(4) { width: 46%; }
-  .phone { width: 74px; height: 112px; border-radius: 14px; border: 1.5px solid rgba(240,125,30,.55);
-    background: linear-gradient(165deg, #2b1607, #170b02); padding: 9px 8px; box-shadow: 0 14px 30px rgba(0,0,0,.4); }
-  .phone u { display: block; text-decoration: none; height: 8px; border-radius: 99px; background: rgba(246,234,217,.28); margin-bottom: 7px; }
+  .phone { width: 58px; height: 88px; border-radius: 11px; border: 1.5px solid rgba(43,22,7,.6);
+    background: linear-gradient(165deg, #3a1e0b, #241105); padding: 8px 7px; box-shadow: 0 10px 22px rgba(43,22,7,.35); }
+  .phone u { display: block; text-decoration: none; height: 7px; border-radius: 99px; background: rgba(246,234,217,.3); margin-bottom: 6px; }
   .phone u.o { background: var(--orange); width: 55%; }
-  .phone u.s { width: 70%; } .phone u.l { height: 22px; border-radius: 7px; background: rgba(240,125,30,.28); margin-top: 2px; }
+  .phone u.s { width: 70%; } .phone u.l { height: 18px; border-radius: 6px; background: rgba(240,125,30,.3); margin-top: 2px; }
 
   .stamp {
-    position: absolute; z-index: 3; inset-inline-end: 16px; bottom: 16px;
-    width: 86px; height: 86px; opacity: 0; transform: rotate(-10deg) scale(2.4); pointer-events: none;
+    position: absolute; z-index: 3; inset-inline-end: 14px; bottom: 12px;
+    width: 92px; height: 92px; pointer-events: none;
+    opacity: 0; transform: rotate(-14deg) scale(2.3);
+  }
+  .paper.served .stamp { animation: slam .38s cubic-bezier(.2,.7,.3,1) forwards; }
+  @keyframes slam {
+    0% { opacity: 0; transform: rotate(-26deg) scale(2.3); }
+    70% { opacity: 1; transform: rotate(-11deg) scale(.96); }
+    100% { opacity: .92; transform: rotate(-12deg) scale(1); }
   }
   .stamp svg { width: 100%; height: 100%; }
-  .stamp .ring-txt {
-    font-family: "AppFont", Georgia, serif; font-size: 13.5px; font-weight: 800; letter-spacing: 2.5px;
-    fill: var(--orange); direction: ltr; unicode-bidi: isolate;
-  }
-  .stamp .q { font-family: "AppFont", Georgia, serif; font-size: 40px; font-weight: 900; fill: var(--orange); }
+  .stamp .q { font-family: "AppFont", Georgia, serif; font-size: 38px; font-weight: 900; fill: var(--stamp); }
 
-  footer { text-align: center; margin-top: 34px; font-size: 12px; letter-spacing: 3px; color: var(--mute); font-weight: 700; }
+  .dl {
+    display: none; margin-top: 14px; text-decoration: none;
+    background: var(--orange); color: #170b02; font-weight: 800; font-size: 15px;
+    border-radius: 12px; padding: 13px 18px; text-align: center;
+    box-shadow: 0 8px 20px rgba(199,91,8,.35);
+  }
+  .paper.has-file .dl { display: block; }
+
+  footer { text-align: center; margin-top: 30px; font-size: 12px; letter-spacing: 3px; color: var(--mute); font-weight: 700; }
   footer b { color: var(--orange); }
 
   @media (prefers-reduced-motion: reduce) {
-    .layer.base, html.haunted .layer.base { filter: brightness(.88) saturate(.9) !important; }
     *, *::before, *::after { animation-duration: .001s !important; transition-duration: .001s !important; }
   }
 </style>
 </head>
 <body>
-  <div class="torch-halo" id="torchHalo"></div>
+  <div class="wrap">
+    <header>
+      <div class="seal">
+        <div class="halo"></div>
+        <svg class="ring" viewBox="0 0 300 300" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <defs><path id="circ" d="M150,150 m-118,0 a118,118 0 1,1 236,0 a118,118 0 1,1 -236,0"/></defs>
+          <text><textPath href="#circ" xlink:href="#circ" textLength="738" lengthAdjust="spacingAndGlyphs">¿IDKStudy?&#160;&#160;¿IDKStudy?&#160;&#160;¿IDKStudy?</textPath></text>
+        </svg>
+        <div class="core">؟</div>
+      </div>
+      <h1 class="word">IDKStudy</h1>
+      <div class="rule"></div>
+    </header>
 
-  <main class="layer base" id="baseLayer">
-    <div class="wrap">
-      <section class="seal-zone">
-        <div class="seal look-seal">
-          <div class="halo"></div>
-          <svg class="ring" viewBox="0 0 300 300" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <defs><path id="circ" d="M150,150 m-118,0 a118,118 0 1,1 236,0 a118,118 0 1,1 -236,0"/></defs>
-            <text><textPath href="#circ" xlink:href="#circ" textLength="738" lengthAdjust="spacingAndGlyphs">¿IDKStudy?&#160;&#160;¿IDKStudy?&#160;&#160;¿IDKStudy?</textPath></text>
-          </svg>
-          <div class="core">؟</div>
-        </div>
-        <h1 class="word">IDKStudy</h1>
-        <div class="rule"></div>
-      </section>
+    <div class="sec-label">الأعمال</div>
 
-      <div class="sec-label">الأعمال</div>
+    <article class="paper" data-paper>
+      <div class="head"><h2>كتب وخطط دراسية</h2><span class="chip">قريبًا</span></div>
+      <div class="art pages"><i></i><i></i><i>؟</i></div>
+      <div class="stamp"><svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#c75b08" stroke-width="3"/>
+        <circle cx="50" cy="50" r="34" fill="none" stroke="#c75b08" stroke-width="1.4" opacity=".7"/>
+        <text class="q" x="50" y="65" text-anchor="middle">؟</text>
+      </svg></div>
+    </article>
 
-      <article class="work" data-work>
-        <div class="head"><h2>كتب وخطط دراسية</h2><span class="chip">قريبًا</span></div>
-        <div class="art pages"><i></i><i></i><i>؟</i></div>
-        <div class="stamp" data-stamp>
-          <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="46" fill="none" stroke="#f07d1e" stroke-width="2.5"/>
-            <circle cx="50" cy="50" r="35" fill="none" stroke="#f07d1e" stroke-width="1.2" opacity=".7"/>
-            <text class="q" x="50" y="66" text-anchor="middle">؟</text>
-          </svg>
-        </div>
-      </article>
+    <article class="paper" data-paper>
+      <div class="head"><h2>ملخصات ومواضيع جاهزة</h2><span class="chip">قريبًا</span></div>
+      <div class="art lines"><b></b><b class="o"></b><b></b><b></b></div>
+      <div class="stamp"><svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#c75b08" stroke-width="3"/>
+        <circle cx="50" cy="50" r="34" fill="none" stroke="#c75b08" stroke-width="1.4" opacity=".7"/>
+        <text class="q" x="50" y="65" text-anchor="middle">؟</text>
+      </svg></div>
+    </article>
 
-      <article class="work" data-work>
-        <div class="head"><h2>ملخصات ومواضيع جاهزة</h2><span class="chip">قريبًا</span></div>
-        <div class="art lines"><b></b><b class="o"></b><b></b><b></b></div>
-        <div class="stamp" data-stamp>
-          <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="46" fill="none" stroke="#f07d1e" stroke-width="2.5"/>
-            <circle cx="50" cy="50" r="35" fill="none" stroke="#f07d1e" stroke-width="1.2" opacity=".7"/>
-            <text class="q" x="50" y="66" text-anchor="middle">؟</text>
-          </svg>
-        </div>
-      </article>
+    <article class="paper" data-paper>
+      <div class="head"><h2>تطبيق وقت المعهد</h2><span class="chip live">متوفر</span></div>
+      <div class="art"><div class="phone"><u class="o"></u><u></u><u class="s"></u><u></u><u class="l"></u></div></div>
+      <div class="stamp"><svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#c75b08" stroke-width="3"/>
+        <circle cx="50" cy="50" r="34" fill="none" stroke="#c75b08" stroke-width="1.4" opacity=".7"/>
+        <text class="q" x="50" y="65" text-anchor="middle">؟</text>
+      </svg></div>
+    </article>
 
-      <article class="work" data-work>
-        <div class="head"><h2>تطبيق وقت المعهد</h2><span class="chip live">متوفر</span></div>
-        <div class="art"><div class="phone"><u class="o"></u><u></u><u class="s"></u><u></u><u class="l"></u></div></div>
-        <div class="stamp" data-stamp>
-          <svg viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="46" fill="none" stroke="#f07d1e" stroke-width="2.5"/>
-            <circle cx="50" cy="50" r="35" fill="none" stroke="#f07d1e" stroke-width="1.2" opacity=".7"/>
-            <text class="q" x="50" y="66" text-anchor="middle">؟</text>
-          </svg>
-        </div>
-      </article>
+    <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
+  </div>
 
-      <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
-    </div>
-  </main>
-
-  <div class="layer lit" id="litLayer" aria-hidden="true"></div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script>
-    (function () {
-      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      var base = document.getElementById("baseLayer");
-      var lit = document.getElementById("litLayer");
-      var halo = document.getElementById("torchHalo");
-      lit.innerHTML = base.innerHTML;
-      lit.querySelectorAll("[id]").forEach(function (n) { n.removeAttribute("id"); });
-
-      if (reduced || !window.gsap) { return; }
-      document.documentElement.classList.add("haunted");
-
-      var root = document.documentElement;
-      var tx = window.innerWidth / 2, ty = 250, cx = tx, cy = ty, radius = 0;
-      var userDrove = false, idleTimer = null, wander = null;
-
-      function place() {
-        root.style.setProperty("--mx", cx + "px");
-        root.style.setProperty("--my", cy + "px");
-        root.style.setProperty("--mr", radius + "px");
-        halo.style.transform = "translate(" + (cx - 280) + "px," + (cy - 280) + "px)";
-      }
-      gsap.ticker.add(function () {
-        cx += (tx - cx) * 0.085;
-        cy += (ty - cy) * 0.085;
-        place();
+    document.querySelectorAll("[data-paper]").forEach(function (p) {
+      p.addEventListener("click", function () {
+        if (!p.classList.contains("served")) {
+          p.classList.add("served");
+          if (navigator.vibrate) navigator.vibrate(25);
+        }
       });
-      gsap.to({ r: 0 }, {
-        r: 215, duration: 1.6, ease: "power2.out", delay: .3,
-        onUpdate: function () { radius = this.targets()[0].r; }
-      });
-
-      function wanderTo() {
-        if (userDrove) return;
-        var x = 60 + Math.random() * (window.innerWidth - 120);
-        var y = 120 + Math.random() * Math.min(document.body.scrollHeight - 160, 1400);
-        wander = gsap.to({ px: tx, py: ty }, {
-          px: x, py: y, duration: 3.4, ease: "sine.inOut",
-          onUpdate: function () { var t = this.targets()[0]; tx = t.px; ty = t.py; },
-          onComplete: wanderTo
-        });
-      }
-      var startWander = gsap.delayedCall(1.2, wanderTo);
-
-      function drive(x, yDoc) {
-        userDrove = true;
-        if (startWander) startWander.kill();
-        if (wander) wander.kill();
-        tx = x; ty = yDoc;
-        if (idleTimer) idleTimer.kill();
-        idleTimer = gsap.delayedCall(7, function () { userDrove = false; wanderTo(); });
-      }
-      window.addEventListener("pointermove", function (e) { drive(e.clientX, e.clientY + window.scrollY); }, { passive: true });
-      window.addEventListener("pointerdown", function (e) { drive(e.clientX, e.clientY + window.scrollY); }, { passive: true });
-      window.addEventListener("touchmove", function (e) {
-        var t = e.touches[0]; if (t) drive(t.clientX, t.clientY + window.scrollY);
-      }, { passive: true });
-
-      gsap.utils.toArray(".look-seal").forEach(function (s) {
-        gsap.to(s.querySelector(".core"), {
-          scale: 1.035, duration: 2.6, yoyo: true, repeat: -1, ease: "sine.inOut",
-          textShadow: "0 14px 60px rgba(240,125,30,.55)"
-        });
-      });
-
-      document.querySelectorAll("[data-work]").forEach(function (card, idx) {
-        card.addEventListener("click", function () {
-          var litCards = lit.querySelectorAll("[data-work]");
-          [card, litCards[idx]].forEach(function (c) {
-            if (!c) return;
-            var st = c.querySelector("[data-stamp]");
-            if (c.dataset.stamped) {
-              gsap.to(st, { opacity: 0, scale: 2.4, duration: .3, ease: "power2.in" });
-              delete c.dataset.stamped;
-            } else {
-              c.dataset.stamped = "1";
-              gsap.fromTo(st, { opacity: 0, scale: 2.6, rotate: -22 },
-                { opacity: 1, scale: 1, rotate: -10, duration: .38, ease: "power4.in" });
-              gsap.fromTo(c, { y: 0 }, { y: 2.5, duration: .05, delay: .36, yoyo: true, repeat: 1, ease: "power1.inOut" });
-            }
-          });
-        });
-      });
-    })();
+    });
   </script>
 </body>
 </html>
