@@ -72,16 +72,8 @@
     background: radial-gradient(circle at 50% 36%, rgba(240,125,30,.42), rgba(23,11,2,.5) 74%);
   }
   .disc.lit .q { text-shadow: 0 12px 44px rgba(240,125,30,.95), 0 0 26px rgba(255,176,102,.8); }
-  #titleRing {
-    position: absolute; z-index: 4; left: 50%; top: 50%; width: 142%; aspect-ratio: 1;
-    margin-left: -71%; margin-top: -71%; opacity: 0; pointer-events: none; direction: ltr;
-  }
-  #ringRot { position: absolute; inset: 0; will-change: transform; }
-  #ringRot .chip {
-    position: absolute; left: 50%; top: 50%; white-space: nowrap;
-    font-size: 29px; font-weight: 800; color: #e8d3ae; line-height: 1;
-    text-shadow: 0 2px 14px rgba(23,11,2,.8);
-  }
+  #morphLayer { position: fixed; inset: 0; z-index: 31; pointer-events: none; }
+  #morphLayer .w { position: fixed; margin: 0; white-space: nowrap; }
   h1 .w { display: inline-block; will-change: transform; }
   .pulse {
     position: absolute; z-index: 2; left: 50%; top: 50%; width: 50%; height: 50%;
@@ -184,9 +176,11 @@
       <svg class="ring" id="ringFront" viewBox="0 0 400 400"><g id="textGF">
         <defs><path id="circF" d="M200,200 m-112,0 a112,112 0 1,1 224,0 a112,112 0 1,1 -224,0"/></defs>
         <text class="insc"><textPath href="#circF" textLength="700" lengthAdjust="spacingAndGlyphs">¿IDKStudy?&#160;&#160;¿IDKStudy?&#160;&#160;¿IDKStudy?</textPath></text></g></svg>
-      <div id="titleRing"><div id="ringRot"></div></div>
+
     </div>
   </div>
+
+  <div id="morphLayer"></div>
 
   <!-- main view -->
   <main class="wrap" id="mainView">
@@ -400,75 +394,91 @@
       }
       gsap.ticker.add(partTick);
 
-      /* THE TITLE BENDS, THEN ORBITS: as the active page title nears the seal
-         its words arc toward it; on touch it becomes a rotating ring around
-         the seal and stays there for the rest of the scroll. */
-      var titleState = { el: null, words: [], ringOn: false };
-      var ringTween = gsap.to("#ringRot", { rotation: 360, duration: 38, repeat: -1, ease: "none", paused: true });
-      var ringO = gsap.quickTo("#titleRing", "opacity", { duration: .45, ease: "power2.out" });
-      var lastRingTitle = "";
-      function setRingText(t) {
-        lastRingTitle = t;
-        var rot = document.getElementById("ringRot");
-        var ring = document.getElementById("titleRing");
-        var words = t.trim().split(/\s+/);
-        var per = words.length + 1;                              // + the ؟ separator chip
-        var reps = Math.max(2, Math.round(10 / per));
-        var seq = [];
-        for (var r2 = 0; r2 < reps; r2++) { words.forEach(function (w) { seq.push(w); }); seq.push("؟"); }
-        var R = ring.offsetWidth * 0.405;
-        rot.innerHTML = "";
-        seq.forEach(function (w, i) {
-          var chip = document.createElement("span");
-          chip.className = "chip";
-          chip.textContent = w;
-          var ang = i * 360 / seq.length;
-          chip.style.transform = "translate(-50%,-50%) rotate(" + ang + "deg) translateY(" + (-R) + "px)";
-          rot.appendChild(chip);
+      /* THE TITLE ITSELF WRAPS THE SEAL (Omar's design):
+         the title's own words bend — ends first — as the seal nears;
+         on touch they complete the wrap ON the seal's rim, stay glued
+         to it, and orbit it driven by the scroll itself. Scroll back
+         and they unwrap home. Same elements throughout: while wrapped,
+         the words live in a fixed layer above the seal. */
+      var morphLayer = document.getElementById("morphLayer");
+      var titleState = { el: null, words: [], inLayer: false, rot: 0, rotAtWrap: 0, anchorScroll: null };
+      function restoreWords() {
+        if (!titleState.inLayer || !titleState.el) { titleState.inLayer = false; return; }
+        titleState.words.forEach(function (w) {
+          w.el.removeAttribute("style");
+          w.el.className = "w";
+          titleState.el.appendChild(w.el);
+          w.qx = gsap.quickTo(w.el, "x", { duration: .3, ease: "power2.out" });
+          w.qy = gsap.quickTo(w.el, "y", { duration: .3, ease: "power2.out" });
+          w.qr = gsap.quickTo(w.el, "rotation", { duration: .3, ease: "power2.out" });
         });
+        titleState.inLayer = false;
+        titleState.anchorScroll = null;
       }
-      function armTitle(el, ringText) {
+      function armTitle(el) {
+        restoreWords();
         if (!el) return;
         var words = el.textContent.trim().split(/\s+/);
         el.innerHTML = words.map(function (w) { return '<span class="w">' + w + "</span>"; }).join(" ");
+        el.style.minHeight = el.offsetHeight + "px";
+        var hr = el.getBoundingClientRect();
         titleState.el = el;
-        titleState.words = Array.prototype.map.call(el.querySelectorAll(".w"), function (wEl, i) {
-          var n = words.length;
-          var t = n === 1 ? 0 : (i - (n - 1) / 2) / ((n - 1) / 2);
-          return { t: t,
-            x: gsap.quickTo(wEl, "x", { duration: .3, ease: "power2.out" }),
-            y: gsap.quickTo(wEl, "y", { duration: .3, ease: "power2.out" }),
-            r: gsap.quickTo(wEl, "rotation", { duration: .3, ease: "power2.out" }) };
+        titleState.rot = 0; titleState.rotAtWrap = 0; titleState.anchorScroll = null;
+        titleState.words = Array.prototype.map.call(el.querySelectorAll(".w"), function (wEl) {
+          var r = wEl.getBoundingClientRect();
+          return { el: wEl,
+            offX: (r.left + r.width / 2) - (hr.left + hr.width / 2),
+            offY: (r.top + r.height / 2) - (hr.top + hr.height / 2),
+            baseCx: 0, baseCy: 0,
+            qx: gsap.quickTo(wEl, "x", { duration: .3, ease: "power2.out" }),
+            qy: gsap.quickTo(wEl, "y", { duration: .3, ease: "power2.out" }),
+            qr: gsap.quickTo(wEl, "rotation", { duration: .3, ease: "power2.out" }) };
         });
-        titleState.ringOn = false;
-        gsap.set(el, { opacity: 1 });
-        ringO(0); ringTween.pause();
-        setRingText(ringText);
+      }
+      function engageLayer() {
+        titleState.words.forEach(function (w) {
+          gsap.set(w.el, { x: 0, y: 0, rotation: 0 });
+          var r = w.el.getBoundingClientRect();
+          morphLayer.appendChild(w.el);
+          w.el.style.left = r.left + "px";
+          w.el.style.top = r.top + "px";
+          w.baseCx = r.left + r.width / 2;
+          w.baseCy = r.top + r.height / 2;
+        });
+        titleState.inLayer = true;
       }
       function titleTick() {
         var el = titleState.el;
         if (!el || el.offsetParent === null) return;
         var sr = sealStage.getBoundingClientRect();
-        var tr = el.getBoundingClientRect();
-        var dist = tr.top - sr.bottom;               // title below the seal: positive
-        if (!titleState.ringOn && dist <= 6) {
-          titleState.ringOn = true;
-          gsap.to(el, { opacity: 0, duration: .35, ease: "power2.out" });
-          ringO(1); ringTween.play();
-          if (navigator.vibrate) navigator.vibrate(10);
-        } else if (titleState.ringOn && dist >= 46) {
-          titleState.ringOn = false;
-          gsap.to(el, { opacity: 1, duration: .35, ease: "power2.out" });
-          ringO(0); ringTween.pause();
+        var hr = el.getBoundingClientRect();
+        var pen = sr.bottom - hr.top;
+        var m = gsap.utils.clamp(0, 1, pen / 110);
+        if (m > 0.02 && !titleState.inLayer) engageLayer();
+        if (m >= 1) {
+          if (titleState.anchorScroll === null) { titleState.anchorScroll = window.scrollY; titleState.rotAtWrap = titleState.rot; }
+          titleState.rot = titleState.rotAtWrap + (window.scrollY - titleState.anchorScroll) * 0.18;
+        } else {
+          titleState.anchorScroll = null;
+          titleState.rot = titleState.rotAtWrap;
         }
-        if (!titleState.ringOn) {
-          var bend = gsap.utils.clamp(0, 1, (160 - dist) / 160);
-          titleState.words.forEach(function (w) {
-            w.x(w.t * 12 * bend);
-            w.y(-(1 - w.t * w.t) * 13 * bend);
-            w.r(w.t * -16 * bend);
-          });
-        }
+        if (!titleState.inLayer) return;
+        if (m <= 0.001) { restoreWords(); return; }
+        var ease = m * m * (3 - 2 * m);
+        var sealCx = sr.left + sr.width / 2, sealCy = sr.top + sr.height / 2;
+        var R = sr.width / 2 + 10;
+        var Rm = R * (1 + (1 - ease) * 2.4);
+        var hCx = hr.left + hr.width / 2, hCy = hr.top + hr.height / 2;
+        titleState.words.forEach(function (w) {
+          var phiDeg = 90 - (w.offX / Rm) * (180 / Math.PI) + titleState.rot * ease;
+          var phi = phiDeg * Math.PI / 180;
+          var tx = sealCx + Rm * Math.cos(phi), ty = sealCy + Rm * Math.sin(phi);
+          var hx = hCx + w.offX, hy = hCy + w.offY;
+          var fx = hx + (tx - hx) * ease, fy = hy + (ty - hy) * ease;
+          w.qx(fx - w.baseCx);
+          w.qy(fy - w.baseCy);
+          w.qr(-(phiDeg - 90) * ease);
+        });
       }
       gsap.ticker.add(titleTick);
       window.addEventListener("resize", function () { gsap.delayedCall(.3, measureCards); });
