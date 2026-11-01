@@ -71,6 +71,24 @@ audio{width:100%;height:44px;margin-bottom:8px}
 .lbtn.start{background:linear-gradient(180deg,var(--orange2),var(--orange));color:#2b1607;box-shadow:0 6px 18px rgba(240,125,30,.35)}
 .lbtn.end{background:transparent;color:var(--cream70);border:1px solid var(--line)}
 .lbtn:active{transform:scale(.97)}
+/* ===== ورقة الخطوات — أثناء الدرس ===== */
+.sheetbtn{width:100%;padding:15px;border-radius:18px;border:1.5px solid var(--orange);background:rgba(240,125,30,.1);color:var(--orange2);font-family:inherit;font-size:18px;font-weight:900;cursor:pointer;margin-bottom:18px}
+.sheetbtn:active{transform:scale(.98)}
+.sheet{display:none}
+.sheet.open{display:block}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px 18px;margin-bottom:14px}
+.stage .shead{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:1px dashed rgba(246,234,217,.15);padding-bottom:9px;margin-bottom:10px}
+.stage .sname{direction:ltr;text-align:left;font-size:19px;font-weight:900;color:var(--cream)}
+.stage .sname small{display:block;direction:rtl;text-align:left;font-size:13.5px;color:var(--cream70);font-weight:400;margin-top:1px}
+.stage .min{flex:0 0 auto;background:var(--orange);color:#2b1607;font-size:13.5px;font-weight:900;border-radius:999px;padding:3px 12px}
+.stage p.do{font-size:16px;line-height:1.75;color:var(--cream);margin-bottom:8px}
+.stage .cmds{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}
+.stage .cmd{direction:ltr;background:rgba(240,125,30,.13);border:1px solid rgba(240,125,30,.45);color:#ffb066;border-radius:10px;padding:4px 11px;font-size:15px;font-weight:700}
+.stage .ans{font-size:14.5px;line-height:1.7;color:var(--cream70);background:rgba(255,255,255,.04);border-radius:12px;padding:8px 12px;margin-top:8px}
+.stage .ans b{color:var(--orange2)}
+.stage ol.beats{margin:4px 4px 4px 0;padding-inline-start:20px}
+.stage ol.beats li{font-size:16px;line-height:1.75;margin-bottom:7px}
+.stage .warn{border-color:rgba(240,125,30,.6);background:rgba(240,125,30,.07)}
 </style>
 </head>
 <body>
@@ -94,6 +112,80 @@ audio{width:100%;height:44px;margin-bottom:8px}
       <button class="lbtn start" id="lStart">▶ ابدأ الدرس</button>
       <button class="lbtn end" id="lEnd" style="display:none">إنهاء الدرس</button>
     </div>
+  </div>
+  <button class="sheetbtn" id="sheetBtn">📋 ورقة الخطوات — ما سأفعله خطوة خطوة</button>
+  <div class="sheet" id="sheet">
+
+    <div class="stage">
+      <div class="shead"><div class="sname">Warm-up<small>التمهيد</small></div><div class="min">4 د</div></div>
+      <p class="do">أحيّي الطلاب وأعرّف بنفسي، أعرض بطاقة التلفاز الكبيرة وأسأل عنها، أعلّقها أعلى اللوح وبطاقات البرامج بجانبها، وأسأل بعض الطلاب عن برنامجهم المفضّل (الإجابة بالعربية مقبولة هنا).</p>
+      <div class="cmds"><span class="cmd">Hello, I am your teacher today.</span><span class="cmd">What is this?</span><span class="cmd">What is our lesson today?</span><span class="cmd">What's your favourite TV programme?</span></div>
+    </div>
+
+    <div class="stage">
+      <div class="shead"><div class="sname">Activity 1 · The TV Guide<small>النشاط الأول — دليل البرامج · كتاب الطالب ص24 ت1</small></div><div class="min">9 د</div></div>
+      <p class="do">أعرض الكلمات التسع بالبطاقات واحدة واحدة (أسأل، يكرّرون، أعلّق الصورة على اللوح). يفتحون التمرين ويقرؤون عناوينه، أعلن المهمّة، أشغّل الصوت من المشغّل مرّتين: الأولى للفكرة العامة والثانية للتفاصيل والتعليم، ثم تصحيح جماعي.</p>
+      <div class="cmds"><span class="cmd">What is this?</span><span class="cmd">Tick only the programmes you hear about.</span><span class="cmd">What is it? — A TV guide for tonight.</span></div>
+      <div class="ans"><b>الإجابات:</b> cartoon · quiz show · news · documentary · sports programme · film (Mr Bean)</div>
+    </div>
+
+    <div class="stage">
+      <div class="shead"><div class="sname">Formative 1<small>تقويم تكويني — كتاب الأنشطة ت2 ص22</small></div><div class="min">3 د</div></div>
+      <p class="do">يحلّون التمرين: توصيل كل برنامج بتعريفه. يتحقّقون ثنائيًا، ثم أصحّح مع الصف كلّه شفهيًا.</p>
+    </div>
+
+    <div class="stage">
+      <div class="shead"><div class="sname">Activity 2 · Paul and His Family<small>النشاط الثاني — بول وعائلته · كتاب الطالب ص24 ت2</small></div><div class="min">9 د</div></div>
+      <p class="do">ألفت انتباههم إلى أسماء العائلة على اللوح (الصور معلّقة من النشاط الأول). يقرؤون الأسماء وكلمات البرامج قبل السماع، أعلن مهمّة التوصيل، وأشغّل الصوت مرّتين: الأولى للفكرة العامة والثانية للتوصيل.</p>
+      <div class="cmds"><span class="cmd">Listen and match each person to his favourite programme.</span><span class="cmd">Who is talking? — Paul, about his family.</span></div>
+      <div class="ans"><b>الإجابات:</b> Paul → sports programmes · Sandy → film · Mother → quiz shows · Father → news · Ken → documentaries · The family → TV series</div>
+    </div>
+
+    <div class="stage">
+      <div class="shead"><div class="sname">Formative 2 · My Slips<small>تقويم تكويني — قصاصاتي (8 نماذج)</small></div><div class="min">3 د</div></div>
+      <p class="do">أوزّع القصاصات، وأعرّفهم بالحرف: أرفع قصاصة وأشير إلى حرفها، وكل طالب يجد حرف قصاصته، ويرفع أصحاب كل حرف أيديهم حتى يروا مجموعتهم. بعدها أقرأ جمل Sami مرّتين بصوتي، وكل طالب يختار a أو b أو c بنفسه، وأجمع القصاصات.</p>
+      <div class="cmds"><span class="cmd">Look — a LETTER!</span><span class="cmd">What is YOUR letter?</span><span class="cmd">A — hands up!</span><span class="cmd">B — hands up!</span><span class="cmd">C — hands up!</span></div>
+    </div>
+
+    <div class="stage">
+      <div class="shead"><div class="sname">Activity 3 · Conversation<small>النشاط الثالث — محادثة · كتاب الطالب ص25 ت3</small></div><div class="min">6 د</div></div>
+      <p class="do">يقرؤون المحادثة قراءة صامتة، ثم أختار طالبين يقفان أمام الصف ويؤدّيانها من الكتاب مباشرة سؤالًا وجوابًا.</p>
+      <div class="cmds"><span class="cmd">What's your favourite TV programme?</span><span class="cmd">When is it on?</span><span class="cmd">How often do you watch it?</span></div>
+    </div>
+
+    <div class="stage">
+      <div class="shead"><div class="sname">Formative 3<small>تقويم تكويني — أداء المحادثة</small></div><div class="min">3 د</div></div>
+      <p class="do">أداء الطالبين أمام الصف هو التقويم نفسه: أستمع إليهما وأتحقّق من سلامة سؤالهما وجوابهما عن البرامج.</p>
+    </div>
+
+    <div class="stage">
+      <div class="shead"><div class="sname">Final Assessment<small>التقويم النهائي — فردي</small></div><div class="min">5 د</div></div>
+      <p class="do">كل طالب يقلب قصاصة التقويم الثاني ويكتب على ظهرها جملة عن برنامجه المفضّل. أجمع القصاصات، أقرأ بعض الجمل دون أسماء، والصف يخمّن صاحب كل جملة.</p>
+      <div class="cmds"><span class="cmd">I like a TV series.</span><span class="cmd">I like a football match.</span></div>
+    </div>
+
+    <div class="stage">
+      <div class="shead"><div class="sname">Closure<small>الخاتمة — مفصّلة</small></div><div class="min">3 د</div></div>
+      <ol class="beats">
+        <li><b>مراجعة خاطفة (‏~90 ثانية):</b> أشير إلى صور البرامج المعلّقة بسرعة واحدة تلو الأخرى وهم يسمّون كل برنامج، وأسأل: «What was on TV tonight?» — طالب يجيب ببرنامجه المفضّل ووقته.</li>
+        <li><b>الوقوف بالمجموعات (‏~40 ثانية):</b> أنادي كل مجموعة بدورها وبرتم واضح، وتقف كل مجموعة كلٌّ بمكانها.</li>
+        <li><b>الشكر المرآتي (‏~20 ثانية):</b> أقول لهم الشكر أولًا، وهم يردّون عليّ جماعيًا — وينتهي الدرس.</li>
+      </ol>
+      <div class="cmds"><span class="cmd">What was on TV tonight?</span><span class="cmd">Group A — stand up</span><span class="cmd">Group B — stand up</span><span class="cmd">Group C — stand up</span><span class="cmd">Thank you, everyone</span><span class="cmd">→ Thank you, teacher</span></div>
+    </div>
+
+    <div class="stage warn">
+      <div class="shead"><div class="sname">If Time Frees Up<small>إذا تحرّر وقت فعلي أثناء الدرس — طابور نقطة العبور</small></div><div class="min">اختياري</div></div>
+      <ol class="beats">
+        <li>يصطفّ الطلاب بالدور وقصاصة إكمال الجمل بيد كل واحد، وأنا ثابت عند اللوح.</li>
+        <li>أفحص جملة كل طالب عند وصوله: <b>صحيحة</b> ← يقرؤها بصوته ويدخل = نقطتان لفريقه. <b>خاطئة</b> ← أصلّحها معه كلمة كلمة ويعيدها صحيحة = نقطة لفريقه.</li>
+        <li>أضع العلامة على قصاصته نفسها (لا أوقف الطابور للّوح)، وأحصي نقاط كل فرقة من القصاصات بعد الجمع — جمع بسيط، الأعلى يفوز.</li>
+        <li>قبل النهاية بدقيقتين: الفرقة الفائزة تخرج أمام الصف ويصفّق لها الجميع، ثم وقوف المجموعات والشكر المرآتي كالمعتاد.</li>
+        <li>وإن زاد وقت أكثر: جولة متطوّعين — «من يريد أن يزيد نقاط فريقه؟» يقف المتطوّع وأسأله سؤالًا من الدرس.</li>
+      </ol>
+      <p class="do"><b>قاعدة نقص الوقت:</b> يُحذف Activity 3 وحده (الأبعد عن الهدف) — ولا يُمسّ التقويم النهائي ولا الخاتمة أبدًا.</p>
+    </div>
+
   </div>
   <div id="list"></div>
   <div class="foot">أداة خاصة بالمعلّم · تُحدَّث عن بُعد</div>
@@ -190,6 +282,13 @@ function tick(){
 startBtn.addEventListener('click',()=>{localStorage.setItem(KEY,String(Date.now()));tick();});
 endBtn.addEventListener('click',()=>{localStorage.removeItem(KEY);tick();});
 setInterval(tick,1000);tick();
+</script>
+<script>
+document.getElementById('sheetBtn').addEventListener('click',function(){
+  var s=document.getElementById('sheet');
+  s.classList.toggle('open');
+  if(s.classList.contains('open')){ s.scrollIntoView({behavior:'smooth',block:'start'}); }
+});
 </script>
 </body>
 </html>
