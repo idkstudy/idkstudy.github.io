@@ -99,7 +99,9 @@ function render(data){
 let fallback={};
 try{fallback=JSON.parse(document.getElementById('fallback').textContent);}catch(e){}
 render(fallback);
-fetch('tracks.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{if(d&&d.tracks&&d.tracks.length)render(d);}).catch(()=>{});
+window.applyNewTracks=function(d){try{if(typeof d==='string')d=JSON.parse(d);if(d&&d.tracks&&d.tracks.length)render(d);}catch(e){}};
+try{if(window.AndroidPlayer){const t=AndroidPlayer.getTracks();if(t){const d=JSON.parse(t);if(d&&d.tracks&&d.tracks.length)render(d);}}}catch(e){}
+fetch('tracks.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{const playing=[...document.querySelectorAll('audio')].some(a=>!a.paused);if(d&&d.tracks&&d.tracks.length&&!playing)render(d);}).catch(()=>{});
 </script>
 </body>
 </html>
