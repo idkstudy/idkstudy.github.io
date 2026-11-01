@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>¿IDKStudy؟ — ملفات وكتب وخطط دراسية</title>
-<meta name="description" content="IDKStudy — كتب وخطط دراسية، ملخصات امتحانية، ومواضيع جاهزة للحفظ.">
+<title>IDKStudy</title>
 <style>
   @font-face {
     font-family: "AppFont";
@@ -19,53 +18,32 @@
     min-height: 100vh;
     background: linear-gradient(160deg, #2b1607 0%, #170b02 72%) fixed;
     color: #f6ead9;
-    padding: 34px 18px 28px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 34px 18px;
   }
-  .wrap { max-width: 560px; margin: 0 auto; animation: rise .7s cubic-bezier(.32,.72,0,1) both; }
+  .wrap { width: 100%; max-width: 480px; animation: rise .7s cubic-bezier(.32,.72,0,1) both; }
   @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
-  .tag {
-    display: flex; align-items: center; gap: 12px; justify-content: center;
-    color: #f07d1e; font-size: 12px; font-weight: 700; letter-spacing: 4px;
-  }
-  .tag::before, .tag::after { content: ""; height: 1px; width: 44px; background: rgba(240,125,30,.45); }
-
   .seal {
-    text-align: center; font-size: 92px; font-weight: 900; line-height: 1.15;
-    color: #f6ead9; text-shadow: 0 10px 34px rgba(240,125,30,.25);
+    text-align: center; font-size: 110px; font-weight: 900; line-height: 1.15;
+    text-shadow: 0 10px 34px rgba(240,125,30,.25);
   }
-  h1 {
-    text-align: center; font-size: 40px; font-weight: 900; letter-spacing: .5px; line-height: 1.25;
-  }
-  .tagline {
-    text-align: center; color: #d9c3a5; font-size: 16.5px; line-height: 1.95; margin: 10px auto 26px; max-width: 430px;
-  }
-
-  .hero {
-    position: relative; overflow: hidden;
-    background: linear-gradient(120deg, #3a1c09 20%, #f07d1e 130%);
-    border: 1px solid rgba(240,125,30,.35); border-radius: 26px;
-    padding: 24px 22px; margin-bottom: 16px;
-    box-shadow: 0 18px 44px rgba(0,0,0,.35);
-  }
-  .hero .k { font-size: 11.5px; letter-spacing: 3px; color: #ffd9ae; font-weight: 700; margin-bottom: 8px; }
-  .hero .t { font-size: 24px; font-weight: 900; line-height: 1.5; }
-  .hero .d { color: #ffe9d2; font-size: 14.5px; line-height: 1.9; margin-top: 6px; }
+  h1 { text-align: center; font-size: 38px; font-weight: 900; letter-spacing: .5px; line-height: 1.3; }
+  .rule { width: 54px; height: 1px; background: rgba(240,125,30,.5); margin: 22px auto 26px; }
 
   .card {
-    display: flex; gap: 14px; align-items: flex-start;
+    display: flex; gap: 14px; align-items: center;
     background: rgba(59,32,12,.42);
     border: 1px solid rgba(240,125,30,.28); border-radius: 22px;
-    padding: 18px; margin-bottom: 12px;
+    padding: 17px 18px; margin-bottom: 12px;
     box-shadow: inset 0 1px 0 rgba(246,234,217,.06), 0 10px 26px rgba(0,0,0,.25);
   }
   .ic {
-    flex: 0 0 auto; width: 46px; height: 46px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; font-size: 21px;
+    flex: 0 0 auto; width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
     border: 1px solid rgba(240,125,30,.4); background: rgba(240,125,30,.1);
   }
-  .card h2 { font-size: 19px; font-weight: 800; line-height: 1.5; }
-  .card p { color: #d9c3a5; font-size: 14.5px; line-height: 1.9; margin-top: 3px; }
+  .card h2 { font-size: 18.5px; font-weight: 800; }
   .chip {
     flex: 0 0 auto; margin-inline-start: auto;
     font-size: 10.5px; font-weight: 700; letter-spacing: 2px; color: #ffb066;
@@ -75,53 +53,36 @@
   .chip.live { color: #170b02; background: #f07d1e; border-color: #f07d1e; }
 
   footer {
-    text-align: center; margin-top: 26px;
-    font-size: 11.5px; letter-spacing: 3px; color: #a98a63; font-weight: 700;
+    text-align: center; margin-top: 28px;
+    font-size: 12px; letter-spacing: 3px; color: #a98a63; font-weight: 700;
   }
-  footer b { color: #f07d1e; font-weight: 800; }
 </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="tag">IDKSTUDY</div>
     <div class="seal">؟</div>
-    <h1>¿IDKStudy?</h1>
-    <p class="tagline">الشبح اللي بيكتب الملفات من أول سنة بالمعهد — صار له بيت. كتب وخطط وملخصات، بتنزل هون تباعًا.</p>
-
-    <section class="hero">
-      <div class="k">أهلًا فيك</div>
-      <div class="t">الموقع انفتح — والمحتوى عالطريق</div>
-      <p class="d">كل شي كان بيمر من إيد لإيد، بيصير بينزل من مكان واحد وبيوصل الكل بنفس اللحظة.</p>
-    </section>
+    <h1>IDKStudy</h1>
+    <div class="rule"></div>
 
     <article class="card">
       <div class="ic">📚</div>
-      <div>
-        <h2>كتب وخطط دراسية</h2>
-        <p>دفاتر خطط لكل صف، وكل خطة بثلاث صيغ — نفس بصمة IDKStudy اللي بتعرفها.</p>
-      </div>
+      <h2>كتب وخطط دراسية</h2>
       <span class="chip">قريبًا</span>
     </article>
 
     <article class="card">
       <div class="ic">📝</div>
-      <div>
-        <h2>ملخصات ومواضيع جاهزة</h2>
-        <p>ملخصات امتحانية ومواضيع جاهزة للحفظ، مرتبة حسب الصف والمادة.</p>
-      </div>
+      <h2>ملخصات ومواضيع جاهزة</h2>
       <span class="chip">قريبًا</span>
     </article>
 
     <article class="card">
       <div class="ic">🕐</div>
-      <div>
-        <h2>تطبيق وقت المعهد</h2>
-        <p>جدول المعهد بتطبيق بيحدّث لحاله: البرنامج والشعب والإعلانات — بلا إعادة تثبيت أبدًا.</p>
-      </div>
+      <h2>تطبيق وقت المعهد</h2>
       <span class="chip live">متوفر</span>
     </article>
 
-    <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
+    <footer>¿IDKStudy?</footer>
   </div>
 </body>
 </html>
