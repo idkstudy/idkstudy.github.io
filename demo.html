@@ -72,6 +72,17 @@
     background: radial-gradient(circle at 50% 36%, rgba(240,125,30,.42), rgba(23,11,2,.5) 74%);
   }
   .disc.lit .q { text-shadow: 0 12px 44px rgba(240,125,30,.95), 0 0 26px rgba(255,176,102,.8); }
+  #titleRing {
+    position: absolute; z-index: 4; left: 50%; top: 50%; width: 142%; aspect-ratio: 1;
+    margin-left: -71%; margin-top: -71%; opacity: 0; pointer-events: none; direction: ltr;
+  }
+  #ringRot { position: absolute; inset: 0; will-change: transform; }
+  #ringRot .chip {
+    position: absolute; left: 50%; top: 50%; white-space: nowrap;
+    font-size: 29px; font-weight: 800; color: #e8d3ae; line-height: 1;
+    text-shadow: 0 2px 14px rgba(23,11,2,.8);
+  }
+  h1 .w { display: inline-block; will-change: transform; }
   .pulse {
     position: absolute; z-index: 2; left: 50%; top: 50%; width: 50%; height: 50%;
     transform: translate(-50%,-50%); border-radius: 50%;
@@ -173,6 +184,7 @@
       <svg class="ring" id="ringFront" viewBox="0 0 400 400"><g id="textGF">
         <defs><path id="circF" d="M200,200 m-112,0 a112,112 0 1,1 224,0 a112,112 0 1,1 -224,0"/></defs>
         <text class="insc"><textPath href="#circF" textLength="700" lengthAdjust="spacingAndGlyphs">¿IDKStudy?&#160;&#160;¿IDKStudy?&#160;&#160;¿IDKStudy?</textPath></text></g></svg>
+      <div id="titleRing"><div id="ringRot"></div></div>
     </div>
   </div>
 
@@ -387,6 +399,78 @@
         });
       }
       gsap.ticker.add(partTick);
+
+      /* THE TITLE BENDS, THEN ORBITS: as the active page title nears the seal
+         its words arc toward it; on touch it becomes a rotating ring around
+         the seal and stays there for the rest of the scroll. */
+      var titleState = { el: null, words: [], ringOn: false };
+      var ringTween = gsap.to("#ringRot", { rotation: 360, duration: 38, repeat: -1, ease: "none", paused: true });
+      var ringO = gsap.quickTo("#titleRing", "opacity", { duration: .45, ease: "power2.out" });
+      var lastRingTitle = "";
+      function setRingText(t) {
+        lastRingTitle = t;
+        var rot = document.getElementById("ringRot");
+        var ring = document.getElementById("titleRing");
+        var words = t.trim().split(/\s+/);
+        var per = words.length + 1;                              // + the ؟ separator chip
+        var reps = Math.max(2, Math.round(10 / per));
+        var seq = [];
+        for (var r2 = 0; r2 < reps; r2++) { words.forEach(function (w) { seq.push(w); }); seq.push("؟"); }
+        var R = ring.offsetWidth * 0.405;
+        rot.innerHTML = "";
+        seq.forEach(function (w, i) {
+          var chip = document.createElement("span");
+          chip.className = "chip";
+          chip.textContent = w;
+          var ang = i * 360 / seq.length;
+          chip.style.transform = "translate(-50%,-50%) rotate(" + ang + "deg) translateY(" + (-R) + "px)";
+          rot.appendChild(chip);
+        });
+      }
+      function armTitle(el, ringText) {
+        if (!el) return;
+        var words = el.textContent.trim().split(/\s+/);
+        el.innerHTML = words.map(function (w) { return '<span class="w">' + w + "</span>"; }).join(" ");
+        titleState.el = el;
+        titleState.words = Array.prototype.map.call(el.querySelectorAll(".w"), function (wEl, i) {
+          var n = words.length;
+          var t = n === 1 ? 0 : (i - (n - 1) / 2) / ((n - 1) / 2);
+          return { t: t,
+            x: gsap.quickTo(wEl, "x", { duration: .3, ease: "power2.out" }),
+            y: gsap.quickTo(wEl, "y", { duration: .3, ease: "power2.out" }),
+            r: gsap.quickTo(wEl, "rotation", { duration: .3, ease: "power2.out" }) };
+        });
+        titleState.ringOn = false;
+        gsap.set(el, { opacity: 1 });
+        ringO(0); ringTween.pause();
+        setRingText(ringText);
+      }
+      function titleTick() {
+        var el = titleState.el;
+        if (!el || el.offsetParent === null) return;
+        var sr = sealStage.getBoundingClientRect();
+        var tr = el.getBoundingClientRect();
+        var dist = tr.top - sr.bottom;               // title below the seal: positive
+        if (!titleState.ringOn && dist <= 6) {
+          titleState.ringOn = true;
+          gsap.to(el, { opacity: 0, duration: .35, ease: "power2.out" });
+          ringO(1); ringTween.play();
+          if (navigator.vibrate) navigator.vibrate(10);
+        } else if (titleState.ringOn && dist >= 46) {
+          titleState.ringOn = false;
+          gsap.to(el, { opacity: 1, duration: .35, ease: "power2.out" });
+          ringO(0); ringTween.pause();
+        }
+        if (!titleState.ringOn) {
+          var bend = gsap.utils.clamp(0, 1, (160 - dist) / 160);
+          titleState.words.forEach(function (w) {
+            w.x(w.t * 12 * bend);
+            w.y(-(1 - w.t * w.t) * 13 * bend);
+            w.r(w.t * -16 * bend);
+          });
+        }
+      }
+      gsap.ticker.add(titleTick);
       window.addEventListener("resize", function () { gsap.delayedCall(.3, measureCards); });
     }
 
@@ -500,6 +584,7 @@
       shelfView.hidden = false;
       window.scrollTo(0, 0);
       gsap.delayedCall(.75, measureCards);
+      armTitle(shelfTitle, shelf.title);
       if (hasGsap) {
         gsap.from("#shelfView h1.shelf", { y: 16, opacity: 0, duration: .55, ease: "power3.out" });
         gsap.from("#fileGrid .gcard", { y: 26, opacity: 0, duration: .6, stagger: .06, ease: "power3.out", delay: .08, clearProps: "opacity" });
@@ -511,6 +596,7 @@
       mainView.hidden = false;
       window.scrollTo(0, 0);
       if (hasGsap) gsap.delayedCall(.65, measureCards);
+      if (hasGsap) armTitle(document.querySelector("h1.word"), "IDKStudy");
       if (hasGsap && wasShelf) {
         gsap.from("#worksGrid .gcard", { y: 20, opacity: 0, duration: .5, stagger: .06, ease: "power2.out", clearProps: "opacity" });
       }
@@ -526,7 +612,10 @@
       else { location.hash = ""; showMain(); }
     });
     route();
-    if (hasGsap) gsap.delayedCall(1.2, measureCards);
+    if (hasGsap) {
+      gsap.delayedCall(1.2, measureCards);
+      if (shelfView.hidden) armTitle(document.querySelector("h1.word"), "IDKStudy");
+    }
   </script>
 </body>
 </html>
