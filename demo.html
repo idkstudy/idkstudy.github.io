@@ -22,20 +22,28 @@
   body {
     font-family: "AppFont", Georgia, serif;
     min-height: 100dvh; color: var(--ink); position: relative;
-    background:
-      radial-gradient(900px 480px at 50% -6%, rgba(240,125,30,.12), transparent 62%),
-      linear-gradient(165deg, var(--bg1), var(--bg0) 80%) fixed;
+    background: linear-gradient(165deg, var(--bg1), var(--bg0) 80%) fixed;
     overflow-x: clip; touch-action: manipulation;
   }
   body::after {
     content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .05;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
   }
+
+  /* ---------- GSAP-driven ambient background (all code) ---------- */
+  .bg-fx { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+  .bg-glow { position: absolute; border-radius: 50%; filter: blur(46px); will-change: transform; }
+  .bg-glow.a { width: 340px; height: 340px; left: -90px; top: -70px; background: radial-gradient(circle, rgba(240,125,30,.20), transparent 65%); }
+  .bg-glow.b { width: 300px; height: 300px; right: -80px; top: 34%; background: radial-gradient(circle, rgba(240,125,30,.13), transparent 65%); }
+  .bg-glow.c { width: 260px; height: 260px; left: 16%; bottom: -110px; background: radial-gradient(circle, rgba(217,164,65,.10), transparent 65%); }
+  .bg-star { position: absolute; border-radius: 50%; background: #ffe3c2; opacity: .25; will-change: opacity, transform; }
+  .bg-ring { position: absolute; width: 640px; height: 640px; left: 50%; top: -240px; margin-left: -320px; opacity: .5; direction: ltr; will-change: transform; }
+
   .wrap { max-width: 560px; margin: 0 auto; padding: 22px 20px calc(26px + env(safe-area-inset-bottom)); position: relative; z-index: 1; }
   .kicker { text-align: center; color: var(--orange); font-size: 11px; font-weight: 800; letter-spacing: 5px; margin-top: 4px; }
 
-  /* ---------- the astrolabe seal (all code) ---------- */
-  .seal-stage { position: relative; width: min(80vw, 336px); aspect-ratio: 1; margin: 10px auto 0; }
+  /* ---------- the astrolabe seal ---------- */
+  .seal-stage { position: relative; width: min(80vw, 336px); aspect-ratio: 1; margin: 10px auto 0; will-change: transform; }
   .seal-stage svg.ring { position: absolute; inset: 0; width: 100%; height: 100%; direction: ltr; overflow: visible; }
   .seal-stage svg.ring text.insc {
     font-family: "AppFont", Georgia, serif; font-size: 25px; font-weight: 800;
@@ -64,8 +72,6 @@
     transform: translate(-50%,-50%); border-radius: 50%;
     border: 2px solid rgba(240,125,30,.65); opacity: 0; pointer-events: none;
   }
-  .pulse.go { animation: pulseA 1s ease-out forwards; }
-  @keyframes pulseA { 0% { opacity: .85; transform: translate(-50%,-50%) scale(1); } 100% { opacity: 0; transform: translate(-50%,-50%) scale(1.65); } }
 
   h1.word { text-align: center; font-size: 34px; font-weight: 900; letter-spacing: 1px; line-height: 1.3; margin-top: 14px; }
   .tickrule {
@@ -84,13 +90,22 @@
     display: flex; align-items: center; gap: 14px; width: 100%;
     padding: 17px 2px; border: 0; border-bottom: 1px solid var(--line);
     background: none; color: inherit; font: inherit; text-align: inherit; cursor: pointer;
+    will-change: transform;
   }
-  .mini-ring {
-    flex: 0 0 auto; width: 42px; height: 42px; border-radius: 50%;
-    border: 1.5px solid rgba(240,125,30,.65);
+  .orbit-disc { position: relative; flex: 0 0 auto; width: 58px; height: 58px; }
+  .orbit-disc svg { position: absolute; inset: 0; width: 100%; height: 100%; direction: ltr; }
+  .orbit-disc .core {
+    position: absolute; inset: 13px; border-radius: 50%;
+    border: 1.5px solid rgba(240,125,30,.7);
+    background: radial-gradient(circle at 50% 35%, rgba(240,125,30,.2), rgba(23,11,2,.4) 78%);
     display: flex; align-items: center; justify-content: center;
-    font-size: 17px; font-weight: 900; color: var(--orange);
-    background: radial-gradient(circle at 50% 35%, rgba(240,125,30,.14), rgba(23,11,2,.25) 75%);
+    font-size: 16.5px; font-weight: 900; color: var(--orange);
+  }
+  .orbit-disc .spinwrap { position: absolute; inset: 0; will-change: transform; }
+  .orbit-disc .planet {
+    position: absolute; left: 50%; top: -1px; transform: translate(-50%,-50%);
+    width: 7px; height: 7px; border-radius: 50%; background: #ffb066;
+    box-shadow: 0 0 8px rgba(240,125,30,.9), 0 0 3px rgba(255,176,102,.9);
   }
   .row h2 { font-size: 19.5px; font-weight: 800; line-height: 1.45; }
   .row .st {
@@ -116,8 +131,22 @@
     background: none; font-family: inherit; cursor: pointer;
   }
   h1.shelf { font-size: 29px; font-weight: 900; line-height: 1.35; margin-top: 24px; }
-  .frow { display: flex; align-items: center; gap: 13px; padding: 15px 2px; border-bottom: 1px solid var(--line); }
-  .frow .mini-ring { width: 36px; height: 36px; font-size: 14.5px; }
+  #fileRows { position: relative; }
+  #fileRows::before {
+    content: ""; position: absolute; top: 26px; bottom: 26px; inset-inline-start: 17px; width: 2px;
+    background: linear-gradient(rgba(240,125,30,.5), rgba(240,125,30,.14)); border-radius: 2px;
+  }
+  .frow { display: flex; align-items: center; gap: 13px; padding: 15px 2px; border-bottom: 1px solid var(--line); will-change: transform, opacity; }
+  .star { position: relative; z-index: 1; flex: 0 0 auto; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+  .star::before {
+    content: ""; width: 13px; height: 13px; border-radius: 50%;
+    background: radial-gradient(circle at 42% 38%, #ffe3c2, #f07d1e 62%, rgba(240,125,30,.25));
+    box-shadow: 0 0 12px rgba(240,125,30,.55);
+    transition: transform .5s ease, box-shadow .5s ease;
+  }
+  .star::after { content: ""; position: absolute; inset: 2px; border-radius: 50%; border: 1px solid rgba(240,125,30,.35); transition: transform .6s ease, opacity .6s ease; }
+  .frow.inview .star::before { transform: scale(1.45); box-shadow: 0 0 22px rgba(240,125,30,.95), 0 0 6px rgba(255,176,102,.9); }
+  .frow.inview .star::after { transform: scale(1.25); opacity: .9; }
   .frow .tx { flex: 1; min-width: 0; }
   .frow h3 { font-size: 17.5px; font-weight: 800; line-height: 1.4; }
   .frow .meta { color: var(--mute); font-size: 11.5px; margin-top: 3px; letter-spacing: .5px; }
@@ -125,7 +154,7 @@
     flex: 0 0 auto; display: flex; align-items: center; gap: 7px;
     background: var(--orange); color: #170b02; text-decoration: none;
     font-weight: 900; font-size: 14px; border-radius: 999px; padding: 11px 16px;
-    box-shadow: 0 8px 22px rgba(240,125,30,.28);
+    box-shadow: 0 8px 22px rgba(240,125,30,.28); will-change: transform;
   }
   .dl .arr { font-size: 16px; line-height: 1; }
 
@@ -138,6 +167,12 @@
 </style>
 </head>
 <body>
+  <div class="bg-fx" aria-hidden="true">
+    <svg class="bg-ring" id="bgRing" viewBox="0 0 400 400"><g id="bgTickG"></g></svg>
+    <div class="bg-glow a"></div><div class="bg-glow b"></div><div class="bg-glow c"></div>
+    <div id="starfield"></div>
+  </div>
+
   <!-- main view -->
   <main class="wrap" id="mainView">
     <div class="kicker">المكتبة — نسخة تجريبية</div>
@@ -160,13 +195,13 @@
     <div class="sec-label">الأعمال</div>
     <div id="worksRows">
       <button class="row" type="button" data-work="books">
-        <span class="mini-ring">٠١</span><h2>كتب وخطط دراسية</h2><span class="st">قريبًا</span>
+        <span class="orbit-disc"><svg viewBox="0 0 58 58"><g class="dticks"></g></svg><span class="core">٠١</span><span class="spinwrap"><span class="planet"></span></span></span><h2>كتب وخطط دراسية</h2><span class="st">قريبًا</span>
       </button>
       <button class="row" type="button" data-work="summaries">
-        <span class="mini-ring">٠٢</span><h2>ملخصات ومواضيع جاهزة</h2><span class="st">قريبًا</span>
+        <span class="orbit-disc"><svg viewBox="0 0 58 58"><g class="dticks"></g></svg><span class="core">٠٢</span><span class="spinwrap"><span class="planet"></span></span></span><h2>ملخصات ومواضيع جاهزة</h2><span class="st">قريبًا</span>
       </button>
       <button class="row" type="button" data-work="app">
-        <span class="mini-ring">٠٣</span><h2>تطبيق وقت المعهد</h2><span class="st live">متوفر</span>
+        <span class="orbit-disc"><svg viewBox="0 0 58 58"><g class="dticks"></g></svg><span class="core">٠٣</span><span class="spinwrap"><span class="planet"></span></span></span><h2>تطبيق وقت المعهد</h2><span class="st live">متوفر</span>
       </button>
     </div>
 
@@ -185,6 +220,8 @@
     <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
   </section>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
     /* ===== shelves (demo data) ===== */
     var SHELVES = {
@@ -206,19 +243,23 @@
     var AR = ["٠","١","٢","٣","٤","٥","٦","٧","٨","٩"];
     function arNum(n) { return String(n).replace(/\d/g, function (d) { return AR[+d]; }); }
 
-    /* ===== astrolabe tick ring, drawn by code ===== */
+    /* ===== code-drawn instrument rings (hero ticks, background ring, mini discs) ===== */
     var NS = "http://www.w3.org/2000/svg";
-    var tickG = document.getElementById("tickG");
-    for (var i = 0; i < 72; i++) {
-      var a = i * 5 * Math.PI / 180, big = i % 6 === 0;
-      var r1 = big ? 130 : 138, r2 = 146;
-      var l = document.createElementNS(NS, "line");
-      l.setAttribute("x1", 200 + r1 * Math.cos(a)); l.setAttribute("y1", 200 + r1 * Math.sin(a));
-      l.setAttribute("x2", 200 + r2 * Math.cos(a)); l.setAttribute("y2", 200 + r2 * Math.sin(a));
-      l.setAttribute("stroke", big ? "rgba(240,125,30,.75)" : "rgba(217,195,165,.35)");
-      l.setAttribute("stroke-width", big ? 2 : 1);
-      tickG.appendChild(l);
+    function drawTicks(g, cx, r1, r2, n, bigEvery, bigStroke, smallStroke) {
+      for (var i = 0; i < n; i++) {
+        var a = i * (360 / n) * Math.PI / 180, big = i % bigEvery === 0;
+        var ln = document.createElementNS(NS, "line");
+        ln.setAttribute("x1", cx + (big ? r1 : (r1 + r2) / 2) * Math.cos(a));
+        ln.setAttribute("y1", cx + (big ? r1 : (r1 + r2) / 2) * Math.sin(a));
+        ln.setAttribute("x2", cx + r2 * Math.cos(a));
+        ln.setAttribute("y2", cx + r2 * Math.sin(a));
+        ln.setAttribute("stroke", big ? bigStroke : smallStroke);
+        ln.setAttribute("stroke-width", big ? 2 : 1);
+        g.appendChild(ln);
+      }
     }
+    var tickG = document.getElementById("tickG");
+    drawTicks(tickG, 200, 130, 146, 72, 6, "rgba(240,125,30,.75)", "rgba(217,195,165,.35)");
     ["٠","٩٠","١٨٠","٢٧٠"].forEach(function (t, i) {
       var a = i * 90 * Math.PI / 180 - Math.PI / 2;
       var tx = document.createElementNS(NS, "text");
@@ -228,62 +269,103 @@
       tx.textContent = t;
       tickG.appendChild(tx);
     });
+    drawTicks(document.getElementById("bgTickG"), 200, 168, 196, 120, 10, "rgba(240,125,30,.16)", "rgba(217,195,165,.07)");
+    document.querySelectorAll(".orbit-disc .dticks").forEach(function (g) {
+      drawTicks(g, 29, 24.5, 28, 24, 6, "rgba(240,125,30,.8)", "rgba(217,195,165,.35)");
+    });
 
-    /* ===== the seal engine: free orbit → align + glow on selection ===== */
+    /* ===== starfield, generated by code ===== */
+    var sf = document.getElementById("starfield");
+    var starEls = [];
+    for (var si = 0; si < 42; si++) {
+      var st = document.createElement("div");
+      st.className = "bg-star";
+      var sz = 1 + Math.random() * 1.8;
+      st.style.width = sz + "px"; st.style.height = sz + "px";
+      st.style.left = (Math.random() * 100) + "%";
+      st.style.top = (Math.random() * 100) + "%";
+      sf.appendChild(st); starEls.push(st);
+    }
+
+    /* ===== GSAP motion system ===== */
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var hasGsap = typeof window.gsap !== "undefined" && !reduced;
     var textGB = document.getElementById("textGB"), textGF = document.getElementById("textGF");
     var disc = document.getElementById("disc"), pulse = document.getElementById("pulse");
-    var aT = 40, aK = -70, MODE = "free", t0 = 0, fromT = 0, fromK = 0, toT = 0, toK = 0, alignedAt = 0;
-    var SPIN_T = 360 / 26, SPIN_K = -360 / 44;
-    var onAligned = null, lastAlignEnd = performance.now();
-    function nearestTurn(a) { return Math.round(a / 360) * 360; }
-    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
-    function applyAngles() {
-      var tr = "rotate(" + aT + " 200 200)";
-      textGB.setAttribute("transform", tr); textGF.setAttribute("transform", tr);
-      tickG.setAttribute("transform", "rotate(" + aK + " 200 200)");
+    var spinT = null, spinK = null, aligning = false;
+
+    if (hasGsap) {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.set([textGB, textGF], { svgOrigin: "200 200", rotation: 40 });
+      gsap.set(tickG, { svgOrigin: "200 200", rotation: -70 });
+
+      // free orbit
+      spinT = gsap.to([textGB, textGF], { rotation: "+=360", duration: 26, repeat: -1, ease: "none" });
+      spinK = gsap.to(tickG, { rotation: "-=360", duration: 44, repeat: -1, ease: "none" });
+
+      // ambient background: drifting glows, twinkling stars, slow instrument ring + scroll parallax
+      gsap.to(".bg-glow.a", { x: 90, y: 60, duration: 17, yoyo: true, repeat: -1, ease: "sine.inOut" });
+      gsap.to(".bg-glow.b", { x: -70, y: -50, duration: 21, yoyo: true, repeat: -1, ease: "sine.inOut" });
+      gsap.to(".bg-glow.c", { x: 60, y: -40, duration: 15, yoyo: true, repeat: -1, ease: "sine.inOut" });
+      gsap.to(starEls, { opacity: .85, scale: 1.5, duration: 1.6, yoyo: true, repeat: -1, ease: "sine.inOut",
+        stagger: { each: .18, from: "random" } });
+      gsap.to("#bgRing", { rotation: 360, duration: 240, repeat: -1, ease: "none", transformOrigin: "50% 50%" });
+      gsap.to("#bgRing", { yPercent: 16, ease: "none",
+        scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 1.2 } });
+      gsap.to("#sealStage", { y: -6, duration: 3.2, yoyo: true, repeat: -1, ease: "sine.inOut" });
+
+      // planets on the mini discs
+      document.querySelectorAll(".orbit-disc .spinwrap").forEach(function (w, i) {
+        gsap.to(w, { rotation: i % 2 ? -360 : 360, duration: 9 + i * 3.5, repeat: -1, ease: "none" });
+      });
+
+      // entrance choreography
+      var intro = gsap.timeline({ defaults: { ease: "power3.out" } });
+      intro.from("#sealStage", { scale: .9, opacity: 0, duration: 1 })
+           .from(".kicker", { y: -12, opacity: 0, duration: .5 }, "-=.6")
+           .from("h1.word", { y: 22, opacity: 0, duration: .7 }, "-=.45")
+           .from(".tickrule, .sec-label", { opacity: 0, duration: .6 }, "-=.4")
+           .from("#worksRows .row", { y: 30, opacity: 0, duration: .7, stagger: .1 }, "-=.35")
+           .from("footer", { opacity: 0, duration: .6 }, "-=.3");
+
+      // press physics on rows and download buttons
+      document.addEventListener("pointerdown", function (e) {
+        var t = e.target.closest(".row, .dl, .back");
+        if (!t) return;
+        gsap.fromTo(t, { scale: .972 }, { scale: 1, duration: .6, ease: "elastic.out(1, .45)", overwrite: "auto" });
+      });
     }
+
+    function nearestTurn(r) { return Math.round(r / 360) * 360; }
     function align(cb) {
-      if (reduced) { if (cb) cb(); return; }
-      if (MODE !== "free") { onAligned = cb || onAligned; return; }
-      MODE = "aligning"; t0 = performance.now();
-      fromT = aT; fromK = aK; toT = nearestTurn(aT); toK = nearestTurn(aK);
-      onAligned = cb || null;
+      if (!hasGsap) { if (cb) cb(); return; }
+      if (aligning) { return; }
+      aligning = true;
+      spinT.pause(); spinK.pause();
+      var curT = gsap.getProperty(textGB, "rotation");
+      var curK = gsap.getProperty(tickG, "rotation");
+      var tl = gsap.timeline({ onComplete: function () {
+        gsap.delayedCall(1.05, function () {
+          disc.classList.remove("lit");
+          spinT.resume(); spinK.resume(); aligning = false;
+        });
+      }});
+      tl.to([textGB, textGF], { rotation: nearestTurn(curT), duration: .65, ease: "power3.inOut" }, 0)
+        .to(tickG, { rotation: nearestTurn(curK), duration: .65, ease: "power3.inOut" }, 0)
+        .add(function () {
+          disc.classList.add("lit");
+          gsap.fromTo(pulse, { opacity: .85, scale: .5, xPercent: -50, yPercent: -50, left: "50%", top: "50%" },
+            { opacity: 0, scale: 1.65, duration: 1, ease: "power2.out" });
+          if (navigator.vibrate) navigator.vibrate(18);
+          if (cb) gsap.delayedCall(.24, cb);
+        }, .62);
     }
-    var last = performance.now();
-    function frame(now) {
-      var dt = Math.min(60, now - last) / 1000; last = now;
-      if (!reduced) {
-        if (MODE === "free") {
-          aT += SPIN_T * dt; aK += SPIN_K * dt;
-          if (now - lastAlignEnd > 40000) align(null);   // the instrument aligns itself, rarely
-        } else if (MODE === "aligning") {
-          var p = Math.min(1, (now - t0) / 650), e = easeOut(p);
-          aT = fromT + (toT - fromT) * e; aK = fromK + (toK - fromK) * e;
-          if (p >= 1) {
-            MODE = "aligned"; alignedAt = now;
-            disc.classList.add("lit");
-            pulse.classList.remove("go"); void pulse.offsetWidth; pulse.classList.add("go");
-            if (navigator.vibrate) navigator.vibrate(18);
-            if (onAligned) { var cb = onAligned; onAligned = null; setTimeout(cb, 240); }
-          }
-        } else if (MODE === "aligned") {
-          if (now - alignedAt > 1100) { disc.classList.remove("lit"); MODE = "free"; lastAlignEnd = now; }
-        }
-        applyAngles();
-      }
-      requestAnimationFrame(frame);
+    if (hasGsap) {
+      gsap.delayedCall(40, function selfAlign() { align(null); gsap.delayedCall(40, selfAlign); });
     }
-    applyAngles();
-    requestAnimationFrame(frame);
     document.getElementById("sealStage").addEventListener("pointerdown", function () { align(null); });
 
-    /* ===== views & downloads ===== */
-    var mainView = document.getElementById("mainView");
-    var shelfView = document.getElementById("shelfView");
-    var shelfTitle = document.getElementById("shelfTitle");
-    var fileRows = document.getElementById("fileRows");
-
+    /* ===== downloads (demo PDFs generated by code) ===== */
     function circleOps(cx, cy, r) {
       var k = 0.5523 * r;
       return (cx + r) + " " + cy + " m " +
@@ -316,6 +398,12 @@
       return URL.createObjectURL(new Blob([pdf], { type: "application/pdf" }));
     }
 
+    /* ===== views ===== */
+    var mainView = document.getElementById("mainView");
+    var shelfView = document.getElementById("shelfView");
+    var shelfTitle = document.getElementById("shelfTitle");
+    var fileRows = document.getElementById("fileRows");
+
     Object.keys(SHELVES).forEach(function (key) {
       var shelf = SHELVES[key];
       var row = document.querySelector('[data-work="' + key + '"]');
@@ -335,12 +423,11 @@
       if (!shelf) return showMain();
       shelfTitle.textContent = shelf.title;
       fileRows.innerHTML = "";
-      shelf.files.forEach(function (f, i) {
+      shelf.files.forEach(function (f) {
         var div = document.createElement("div");
         div.className = "frow";
-        div.innerHTML = '<span class="mini-ring"></span><div class="tx"><h3></h3><div class="meta"></div></div>' +
+        div.innerHTML = '<span class="star"></span><div class="tx"><h3></h3><div class="meta"></div></div>' +
           '<a class="dl" download><span class="arr">↓</span>تحميل</a>';
-        div.querySelector(".mini-ring").textContent = arNum(i + 1).padStart(2, "٠");
         div.querySelector("h3").textContent = f.name;
         div.querySelector(".meta").textContent = f.meta || "";
         var a = div.querySelector(".dl");
@@ -351,11 +438,26 @@
       mainView.hidden = true;
       shelfView.hidden = false;
       window.scrollTo(0, 0);
+      if (hasGsap) {
+        gsap.from("#shelfView .top, #shelfView h1.shelf", { y: 16, opacity: 0, duration: .55, stagger: .08, ease: "power3.out" });
+        gsap.from("#fileRows .frow", { y: 26, opacity: 0, duration: .6, stagger: .07, ease: "power3.out", delay: .1 });
+        ScrollTrigger.batch("#fileRows .frow", {
+          start: "top 92%",
+          onEnter: function (b) { b.forEach(function (el) { el.classList.add("inview"); }); }
+        });
+        ScrollTrigger.refresh();
+      } else {
+        fileRows.querySelectorAll(".frow").forEach(function (el) { el.classList.add("inview"); });
+      }
     }
     function showMain() {
+      var wasShelf = !shelfView.hidden;
       shelfView.hidden = true;
       mainView.hidden = false;
       window.scrollTo(0, 0);
+      if (hasGsap && wasShelf) {
+        gsap.from("#worksRows .row", { y: 20, opacity: 0, duration: .5, stagger: .06, ease: "power2.out" });
+      }
     }
     function route() {
       var m = location.hash.match(/^#\/(\w+)$/);
