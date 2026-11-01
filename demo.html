@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>IDKStudy</title>
+<meta name="description" content="IDKStudy">
+<style>
+  @font-face {
+    font-family: "AppFont";
+    src: url("https://omrhmza.github.io/myschedulejson/assets/font.ttf") format("truetype");
+    font-weight: 100 900;
+    font-display: swap;
+  }
+  :root {
+    --bg1: #2b1607; --bg0: #170b02;
+    --ink: #f6ead9; --tan: #d9c3a5; --mute: #a98a63;
+    --orange: #f07d1e; --line: rgba(240,125,30,.2);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { color-scheme: dark; overflow-x: clip; }
+  body {
+    font-family: "AppFont", Georgia, serif;
+    min-height: 100dvh; color: var(--ink); position: relative;
+    background: linear-gradient(165deg, var(--bg1), var(--bg0) 80%) fixed;
+    overflow-x: clip; touch-action: manipulation;
+  }
+  body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  }
+  .g1, .g2 {
+    position: fixed; z-index: 0; pointer-events: none; line-height: 1; font-weight: 900;
+    top: -64px; inset-inline-start: -118px; font-size: 400px; transform: rotate(6deg);
+  }
+  .g1 { color: rgba(240,125,30,.07); }
+  .g2 { top: -58px; inset-inline-start: -124px; color: transparent; -webkit-text-stroke: 1.5px rgba(240,125,30,.30); }
+  .page {
+    position: relative; z-index: 1; max-width: 560px; margin: 0 auto;
+    min-height: 100dvh; display: flex; flex-direction: column;
+    padding: 30px 22px calc(24px + env(safe-area-inset-bottom));
+  }
+  .kicker { color: var(--orange); font-size: 12px; font-weight: 800; letter-spacing: 6px; }
+  h1.word { font-size: 64px; font-weight: 900; line-height: 1.15; margin-top: 8px; text-shadow: 0 16px 44px rgba(0,0,0,.45); }
+  .rule { width: 64px; height: 3px; background: var(--orange); margin: 20px 0 6px; border-radius: 99px; }
+  .rule.s { width: 52px; margin: 14px 0 4px; }
+
+  .rows { margin-top: 16px; }
+  .row {
+    display: flex; align-items: center; gap: 16px; width: 100%;
+    padding: 21px 0; border: 0; border-bottom: 1px solid var(--line);
+    background: none; color: inherit; font: inherit; text-align: inherit;
+  }
+  .row:first-child { border-top: 1px solid var(--line); }
+  a.row, button.row { text-decoration: none; cursor: pointer; }
+  .row .n {
+    font-size: 40px; font-weight: 900; line-height: 1; min-width: 64px;
+    color: transparent; -webkit-text-stroke: 1.5px rgba(240,125,30,.75);
+  }
+  .row h2 { font-size: 22px; font-weight: 800; line-height: 1.4; }
+  .row .st {
+    margin-inline-start: auto; flex: 0 0 auto; white-space: nowrap;
+    font-size: 11px; font-weight: 800; letter-spacing: 2px; color: var(--tan);
+    border: 1.5px solid rgba(240,125,30,.5); padding: 6px 10px; border-radius: 4px;
+  }
+  .row .st.live { background: var(--orange); color: #170b02; border-color: var(--orange); }
+  .row .st.count { background: rgba(240,125,30,.14); color: #ffb066; border-color: rgba(240,125,30,.65); }
+
+  /* shelf view */
+  .top { display: flex; align-items: center; gap: 10px; }
+  .top .mq { font-size: 34px; font-weight: 900; color: var(--orange); line-height: 1; }
+  .top .mn { font-size: 19px; font-weight: 900; letter-spacing: 1px; }
+  .top .back {
+    margin-inline-start: auto; color: var(--tan); font-size: 13px; font-weight: 700;
+    border: 1.5px solid rgba(240,125,30,.45); border-radius: 4px; padding: 6px 12px;
+    background: none; font-family: inherit; cursor: pointer;
+  }
+  h1.shelf { font-size: 31px; font-weight: 900; line-height: 1.35; margin-top: 22px; }
+  .frow { display: flex; align-items: center; gap: 14px; padding: 17px 0; border-bottom: 1px solid var(--line); }
+  .frow .n {
+    font-size: 29px; font-weight: 900; line-height: 1; min-width: 46px;
+    color: transparent; -webkit-text-stroke: 1.3px rgba(240,125,30,.7);
+  }
+  .frow .tx { flex: 1; min-width: 0; }
+  .frow h3 { font-size: 18.5px; font-weight: 800; line-height: 1.4; }
+  .frow .meta { color: var(--mute); font-size: 12px; margin-top: 3px; letter-spacing: .5px; }
+  .dl {
+    flex: 0 0 auto; display: flex; align-items: center; gap: 7px;
+    background: var(--orange); color: #170b02; text-decoration: none;
+    font-weight: 900; font-size: 14px; border-radius: 6px; padding: 12px 14px;
+  }
+  .dl .arr { font-size: 17px; line-height: 1; }
+
+  footer {
+    margin-top: auto; padding-top: 26px;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--mute); font-size: 11px; letter-spacing: 3px; font-weight: 700;
+    direction: ltr; unicode-bidi: isolate;
+  }
+  footer b { color: var(--orange); }
+  footer .q { font-size: 26px; color: var(--orange); font-weight: 900; }
+
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .001s !important; transition-duration: .001s !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="g1" aria-hidden="true">؟</div>
+  <div class="g2" aria-hidden="true">؟</div>
+
+  <!-- main view -->
+  <main class="page" id="mainView">
+    <div class="kicker">المكتبة — نسخة تجريبية</div>
+    <h1 class="word">IDKStudy</h1>
+    <div class="rule"></div>
+    <div class="rows" id="worksRows">
+      <div class="row" data-work="books">
+        <span class="n">٠١</span><h2>كتب وخطط دراسية</h2><span class="st">قريبًا</span>
+      </div>
+      <div class="row" data-work="summaries">
+        <span class="n">٠٢</span><h2>ملخصات ومواضيع جاهزة</h2><span class="st">قريبًا</span>
+      </div>
+      <div class="row" data-work="app">
+        <span class="n">٠٣</span><h2>تطبيق وقت المعهد</h2><span class="st live">متوفر</span>
+      </div>
+    </div>
+    <footer><span>DESIGNED BY <b>¿IDKSTUDY?</b></span><span class="q">؟</span></footer>
+  </main>
+
+  <!-- shelf view -->
+  <section class="page" id="shelfView" hidden>
+    <div class="top">
+      <span class="mq">؟</span><span class="mn">IDKStudy</span>
+      <button class="back" id="backBtn" type="button">رجوع</button>
+    </div>
+    <h1 class="shelf" id="shelfTitle"></h1>
+    <div class="rule s"></div>
+    <div class="rows" id="fileRows" style="margin-top:8px"></div>
+    <footer><span>DESIGNED BY <b>¿IDKSTUDY?</b></span><span class="q">؟</span></footer>
+  </section>
+
+  <script>
+    // Shelves data — a work becomes a live shelf the moment its files array is non-empty.
+    // file: { name, meta, url }
+    var SHELVES = {
+      books:     { title: "كتب وخطط دراسية",    files: [
+        { name: "دفتر خطط — الصف الثالث", slug: "daftar-grade3", meta: "PDF · ٦٤ صفحة · ١٨٫٢ MB", demo: true },
+        { name: "دفتر خطط — الصف الرابع", slug: "daftar-grade4", meta: "PDF · ٥٨ صفحة · ١٦٫٤ MB", demo: true },
+        { name: "دفتر خطط — الصف السادس", slug: "daftar-grade6", meta: "PDF · ٢٤ صفحة · ٧٫٩ MB", demo: true }
+      ] },
+      summaries: { title: "ملخصات ومواضيع جاهزة", files: [
+        { name: "ملخص النحو — الوحدة الأولى", slug: "nahw-unit1", meta: "PDF · ١٢ صفحة · ٢٫٤ MB", demo: true },
+        { name: "ملخص الصوتيات", slug: "phonetics", meta: "PDF · ٨ صفحات · ١٫٧ MB", demo: true },
+        { name: "موضوع جاهز — العلم", slug: "essay-science", meta: "PDF · ٣ صفحات · ٠٫٩ MB", demo: true },
+        { name: "موضوع جاهز — الوطن", slug: "essay-homeland", meta: "PDF · ٣ صفحات · ١٫١ MB", demo: true }
+      ] },
+      app:       { title: "تطبيق وقت المعهد", files: [
+        { name: "تطبيق وقت المعهد", slug: "myschedule-app", meta: "Android · ٦٫٢ MB", demo: true }
+      ] }
+    };
+
+    // Demo only: generate a real placeholder PDF (seal rings + brand) for each file.
+    function circleOps(cx, cy, r) {
+      var k = 0.5523 * r;
+      return cx + r + " " + cy + " m " +
+        (cx + r) + " " + (cy + k) + " " + (cx + k) + " " + (cy + r) + " " + cx + " " + (cy + r) + " c " +
+        (cx - k) + " " + (cy + r) + " " + (cx - r) + " " + (cy + k) + " " + (cx - r) + " " + cy + " c " +
+        (cx - r) + " " + (cy - k) + " " + (cx - k) + " " + (cy - r) + " " + cx + " " + (cy - r) + " c " +
+        (cx + k) + " " + (cy - r) + " " + (cx + r) + " " + (cy - k) + " " + (cx + r) + " " + cy + " c h";
+    }
+    function makePdfUrl(f) {
+      var content =
+        "q 0.941 0.486 0.118 RG 2.5 w " + circleOps(297, 540, 95) + " S " +
+        "1.2 w " + circleOps(297, 540, 74) + " S Q\n" +
+        "BT 0.945 0.878 0.847 rg /F1 120 Tf 1 0 0 1 263 492 Tm (?) Tj ET\n" +
+        "BT 0.945 0.878 0.847 rg /F1 30 Tf 1 0 0 1 208 372 Tm (IDKStudy) Tj ET\n" +
+        "BT 0.66 0.54 0.39 rg /F2 13 Tf 1 0 0 1 232 330 Tm (" + f.slug + ") Tj ET";
+      var objs = [
+        "<< /Type /Catalog /Pages 2 0 R >>",
+        "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+        "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>",
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>",
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+        "<< /Length " + content.length + " >>\nstream\n" + content + "\nendstream"
+      ];
+      var pdf = "%PDF-1.4\n", offsets = [];
+      objs.forEach(function (body, i) {
+        offsets.push(pdf.length);
+        pdf += (i + 1) + " 0 obj\n" + body + "\nendobj\n";
+      });
+      var xref = pdf.length;
+      pdf += "xref\n0 " + (objs.length + 1) + "\n0000000000 65535 f \n";
+      offsets.forEach(function (o) { pdf += ("0000000000" + o).slice(-10) + " 00000 n \n"; });
+      pdf += "trailer\n<< /Size " + (objs.length + 1) + " /Root 1 0 R >>\nstartxref\n" + xref + "\n%%EOF";
+      return URL.createObjectURL(new Blob([pdf], { type: "application/pdf" }));
+    }
+    var AR = ["٠","١","٢","٣","٤","٥","٦","٧","٨","٩"];
+    function arNum(n) { return String(n).replace(/\d/g, function (d) { return AR[+d]; }); }
+
+    var mainView = document.getElementById("mainView");
+    var shelfView = document.getElementById("shelfView");
+    var shelfTitle = document.getElementById("shelfTitle");
+    var fileRows = document.getElementById("fileRows");
+
+    // Upgrade works that have files into shelf links with a count chip.
+    Object.keys(SHELVES).forEach(function (key) {
+      var shelf = SHELVES[key];
+      var row = document.querySelector('[data-work="' + key + '"]');
+      if (!row || !shelf.files.length) return;
+      var chip = row.querySelector(".st");
+      chip.textContent = arNum(shelf.files.length) + (shelf.files.length === 1 ? " ملف" : " ملفات");
+      chip.classList.add("count");
+      row.setAttribute("role", "button");
+      row.style.cursor = "pointer";
+      row.addEventListener("click", function () { location.hash = "#/" + key; });
+    });
+
+    function openShelf(key) {
+      var shelf = SHELVES[key];
+      if (!shelf) return showMain();
+      shelfTitle.textContent = shelf.title;
+      fileRows.innerHTML = "";
+      shelf.files.forEach(function (f, i) {
+        var div = document.createElement("div");
+        div.className = "frow";
+        div.innerHTML = '<span class="n"></span><div class="tx"><h3></h3><div class="meta"></div></div>' +
+          '<a class="dl" download><span class="arr">↓</span>تحميل</a>';
+        div.querySelector(".n").textContent = arNum(i + 1).padStart(2, "٠");
+        div.querySelector("h3").textContent = f.name;
+        div.querySelector(".meta").textContent = f.meta || "";
+        var a = div.querySelector(".dl");
+        if (f.demo) { a.href = makePdfUrl(f); a.setAttribute("download", f.name + ".pdf"); }
+        else a.href = f.url;
+        fileRows.appendChild(div);
+      });
+      mainView.hidden = true;
+      shelfView.hidden = false;
+      window.scrollTo(0, 0);
+    }
+    function showMain() {
+      shelfView.hidden = true;
+      mainView.hidden = false;
+      window.scrollTo(0, 0);
+    }
+    function route() {
+      var m = location.hash.match(/^#\/(\w+)$/);
+      if (m && SHELVES[m[1]] && SHELVES[m[1]].files.length) openShelf(m[1]);
+      else showMain();
+    }
+    window.addEventListener("hashchange", route);
+    document.getElementById("backBtn").addEventListener("click", function () {
+      if (history.length > 1) history.back();
+      else { location.hash = ""; showMain(); }
+    });
+    route();
+  </script>
+</body>
+</html>
