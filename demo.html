@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>IDKStudy</title>
+<title>IDKStudy — تجريبي</title>
 <meta name="description" content="IDKStudy">
 <style>
   @font-face {
@@ -15,91 +15,122 @@
   :root {
     --bg1: #2b1607; --bg0: #170b02;
     --ink: #f6ead9; --tan: #d9c3a5; --mute: #a98a63;
-    --orange: #f07d1e; --line: rgba(240,125,30,.2);
+    --orange: #f07d1e; --line: rgba(240,125,30,.22);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html { color-scheme: dark; overflow-x: clip; }
   body {
     font-family: "AppFont", Georgia, serif;
     min-height: 100dvh; color: var(--ink); position: relative;
-    background: linear-gradient(165deg, var(--bg1), var(--bg0) 80%) fixed;
+    background:
+      radial-gradient(900px 480px at 50% -6%, rgba(240,125,30,.12), transparent 62%),
+      linear-gradient(165deg, var(--bg1), var(--bg0) 80%) fixed;
     overflow-x: clip; touch-action: manipulation;
   }
   body::after {
     content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .05;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
   }
-  .g1, .g2 {
-    position: fixed; z-index: 0; pointer-events: none; line-height: 1; font-weight: 900;
-    top: -64px; inset-inline-start: -118px; font-size: 400px; transform: rotate(6deg);
-  }
-  .g1 { color: rgba(240,125,30,.07); }
-  .g2 { top: -58px; inset-inline-start: -124px; color: transparent; -webkit-text-stroke: 1.5px rgba(240,125,30,.30); }
-  .page {
-    position: relative; z-index: 1; max-width: 560px; margin: 0 auto;
-    min-height: 100dvh; display: flex; flex-direction: column;
-    padding: 30px 22px calc(24px + env(safe-area-inset-bottom));
-  }
-  .kicker { color: var(--orange); font-size: 12px; font-weight: 800; letter-spacing: 6px; }
-  h1.word { font-size: 64px; font-weight: 900; line-height: 1.15; margin-top: 8px; text-shadow: 0 16px 44px rgba(0,0,0,.45); }
-  .rule { width: 64px; height: 3px; background: var(--orange); margin: 20px 0 6px; border-radius: 99px; }
-  .rule.s { width: 52px; margin: 14px 0 4px; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 22px 20px calc(26px + env(safe-area-inset-bottom)); position: relative; z-index: 1; }
+  .kicker { text-align: center; color: var(--orange); font-size: 11px; font-weight: 800; letter-spacing: 5px; margin-top: 4px; }
 
-  .rows { margin-top: 16px; }
+  /* ---------- the astrolabe seal (all code) ---------- */
+  .seal-stage { position: relative; width: min(80vw, 336px); aspect-ratio: 1; margin: 10px auto 0; }
+  .seal-stage svg.ring { position: absolute; inset: 0; width: 100%; height: 100%; direction: ltr; overflow: visible; }
+  .seal-stage svg.ring text.insc {
+    font-family: "AppFont", Georgia, serif; font-size: 25px; font-weight: 800;
+    letter-spacing: 6.5px; fill: #e8d3ae; direction: ltr; unicode-bidi: isolate;
+  }
+  #ringBack { z-index: 1; clip-path: inset(0 0 50% 0); opacity: .72; }
+  #ringFront { z-index: 3; clip-path: inset(50% 0 0 0); }
+  #ticksSvg { z-index: 1; }
+  .disc {
+    position: absolute; z-index: 2; left: 50%; top: 50%; width: 49%; height: 49%;
+    transform: translate(-50%,-50%); border-radius: 50%;
+    border: 1px solid rgba(240,125,30,.4);
+    background: radial-gradient(circle at 50% 36%, rgba(240,125,30,.22), rgba(23,11,2,.55) 72%);
+    box-shadow: inset 0 1px 0 rgba(246,234,217,.09), 0 24px 60px rgba(0,0,0,.5), 0 0 90px rgba(240,125,30,.10);
+    display: flex; align-items: center; justify-content: center;
+    transition: box-shadow .45s ease, background .45s ease;
+  }
+  .disc .q { font-size: clamp(64px, 22vw, 96px); font-weight: 900; color: var(--ink); line-height: 1; text-shadow: 0 12px 34px rgba(240,125,30,.4); transition: text-shadow .45s ease; }
+  .disc.lit {
+    box-shadow: inset 0 1px 0 rgba(246,234,217,.14), 0 24px 60px rgba(0,0,0,.5), 0 0 130px rgba(240,125,30,.55), 0 0 46px rgba(240,125,30,.5);
+    background: radial-gradient(circle at 50% 36%, rgba(240,125,30,.42), rgba(23,11,2,.5) 74%);
+  }
+  .disc.lit .q { text-shadow: 0 12px 44px rgba(240,125,30,.95), 0 0 26px rgba(255,176,102,.8); }
+  .pulse {
+    position: absolute; z-index: 2; left: 50%; top: 50%; width: 50%; height: 50%;
+    transform: translate(-50%,-50%); border-radius: 50%;
+    border: 2px solid rgba(240,125,30,.65); opacity: 0; pointer-events: none;
+  }
+  .pulse.go { animation: pulseA 1s ease-out forwards; }
+  @keyframes pulseA { 0% { opacity: .85; transform: translate(-50%,-50%) scale(1); } 100% { opacity: 0; transform: translate(-50%,-50%) scale(1.65); } }
+
+  h1.word { text-align: center; font-size: 34px; font-weight: 900; letter-spacing: 1px; line-height: 1.3; margin-top: 14px; }
+  .tickrule {
+    height: 7px; margin: 16px 6px 0; opacity: .8;
+    background:
+      linear-gradient(rgba(240,125,30,.55), rgba(240,125,30,.55)) center / 100% 1px no-repeat,
+      repeating-linear-gradient(90deg, rgba(240,125,30,.5) 0 1px, transparent 1px 11px);
+  }
+  .sec-label { display: flex; align-items: center; gap: 12px; margin: 22px 2px 6px; color: var(--orange); font-size: 12px; font-weight: 700; letter-spacing: 4px; }
+  .sec-label::after { content: ""; flex: 1; height: 7px; opacity: .7;
+    background: linear-gradient(rgba(240,125,30,.4), rgba(240,125,30,.4)) center / 100% 1px no-repeat,
+      repeating-linear-gradient(90deg, rgba(240,125,30,.45) 0 1px, transparent 1px 11px); }
+
+  /* ---------- works & files ---------- */
   .row {
-    display: flex; align-items: center; gap: 16px; width: 100%;
-    padding: 21px 0; border: 0; border-bottom: 1px solid var(--line);
-    background: none; color: inherit; font: inherit; text-align: inherit;
+    display: flex; align-items: center; gap: 14px; width: 100%;
+    padding: 17px 2px; border: 0; border-bottom: 1px solid var(--line);
+    background: none; color: inherit; font: inherit; text-align: inherit; cursor: pointer;
   }
-  .row:first-child { border-top: 1px solid var(--line); }
-  a.row, button.row { text-decoration: none; cursor: pointer; }
-  .row .n {
-    font-size: 40px; font-weight: 900; line-height: 1; min-width: 64px;
-    color: transparent; -webkit-text-stroke: 1.5px rgba(240,125,30,.75);
+  .mini-ring {
+    flex: 0 0 auto; width: 42px; height: 42px; border-radius: 50%;
+    border: 1.5px solid rgba(240,125,30,.65);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; font-weight: 900; color: var(--orange);
+    background: radial-gradient(circle at 50% 35%, rgba(240,125,30,.14), rgba(23,11,2,.25) 75%);
   }
-  .row h2 { font-size: 22px; font-weight: 800; line-height: 1.4; }
+  .row h2 { font-size: 19.5px; font-weight: 800; line-height: 1.45; }
   .row .st {
     margin-inline-start: auto; flex: 0 0 auto; white-space: nowrap;
-    font-size: 11px; font-weight: 800; letter-spacing: 2px; color: var(--tan);
-    border: 1.5px solid rgba(240,125,30,.5); padding: 6px 10px; border-radius: 4px;
+    font-size: 10.5px; font-weight: 800; letter-spacing: 1.5px; color: #ffb066;
+    border: 1.5px solid rgba(240,125,30,.55); border-radius: 999px; padding: 5px 11px;
+    background: rgba(23,11,2,.35);
   }
   .row .st.live { background: var(--orange); color: #170b02; border-color: var(--orange); }
-  .row .st.count { background: rgba(240,125,30,.14); color: #ffb066; border-color: rgba(240,125,30,.65); }
 
-  /* shelf view */
   .top { display: flex; align-items: center; gap: 10px; }
-  .top .mq { font-size: 34px; font-weight: 900; color: var(--orange); line-height: 1; }
+  .top .badge {
+    width: 40px; height: 40px; border-radius: 50%; flex: 0 0 auto;
+    border: 1.5px solid rgba(240,125,30,.6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 21px; font-weight: 900; color: var(--orange);
+    background: radial-gradient(circle at 50% 35%, rgba(240,125,30,.16), rgba(23,11,2,.3) 75%);
+  }
   .top .mn { font-size: 19px; font-weight: 900; letter-spacing: 1px; }
   .top .back {
     margin-inline-start: auto; color: var(--tan); font-size: 13px; font-weight: 700;
-    border: 1.5px solid rgba(240,125,30,.45); border-radius: 4px; padding: 6px 12px;
+    border: 1.5px solid rgba(240,125,30,.45); border-radius: 999px; padding: 7px 14px;
     background: none; font-family: inherit; cursor: pointer;
   }
-  h1.shelf { font-size: 31px; font-weight: 900; line-height: 1.35; margin-top: 22px; }
-  .frow { display: flex; align-items: center; gap: 14px; padding: 17px 0; border-bottom: 1px solid var(--line); }
-  .frow .n {
-    font-size: 29px; font-weight: 900; line-height: 1; min-width: 46px;
-    color: transparent; -webkit-text-stroke: 1.3px rgba(240,125,30,.7);
-  }
+  h1.shelf { font-size: 29px; font-weight: 900; line-height: 1.35; margin-top: 24px; }
+  .frow { display: flex; align-items: center; gap: 13px; padding: 15px 2px; border-bottom: 1px solid var(--line); }
+  .frow .mini-ring { width: 36px; height: 36px; font-size: 14.5px; }
   .frow .tx { flex: 1; min-width: 0; }
-  .frow h3 { font-size: 18.5px; font-weight: 800; line-height: 1.4; }
-  .frow .meta { color: var(--mute); font-size: 12px; margin-top: 3px; letter-spacing: .5px; }
+  .frow h3 { font-size: 17.5px; font-weight: 800; line-height: 1.4; }
+  .frow .meta { color: var(--mute); font-size: 11.5px; margin-top: 3px; letter-spacing: .5px; }
   .dl {
     flex: 0 0 auto; display: flex; align-items: center; gap: 7px;
     background: var(--orange); color: #170b02; text-decoration: none;
-    font-weight: 900; font-size: 14px; border-radius: 6px; padding: 12px 14px;
+    font-weight: 900; font-size: 14px; border-radius: 999px; padding: 11px 16px;
+    box-shadow: 0 8px 22px rgba(240,125,30,.28);
   }
-  .dl .arr { font-size: 17px; line-height: 1; }
+  .dl .arr { font-size: 16px; line-height: 1; }
 
-  footer {
-    margin-top: auto; padding-top: 26px;
-    display: flex; justify-content: space-between; align-items: center;
-    color: var(--mute); font-size: 11px; letter-spacing: 3px; font-weight: 700;
-    direction: ltr; unicode-bidi: isolate;
-  }
+  footer { text-align: center; margin-top: 30px; font-size: 11px; letter-spacing: 3px; color: var(--mute); font-weight: 700; direction: ltr; unicode-bidi: isolate; }
   footer b { color: var(--orange); }
-  footer .q { font-size: 26px; color: var(--orange); font-weight: 900; }
-
   [hidden] { display: none !important; }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .001s !important; transition-duration: .001s !important; }
@@ -107,45 +138,57 @@
 </style>
 </head>
 <body>
-  <div class="g1" aria-hidden="true">؟</div>
-  <div class="g2" aria-hidden="true">؟</div>
-
   <!-- main view -->
-  <main class="page" id="mainView">
+  <main class="wrap" id="mainView">
     <div class="kicker">المكتبة — نسخة تجريبية</div>
-    <h1 class="word">IDKStudy</h1>
-    <div class="rule"></div>
-    <div class="rows" id="worksRows">
-      <div class="row" data-work="books">
-        <span class="n">٠١</span><h2>كتب وخطط دراسية</h2><span class="st">قريبًا</span>
-      </div>
-      <div class="row" data-work="summaries">
-        <span class="n">٠٢</span><h2>ملخصات ومواضيع جاهزة</h2><span class="st">قريبًا</span>
-      </div>
-      <div class="row" data-work="app">
-        <span class="n">٠٣</span><h2>تطبيق وقت المعهد</h2><span class="st live">متوفر</span>
-      </div>
+
+    <div class="seal-stage" id="sealStage" aria-hidden="true">
+      <svg class="ring" id="ticksSvg" viewBox="0 0 400 400"><g id="tickG"></g></svg>
+      <svg class="ring" id="ringBack" viewBox="0 0 400 400"><g id="textGB">
+        <defs><path id="circB" d="M200,200 m-112,0 a112,112 0 1,1 224,0 a112,112 0 1,1 -224,0"/></defs>
+        <text class="insc"><textPath href="#circB" textLength="700" lengthAdjust="spacingAndGlyphs">¿IDKStudy?&#160;&#160;¿IDKStudy?&#160;&#160;¿IDKStudy?</textPath></text></g></svg>
+      <div class="disc" id="disc"><div class="q">؟</div></div>
+      <div class="pulse" id="pulse"></div>
+      <svg class="ring" id="ringFront" viewBox="0 0 400 400"><g id="textGF">
+        <defs><path id="circF" d="M200,200 m-112,0 a112,112 0 1,1 224,0 a112,112 0 1,1 -224,0"/></defs>
+        <text class="insc"><textPath href="#circF" textLength="700" lengthAdjust="spacingAndGlyphs">¿IDKStudy?&#160;&#160;¿IDKStudy?&#160;&#160;¿IDKStudy?</textPath></text></g></svg>
     </div>
-    <footer><span>DESIGNED BY <b>¿IDKSTUDY?</b></span><span class="q">؟</span></footer>
+
+    <h1 class="word">IDKStudy</h1>
+    <div class="tickrule"></div>
+
+    <div class="sec-label">الأعمال</div>
+    <div id="worksRows">
+      <button class="row" type="button" data-work="books">
+        <span class="mini-ring">٠١</span><h2>كتب وخطط دراسية</h2><span class="st">قريبًا</span>
+      </button>
+      <button class="row" type="button" data-work="summaries">
+        <span class="mini-ring">٠٢</span><h2>ملخصات ومواضيع جاهزة</h2><span class="st">قريبًا</span>
+      </button>
+      <button class="row" type="button" data-work="app">
+        <span class="mini-ring">٠٣</span><h2>تطبيق وقت المعهد</h2><span class="st live">متوفر</span>
+      </button>
+    </div>
+
+    <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
   </main>
 
   <!-- shelf view -->
-  <section class="page" id="shelfView" hidden>
+  <section class="wrap" id="shelfView" hidden>
     <div class="top">
-      <span class="mq">؟</span><span class="mn">IDKStudy</span>
+      <span class="badge">؟</span><span class="mn">IDKStudy</span>
       <button class="back" id="backBtn" type="button">رجوع</button>
     </div>
     <h1 class="shelf" id="shelfTitle"></h1>
-    <div class="rule s"></div>
-    <div class="rows" id="fileRows" style="margin-top:8px"></div>
-    <footer><span>DESIGNED BY <b>¿IDKSTUDY?</b></span><span class="q">؟</span></footer>
+    <div class="tickrule" style="margin:14px 0 2px"></div>
+    <div id="fileRows"></div>
+    <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
   </section>
 
   <script>
-    // Shelves data — a work becomes a live shelf the moment its files array is non-empty.
-    // file: { name, meta, url }
+    /* ===== shelves (demo data) ===== */
     var SHELVES = {
-      books:     { title: "كتب وخطط دراسية",    files: [
+      books:     { title: "كتب وخطط دراسية", files: [
         { name: "دفتر خطط — الصف الثالث", slug: "daftar-grade3", meta: "PDF · ٦٤ صفحة · ١٨٫٢ MB", demo: true },
         { name: "دفتر خطط — الصف الرابع", slug: "daftar-grade4", meta: "PDF · ٥٨ صفحة · ١٦٫٤ MB", demo: true },
         { name: "دفتر خطط — الصف السادس", slug: "daftar-grade6", meta: "PDF · ٢٤ صفحة · ٧٫٩ MB", demo: true }
@@ -160,11 +203,90 @@
         { name: "تطبيق وقت المعهد", slug: "myschedule-app", meta: "Android · ٦٫٢ MB", demo: true }
       ] }
     };
+    var AR = ["٠","١","٢","٣","٤","٥","٦","٧","٨","٩"];
+    function arNum(n) { return String(n).replace(/\d/g, function (d) { return AR[+d]; }); }
 
-    // Demo only: generate a real placeholder PDF (seal rings + brand) for each file.
+    /* ===== astrolabe tick ring, drawn by code ===== */
+    var NS = "http://www.w3.org/2000/svg";
+    var tickG = document.getElementById("tickG");
+    for (var i = 0; i < 72; i++) {
+      var a = i * 5 * Math.PI / 180, big = i % 6 === 0;
+      var r1 = big ? 130 : 138, r2 = 146;
+      var l = document.createElementNS(NS, "line");
+      l.setAttribute("x1", 200 + r1 * Math.cos(a)); l.setAttribute("y1", 200 + r1 * Math.sin(a));
+      l.setAttribute("x2", 200 + r2 * Math.cos(a)); l.setAttribute("y2", 200 + r2 * Math.sin(a));
+      l.setAttribute("stroke", big ? "rgba(240,125,30,.75)" : "rgba(217,195,165,.35)");
+      l.setAttribute("stroke-width", big ? 2 : 1);
+      tickG.appendChild(l);
+    }
+    ["٠","٩٠","١٨٠","٢٧٠"].forEach(function (t, i) {
+      var a = i * 90 * Math.PI / 180 - Math.PI / 2;
+      var tx = document.createElementNS(NS, "text");
+      tx.setAttribute("x", 200 + 163 * Math.cos(a)); tx.setAttribute("y", 200 + 163 * Math.sin(a) + 5);
+      tx.setAttribute("text-anchor", "middle");
+      tx.setAttribute("style", "font-family:'AppFont',Georgia,serif;font-size:14px;font-weight:800;fill:#d9c3a5");
+      tx.textContent = t;
+      tickG.appendChild(tx);
+    });
+
+    /* ===== the seal engine: free orbit → align + glow on selection ===== */
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var textGB = document.getElementById("textGB"), textGF = document.getElementById("textGF");
+    var disc = document.getElementById("disc"), pulse = document.getElementById("pulse");
+    var aT = 40, aK = -70, MODE = "free", t0 = 0, fromT = 0, fromK = 0, toT = 0, toK = 0, alignedAt = 0;
+    var SPIN_T = 360 / 26, SPIN_K = -360 / 44;
+    var onAligned = null, lastAlignEnd = performance.now();
+    function nearestTurn(a) { return Math.round(a / 360) * 360; }
+    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+    function applyAngles() {
+      var tr = "rotate(" + aT + " 200 200)";
+      textGB.setAttribute("transform", tr); textGF.setAttribute("transform", tr);
+      tickG.setAttribute("transform", "rotate(" + aK + " 200 200)");
+    }
+    function align(cb) {
+      if (reduced) { if (cb) cb(); return; }
+      if (MODE !== "free") { onAligned = cb || onAligned; return; }
+      MODE = "aligning"; t0 = performance.now();
+      fromT = aT; fromK = aK; toT = nearestTurn(aT); toK = nearestTurn(aK);
+      onAligned = cb || null;
+    }
+    var last = performance.now();
+    function frame(now) {
+      var dt = Math.min(60, now - last) / 1000; last = now;
+      if (!reduced) {
+        if (MODE === "free") {
+          aT += SPIN_T * dt; aK += SPIN_K * dt;
+          if (now - lastAlignEnd > 40000) align(null);   // the instrument aligns itself, rarely
+        } else if (MODE === "aligning") {
+          var p = Math.min(1, (now - t0) / 650), e = easeOut(p);
+          aT = fromT + (toT - fromT) * e; aK = fromK + (toK - fromK) * e;
+          if (p >= 1) {
+            MODE = "aligned"; alignedAt = now;
+            disc.classList.add("lit");
+            pulse.classList.remove("go"); void pulse.offsetWidth; pulse.classList.add("go");
+            if (navigator.vibrate) navigator.vibrate(18);
+            if (onAligned) { var cb = onAligned; onAligned = null; setTimeout(cb, 240); }
+          }
+        } else if (MODE === "aligned") {
+          if (now - alignedAt > 1100) { disc.classList.remove("lit"); MODE = "free"; lastAlignEnd = now; }
+        }
+        applyAngles();
+      }
+      requestAnimationFrame(frame);
+    }
+    applyAngles();
+    requestAnimationFrame(frame);
+    document.getElementById("sealStage").addEventListener("pointerdown", function () { align(null); });
+
+    /* ===== views & downloads ===== */
+    var mainView = document.getElementById("mainView");
+    var shelfView = document.getElementById("shelfView");
+    var shelfTitle = document.getElementById("shelfTitle");
+    var fileRows = document.getElementById("fileRows");
+
     function circleOps(cx, cy, r) {
       var k = 0.5523 * r;
-      return cx + r + " " + cy + " m " +
+      return (cx + r) + " " + cy + " m " +
         (cx + r) + " " + (cy + k) + " " + (cx + k) + " " + (cy + r) + " " + cx + " " + (cy + r) + " c " +
         (cx - k) + " " + (cy + r) + " " + (cx - r) + " " + (cy + k) + " " + (cx - r) + " " + cy + " c " +
         (cx - r) + " " + (cy - k) + " " + (cx - k) + " " + (cy - r) + " " + cx + " " + (cy - r) + " c " +
@@ -186,35 +308,26 @@
         "<< /Length " + content.length + " >>\nstream\n" + content + "\nendstream"
       ];
       var pdf = "%PDF-1.4\n", offsets = [];
-      objs.forEach(function (body, i) {
-        offsets.push(pdf.length);
-        pdf += (i + 1) + " 0 obj\n" + body + "\nendobj\n";
-      });
+      objs.forEach(function (body, i) { offsets.push(pdf.length); pdf += (i + 1) + " 0 obj\n" + body + "\nendobj\n"; });
       var xref = pdf.length;
       pdf += "xref\n0 " + (objs.length + 1) + "\n0000000000 65535 f \n";
       offsets.forEach(function (o) { pdf += ("0000000000" + o).slice(-10) + " 00000 n \n"; });
       pdf += "trailer\n<< /Size " + (objs.length + 1) + " /Root 1 0 R >>\nstartxref\n" + xref + "\n%%EOF";
       return URL.createObjectURL(new Blob([pdf], { type: "application/pdf" }));
     }
-    var AR = ["٠","١","٢","٣","٤","٥","٦","٧","٨","٩"];
-    function arNum(n) { return String(n).replace(/\d/g, function (d) { return AR[+d]; }); }
 
-    var mainView = document.getElementById("mainView");
-    var shelfView = document.getElementById("shelfView");
-    var shelfTitle = document.getElementById("shelfTitle");
-    var fileRows = document.getElementById("fileRows");
-
-    // Upgrade works that have files into shelf links with a count chip.
     Object.keys(SHELVES).forEach(function (key) {
       var shelf = SHELVES[key];
       var row = document.querySelector('[data-work="' + key + '"]');
-      if (!row || !shelf.files.length) return;
+      if (!row) return;
       var chip = row.querySelector(".st");
-      chip.textContent = arNum(shelf.files.length) + (shelf.files.length === 1 ? " ملف" : " ملفات");
-      chip.classList.add("count");
-      row.setAttribute("role", "button");
-      row.style.cursor = "pointer";
-      row.addEventListener("click", function () { location.hash = "#/" + key; });
+      if (shelf.files.length) {
+        chip.textContent = arNum(shelf.files.length) + (shelf.files.length === 1 ? " ملف" : " ملفات");
+        chip.classList.remove("live");
+      }
+      row.addEventListener("click", function () {
+        align(function () { location.hash = "#/" + key; });
+      });
     });
 
     function openShelf(key) {
@@ -225,9 +338,9 @@
       shelf.files.forEach(function (f, i) {
         var div = document.createElement("div");
         div.className = "frow";
-        div.innerHTML = '<span class="n"></span><div class="tx"><h3></h3><div class="meta"></div></div>' +
+        div.innerHTML = '<span class="mini-ring"></span><div class="tx"><h3></h3><div class="meta"></div></div>' +
           '<a class="dl" download><span class="arr">↓</span>تحميل</a>';
-        div.querySelector(".n").textContent = arNum(i + 1).padStart(2, "٠");
+        div.querySelector(".mini-ring").textContent = arNum(i + 1).padStart(2, "٠");
         div.querySelector("h3").textContent = f.name;
         div.querySelector(".meta").textContent = f.meta || "";
         var a = div.querySelector(".dl");
@@ -246,7 +359,7 @@
     }
     function route() {
       var m = location.hash.match(/^#\/(\w+)$/);
-      if (m && SHELVES[m[1]] && SHELVES[m[1]].files.length) openShelf(m[1]);
+      if (m && SHELVES[m[1]]) openShelf(m[1]);
       else showMain();
     }
     window.addEventListener("hashchange", route);
