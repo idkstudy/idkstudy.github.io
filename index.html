@@ -46,9 +46,10 @@
   .seal { position: relative; width: 300px; height: 300px; max-width: 78vw; aspect-ratio: 1; }
   .seal svg.ring { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 46s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+  .seal svg.ring { direction: ltr; }
   .seal svg.ring text {
     font-family: "AppFont", Georgia, serif; font-size: 26.5px; font-weight: 800;
-    letter-spacing: 7px; fill: var(--tan);
+    letter-spacing: 7px; fill: #e8d3ae; direction: ltr; unicode-bidi: isolate;
   }
   .seal .core {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
@@ -146,9 +147,9 @@
     <section class="seal-zone">
       <div class="seal" id="seal">
         <div class="halo"></div>
-        <svg class="ring" viewBox="0 0 300 300" aria-hidden="true">
+        <svg class="ring" viewBox="0 0 300 300" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink">
           <defs><path id="circ" d="M150,150 m-118,0 a118,118 0 1,1 236,0 a118,118 0 1,1 -236,0"/></defs>
-          <text><textPath href="#circ">¿IDKStudy?&#160;&#160;¿IDKStudy?&#160;&#160;¿IDKStudy?</textPath></text>
+          <text><textPath href="#circ" xlink:href="#circ" textLength="738" lengthAdjust="spacingAndGlyphs">¿IDKStudy?&#160;&#160;¿IDKStudy?&#160;&#160;¿IDKStudy?</textPath></text>
         </svg>
         <div class="core">؟</div>
       </div>
