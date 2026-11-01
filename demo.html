@@ -424,16 +424,23 @@
         var hr = el.getBoundingClientRect();
         titleState.el = el;
         titleState.rot = 0; titleState.rotAtWrap = 0; titleState.anchorScroll = null;
-        titleState.words = Array.prototype.map.call(el.querySelectorAll(".w"), function (wEl) {
+        var gap = 10, acc = 0;
+        var laid = Array.prototype.map.call(el.querySelectorAll(".w"), function (wEl) {
           var r = wEl.getBoundingClientRect();
-          return { el: wEl,
+          var rec = { el: wEl, w: r.width,
             offX: (r.left + r.width / 2) - (hr.left + hr.width / 2),
             offY: (r.top + r.height / 2) - (hr.top + hr.height / 2),
-            baseCx: 0, baseCy: 0,
+            baseCx: 0, baseCy: 0, arcC: 0,
             qx: gsap.quickTo(wEl, "x", { duration: .3, ease: "power2.out" }),
             qy: gsap.quickTo(wEl, "y", { duration: .3, ease: "power2.out" }),
             qr: gsap.quickTo(wEl, "rotation", { duration: .3, ease: "power2.out" }) };
+          rec.arcC = acc + r.width / 2;
+          acc += r.width + gap;
+          return rec;
         });
+        var totalArc = acc - gap;
+        laid.forEach(function (rec) { rec.arcC -= totalArc / 2; });
+        titleState.words = laid;
       }
       function engageLayer() {
         titleState.words.forEach(function (w) {
@@ -447,30 +454,28 @@
         });
         titleState.inLayer = true;
       }
+      var lastTickT = performance.now();
       function titleTick() {
         var el = titleState.el;
         if (!el || el.offsetParent === null) return;
+        var now = performance.now();
+        var dt = Math.min(80, now - lastTickT) / 1000; lastTickT = now;
         var sr = sealStage.getBoundingClientRect();
         var hr = el.getBoundingClientRect();
         var pen = sr.bottom - hr.top;
         var m = gsap.utils.clamp(0, 1, pen / 110);
         if (m > 0.02 && !titleState.inLayer) engageLayer();
-        if (m >= 1) {
-          if (titleState.anchorScroll === null) { titleState.anchorScroll = window.scrollY; titleState.rotAtWrap = titleState.rot; }
-          titleState.rot = titleState.rotAtWrap + (window.scrollY - titleState.anchorScroll) * 0.18;
-        } else {
-          titleState.anchorScroll = null;
-          titleState.rot = titleState.rotAtWrap;
-        }
+        if (m >= 1) titleState.rot += dt * 10.6;   // the ring's own pace: continuous, like the inscription
         if (!titleState.inLayer) return;
         if (m <= 0.001) { restoreWords(); return; }
         var ease = m * m * (3 - 2 * m);
         var sealCx = sr.left + sr.width / 2, sealCy = sr.top + sr.height / 2;
-        var R = sr.width / 2 + 10;
+        var R = sr.width * 0.455;
         var Rm = R * (1 + (1 - ease) * 2.4);
         var hCx = hr.left + hr.width / 2, hCy = hr.top + hr.height / 2;
+        var midDeg = 90 + titleState.rot * ease;
         titleState.words.forEach(function (w) {
-          var phiDeg = 90 - (w.offX / Rm) * (180 / Math.PI) + titleState.rot * ease;
+          var phiDeg = midDeg + (w.arcC / Rm) * (180 / Math.PI);
           var phi = phiDeg * Math.PI / 180;
           var tx = sealCx + Rm * Math.cos(phi), ty = sealCy + Rm * Math.sin(phi);
           var hx = hCx + w.offX, hy = hCy + w.offY;
