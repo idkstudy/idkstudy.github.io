@@ -17,37 +17,45 @@
     --ink: #f6ead9; --tan: #d9c3a5; --mute: #a98a63;
     --orange: #f07d1e; --line: rgba(240,125,30,.28);
     --card: rgba(59,32,12,.42);
+    --mx: 50vw; --my: 240px; --mr: 0px;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { color-scheme: dark; scroll-behavior: smooth; }
+  html { color-scheme: dark; overflow-x: clip; }
   body {
     font-family: "AppFont", Georgia, serif;
-    min-height: 100vh; color: var(--ink);
+    min-height: 100vh; color: var(--ink); position: relative;
     background:
-      radial-gradient(1100px 550px at 85% -10%, rgba(240,125,30,.13), transparent 60%),
-      radial-gradient(900px 500px at 8% 110%, rgba(240,125,30,.07), transparent 60%),
+      radial-gradient(1100px 550px at 85% -10%, rgba(240,125,30,.10), transparent 60%),
       linear-gradient(160deg, var(--bg1) 0%, var(--bg0) 74%) fixed;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
   body::after {
-    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: .05;
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 60; opacity: .05;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
   }
-  .ghost-bg {
-    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
-    pointer-events: none; z-index: 0;
-    font-size: 60vmin; font-weight: 900; line-height: 1; color: rgba(240,125,30,.03);
-    transform: translateY(14%);
-    user-select: none;
-  }
-  .wrap { position: relative; z-index: 1; max-width: 620px; margin: 0 auto; padding: 40px 20px 30px; }
 
-  /* ===== الختم ===== */
+  .layer { position: relative; z-index: 1; }
+  .layer.base { filter: brightness(.62) saturate(.85); }
+  html.haunted .layer.base { filter: brightness(.27) saturate(.78); }
+  .layer.lit {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 2; pointer-events: none;
+    -webkit-mask-image: radial-gradient(circle var(--mr) at var(--mx) var(--my), #000 42%, rgba(0,0,0,.55) 68%, transparent 100%);
+            mask-image: radial-gradient(circle var(--mr) at var(--mx) var(--my), #000 42%, rgba(0,0,0,.55) 68%, transparent 100%);
+  }
+  .torch-halo {
+    position: absolute; z-index: 1; pointer-events: none; width: 560px; height: 560px; border-radius: 50%;
+    left: 0; top: 0; transform: translate(-50%,-50%);
+    background: radial-gradient(circle, rgba(240,125,30,.13) 0%, rgba(240,125,30,.05) 42%, transparent 68%);
+    opacity: 0; transition: opacity 1.2s ease;
+  }
+  html.haunted .torch-halo { opacity: 1; }
+
+  .wrap { max-width: 620px; margin: 0 auto; padding: 40px 20px 30px; }
+
   .seal-zone { display: flex; flex-direction: column; align-items: center; padding: 12px 0 4px; }
   .seal { position: relative; width: 300px; height: 300px; max-width: 78vw; aspect-ratio: 1; }
-  .seal svg.ring { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 46s linear infinite; }
+  .seal svg.ring { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 46s linear infinite; direction: ltr; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .seal svg.ring { direction: ltr; }
   .seal svg.ring text {
     font-family: "AppFont", Georgia, serif; font-size: 26.5px; font-weight: 800;
     letter-spacing: 7px; fill: #e8d3ae; direction: ltr; unicode-bidi: isolate;
@@ -66,39 +74,19 @@
   h1.word { margin-top: 20px; font-size: 42px; font-weight: 900; letter-spacing: 1px; line-height: 1.25; text-align: center; }
   .rule { width: 54px; height: 1px; background: rgba(240,125,30,.55); margin: 18px auto 0; }
 
-  /* ===== شريط متحرك ===== */
-  .marquee {
-    margin: 38px -20px 6px; overflow: hidden; white-space: nowrap;
-    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-    padding: 10px 0; direction: ltr;
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-            mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-  }
-  .marquee .track { display: inline-block; animation: mq 30s linear infinite; font-size: 15px; letter-spacing: 5px; color: var(--mute); font-weight: 700; }
-  @keyframes mq { to { transform: translateX(-50%); } }
-
-  /* ===== الأعمال ===== */
   .sec-label {
-    display: flex; align-items: center; gap: 12px; margin: 34px 2px 16px;
+    display: flex; align-items: center; gap: 12px; margin: 40px 2px 16px;
     color: var(--orange); font-size: 12px; font-weight: 700; letter-spacing: 4px;
   }
   .sec-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 
   .work {
-    position: relative; overflow: hidden;
+    position: relative; overflow: hidden; cursor: pointer; -webkit-tap-highlight-color: transparent;
     background: var(--card); border: 1px solid var(--line); border-radius: 24px;
     padding: 20px; margin-bottom: 14px;
     box-shadow: inset 0 1px 0 rgba(246,234,217,.06), 0 12px 30px rgba(0,0,0,.28);
-    transition: transform .45s cubic-bezier(.32,.72,0,1), border-color .45s;
   }
-  .work:hover { transform: translateY(-4px); border-color: rgba(240,125,30,.55); }
-  .work::before {
-    content: ""; position: absolute; inset: 0; pointer-events: none;
-    background: linear-gradient(115deg, transparent 32%, rgba(246,234,217,.09) 48%, transparent 62%);
-    transform: translateX(130%); transition: transform .9s ease;
-  }
-  .work:hover::before { transform: translateX(-130%); }
-  .work .head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .work .head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; position: relative; z-index: 2; }
   .work h2 { font-size: 20px; font-weight: 800; }
   .chip {
     margin-inline-start: auto; flex: 0 0 auto;
@@ -113,25 +101,33 @@
     border: 1px solid rgba(240,125,30,.16);
     display: flex; align-items: center; justify-content: center;
   }
-  /* كتب: صفحات متراكبة */
   .pages i { position: absolute; width: 74px; height: 96px; border-radius: 6px 12px 12px 6px;
     border: 1px solid rgba(240,125,30,.4); background: linear-gradient(160deg, #3a1e0b, #241105); }
   .pages i:nth-child(1) { transform: rotate(-9deg) translate(-16px, 4px); opacity: .55; }
   .pages i:nth-child(2) { transform: rotate(7deg) translate(16px, 2px); opacity: .8; }
   .pages i:nth-child(3) { transform: none; display: flex; align-items: center; justify-content: center;
     font-size: 44px; font-weight: 900; color: var(--ink); font-style: normal; }
-  /* ملخصات: سطور */
   .lines { flex-direction: column; gap: 11px; padding: 0 34px; align-items: stretch; justify-content: center; }
   .lines b { display: block; height: 7px; border-radius: 99px; background: rgba(217,195,165,.35); }
   .lines b.o { background: var(--orange); box-shadow: 0 4px 16px rgba(240,125,30,.4); }
   .lines b:nth-child(1) { width: 62%; } .lines b:nth-child(2) { width: 88%; }
   .lines b:nth-child(3) { width: 74%; } .lines b:nth-child(4) { width: 46%; }
-  /* التطبيق: جوال مصغر */
   .phone { width: 74px; height: 112px; border-radius: 14px; border: 1.5px solid rgba(240,125,30,.55);
     background: linear-gradient(165deg, #2b1607, #170b02); padding: 9px 8px; box-shadow: 0 14px 30px rgba(0,0,0,.4); }
   .phone u { display: block; text-decoration: none; height: 8px; border-radius: 99px; background: rgba(246,234,217,.28); margin-bottom: 7px; }
   .phone u.o { background: var(--orange); width: 55%; }
   .phone u.s { width: 70%; } .phone u.l { height: 22px; border-radius: 7px; background: rgba(240,125,30,.28); margin-top: 2px; }
+
+  .stamp {
+    position: absolute; z-index: 3; inset-inline-end: 16px; bottom: 16px;
+    width: 86px; height: 86px; opacity: 0; transform: rotate(-10deg) scale(2.4); pointer-events: none;
+  }
+  .stamp svg { width: 100%; height: 100%; }
+  .stamp .ring-txt {
+    font-family: "AppFont", Georgia, serif; font-size: 13.5px; font-weight: 800; letter-spacing: 2.5px;
+    fill: var(--orange); direction: ltr; unicode-bidi: isolate;
+  }
+  .stamp .q { font-family: "AppFont", Georgia, serif; font-size: 40px; font-weight: 900; fill: var(--orange); }
 
   footer { text-align: center; margin-top: 34px; font-size: 12px; letter-spacing: 3px; color: var(--mute); font-weight: 700; }
   footer b { color: var(--orange); }
@@ -142,76 +138,154 @@
 </style>
 </head>
 <body>
-  <div class="ghost-bg">؟</div>
-  <div class="wrap">
+  <div class="torch-halo" id="torchHalo"></div>
 
-    <section class="seal-zone">
-      <div class="seal" id="seal">
-        <div class="halo"></div>
-        <svg class="ring" viewBox="0 0 300 300" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <defs><path id="circ" d="M150,150 m-118,0 a118,118 0 1,1 236,0 a118,118 0 1,1 -236,0"/></defs>
-          <text><textPath href="#circ" xlink:href="#circ" textLength="738" lengthAdjust="spacingAndGlyphs">¿IDKStudy?&#160;&#160;¿IDKStudy?&#160;&#160;¿IDKStudy?</textPath></text>
-        </svg>
-        <div class="core">؟</div>
-      </div>
-      <h1 class="word">IDKStudy</h1>
-      <div class="rule"></div>
-    </section>
+  <main class="layer base" id="baseLayer">
+    <div class="wrap">
+      <section class="seal-zone">
+        <div class="seal look-seal">
+          <div class="halo"></div>
+          <svg class="ring" viewBox="0 0 300 300" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <defs><path id="circ" d="M150,150 m-118,0 a118,118 0 1,1 236,0 a118,118 0 1,1 -236,0"/></defs>
+            <text><textPath href="#circ" xlink:href="#circ" textLength="738" lengthAdjust="spacingAndGlyphs">¿IDKStudy?&#160;&#160;¿IDKStudy?&#160;&#160;¿IDKStudy?</textPath></text>
+          </svg>
+          <div class="core">؟</div>
+        </div>
+        <h1 class="word">IDKStudy</h1>
+        <div class="rule"></div>
+      </section>
 
-    <div class="marquee" aria-hidden="true"><span class="track" id="mqTrack"></span></div>
+      <div class="sec-label">الأعمال</div>
 
-    <div class="sec-label">الأعمال</div>
+      <article class="work" data-work>
+        <div class="head"><h2>كتب وخطط دراسية</h2><span class="chip">قريبًا</span></div>
+        <div class="art pages"><i></i><i></i><i>؟</i></div>
+        <div class="stamp" data-stamp>
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="46" fill="none" stroke="#f07d1e" stroke-width="2.5"/>
+            <circle cx="50" cy="50" r="35" fill="none" stroke="#f07d1e" stroke-width="1.2" opacity=".7"/>
+            <text class="q" x="50" y="66" text-anchor="middle">؟</text>
+          </svg>
+        </div>
+      </article>
 
-    <article class="work reveal">
-      <div class="head"><h2>كتب وخطط دراسية</h2><span class="chip">قريبًا</span></div>
-      <div class="art pages"><i></i><i></i><i>؟</i></div>
-    </article>
+      <article class="work" data-work>
+        <div class="head"><h2>ملخصات ومواضيع جاهزة</h2><span class="chip">قريبًا</span></div>
+        <div class="art lines"><b></b><b class="o"></b><b></b><b></b></div>
+        <div class="stamp" data-stamp>
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="46" fill="none" stroke="#f07d1e" stroke-width="2.5"/>
+            <circle cx="50" cy="50" r="35" fill="none" stroke="#f07d1e" stroke-width="1.2" opacity=".7"/>
+            <text class="q" x="50" y="66" text-anchor="middle">؟</text>
+          </svg>
+        </div>
+      </article>
 
-    <article class="work reveal">
-      <div class="head"><h2>ملخصات ومواضيع جاهزة</h2><span class="chip">قريبًا</span></div>
-      <div class="art lines"><b></b><b class="o"></b><b></b><b></b></div>
-    </article>
+      <article class="work" data-work>
+        <div class="head"><h2>تطبيق وقت المعهد</h2><span class="chip live">متوفر</span></div>
+        <div class="art"><div class="phone"><u class="o"></u><u></u><u class="s"></u><u></u><u class="l"></u></div></div>
+        <div class="stamp" data-stamp>
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="46" fill="none" stroke="#f07d1e" stroke-width="2.5"/>
+            <circle cx="50" cy="50" r="35" fill="none" stroke="#f07d1e" stroke-width="1.2" opacity=".7"/>
+            <text class="q" x="50" y="66" text-anchor="middle">؟</text>
+          </svg>
+        </div>
+      </article>
 
-    <article class="work reveal">
-      <div class="head"><h2>تطبيق وقت المعهد</h2><span class="chip live">متوفر</span></div>
-      <div class="art"><div class="phone"><u class="o"></u><u></u><u class="s"></u><u></u><u class="l"></u></div></div>
-    </article>
+      <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
+    </div>
+  </main>
 
-    <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
-  </div>
+  <div class="layer lit" id="litLayer" aria-hidden="true"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
     (function () {
-      var seg = "؟ &#183; IDKStudy &#183; ";
-      var html = "";
-      for (var i = 0; i < 12; i++) html += seg;
-      document.getElementById("mqTrack").innerHTML = html + html;
-
       var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      if (!reduced && window.gsap) {
-        gsap.from(".seal-zone", { y: 26, opacity: 0, duration: 1, ease: "power3.out" });
-        gsap.from(".marquee", { opacity: 0, duration: 1.2, delay: .35 });
-        if (window.ScrollTrigger) {
-          gsap.registerPlugin(ScrollTrigger);
-          gsap.utils.toArray(".reveal").forEach(function (el, i) {
-            gsap.from(el, {
-              y: 34, opacity: 0, duration: .85, ease: "power3.out", delay: i * .05,
-              scrollTrigger: { trigger: el, start: "top 88%" }
-            });
-          });
-        }
-        var seal = document.getElementById("seal");
-        var fine = window.matchMedia("(pointer: fine)").matches;
-        if (fine && seal) {
-          document.addEventListener("pointermove", function (e) {
-            var x = (e.clientX / window.innerWidth - .5) * 10;
-            var y = (e.clientY / window.innerHeight - .5) * -8;
-            gsap.to(seal, { rotateY: x, rotateX: y, transformPerspective: 700, duration: .7, ease: "power2.out" });
-          });
-        }
+      var base = document.getElementById("baseLayer");
+      var lit = document.getElementById("litLayer");
+      var halo = document.getElementById("torchHalo");
+      lit.innerHTML = base.innerHTML;
+      lit.querySelectorAll("[id]").forEach(function (n) { n.removeAttribute("id"); });
+
+      if (reduced || !window.gsap) {
+        document.documentElement.style.setProperty("--mr", "9999px");
+        return;
       }
+      document.documentElement.classList.add("haunted");
+
+      var root = document.documentElement;
+      var tx = window.innerWidth / 2, ty = 250, cx = tx, cy = ty, radius = 0;
+      var userDrove = false, idleTimer = null, wander = null;
+
+      function place() {
+        root.style.setProperty("--mx", cx + "px");
+        root.style.setProperty("--my", cy + "px");
+        root.style.setProperty("--mr", radius + "px");
+        halo.style.transform = "translate(" + (cx - 280) + "px," + (cy - 280) + "px)";
+      }
+      gsap.ticker.add(function () {
+        cx += (tx - cx) * 0.085;
+        cy += (ty - cy) * 0.085;
+        place();
+      });
+      gsap.to({ r: 0 }, {
+        r: 215, duration: 1.6, ease: "power2.out", delay: .3,
+        onUpdate: function () { radius = this.targets()[0].r; }
+      });
+
+      function wanderTo() {
+        if (userDrove) return;
+        var x = 60 + Math.random() * (window.innerWidth - 120);
+        var y = 120 + Math.random() * Math.min(document.body.scrollHeight - 160, 1400);
+        wander = gsap.to({ px: tx, py: ty }, {
+          px: x, py: y, duration: 3.4, ease: "sine.inOut",
+          onUpdate: function () { var t = this.targets()[0]; tx = t.px; ty = t.py; },
+          onComplete: wanderTo
+        });
+      }
+      var startWander = gsap.delayedCall(1.2, wanderTo);
+
+      function drive(x, yDoc) {
+        userDrove = true;
+        if (startWander) startWander.kill();
+        if (wander) wander.kill();
+        tx = x; ty = yDoc;
+        if (idleTimer) idleTimer.kill();
+        idleTimer = gsap.delayedCall(7, function () { userDrove = false; wanderTo(); });
+      }
+      window.addEventListener("pointermove", function (e) { drive(e.clientX, e.clientY + window.scrollY); }, { passive: true });
+      window.addEventListener("pointerdown", function (e) { drive(e.clientX, e.clientY + window.scrollY); }, { passive: true });
+      window.addEventListener("touchmove", function (e) {
+        var t = e.touches[0]; if (t) drive(t.clientX, t.clientY + window.scrollY);
+      }, { passive: true });
+
+      gsap.utils.toArray(".look-seal").forEach(function (s) {
+        gsap.to(s.querySelector(".core"), {
+          scale: 1.035, duration: 2.6, yoyo: true, repeat: -1, ease: "sine.inOut",
+          textShadow: "0 14px 60px rgba(240,125,30,.55)"
+        });
+      });
+
+      document.querySelectorAll("[data-work]").forEach(function (card, idx) {
+        card.addEventListener("click", function () {
+          var litCards = lit.querySelectorAll("[data-work]");
+          [card, litCards[idx]].forEach(function (c) {
+            if (!c) return;
+            var st = c.querySelector("[data-stamp]");
+            if (c.dataset.stamped) {
+              gsap.to(st, { opacity: 0, scale: 2.4, duration: .3, ease: "power2.in" });
+              delete c.dataset.stamped;
+            } else {
+              c.dataset.stamped = "1";
+              gsap.fromTo(st, { opacity: 0, scale: 2.6, rotate: -22 },
+                { opacity: 1, scale: 1, rotate: -10, duration: .38, ease: "power4.in" });
+              gsap.fromTo(c, { y: 0 }, { y: 2.5, duration: .05, delay: .36, yoyo: true, repeat: 1, ease: "power1.inOut" });
+            }
+          });
+        });
+      });
     })();
   </script>
 </body>
