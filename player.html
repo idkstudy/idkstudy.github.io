@@ -45,6 +45,32 @@ audio{width:100%;height:44px;margin-bottom:8px}
 .ar{direction:rtl;text-align:right;font-size:15.5px;line-height:1.7;color:var(--cream70);margin-top:3px}
 .foot{text-align:center;color:var(--cream45);font-size:12.5px;margin-top:26px;letter-spacing:.12em}
 .err{text-align:center;color:var(--cream70);padding:30px 0}
+/* ===== خط زمن الدرس — 45 دقيقة ===== */
+.lesson{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;margin-bottom:18px}
+.lrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.lstage{font-size:25px;font-weight:900;line-height:1.2}
+.lstage small{display:block;font-size:14px;color:var(--cream70);font-weight:400;margin-top:2px}
+.ltime{text-align:left;color:var(--cream70);font-size:13.5px;line-height:1.7;white-space:nowrap}
+.ltime b{color:var(--cream);font-size:16px}
+.bar{display:flex;height:16px;border-radius:9px;overflow:hidden;margin:14px 0 8px;background:rgba(255,255,255,.07)}
+.bar .seg{height:100%;border-inline-start:1px solid rgba(23,11,2,.55);position:relative}
+.bar .seg:first-child{border-inline-start:none}
+.bar .fillseg{position:absolute;top:0;bottom:0;inset-inline-start:0;background:linear-gradient(90deg,var(--orange),var(--orange2));transition:width .9s linear}
+.barwrap{position:relative}
+.pointer{position:absolute;top:-4px;width:3px;height:24px;background:var(--cream);border-radius:2px;box-shadow:0 0 8px rgba(246,234,217,.8);transition:inset-inline-start .9s linear}
+.steps{margin-top:10px}
+.step{display:flex;align-items:center;gap:10px;padding:6px 2px;color:var(--cream45);font-size:15.5px}
+.step .dot{flex:0 0 auto;width:24px;height:24px;border-radius:50%;border:2px solid var(--cream45);display:flex;align-items:center;justify-content:center;font-size:12.5px}
+.step .mins{margin-inline-start:auto;font-size:13px;color:var(--cream45);white-space:nowrap}
+.step.done{color:var(--cream70)}
+.step.done .dot{border-color:var(--orange);background:var(--orange);color:#2b1607;font-weight:900}
+.step.now{color:var(--cream);font-weight:700}
+.step.now .dot{border-color:var(--orange);color:var(--orange);box-shadow:0 0 10px rgba(240,125,30,.55)}
+.lbtns{display:flex;gap:10px;margin-top:14px}
+.lbtn{flex:1;border:none;border-radius:16px;padding:13px;font-family:inherit;font-size:17px;font-weight:900;cursor:pointer}
+.lbtn.start{background:linear-gradient(180deg,var(--orange2),var(--orange));color:#2b1607;box-shadow:0 6px 18px rgba(240,125,30,.35)}
+.lbtn.end{background:transparent;color:var(--cream70);border:1px solid var(--line)}
+.lbtn:active{transform:scale(.97)}
 </style>
 </head>
 <body>
@@ -53,6 +79,22 @@ audio{width:100%;height:44px;margin-bottom:8px}
   <h1 id="ptitle">مشغّل الإصغاء</h1>
   <div class="sub" id="psub"></div>
   <div class="rule"></div>
+  <div class="lesson" id="lessonCard">
+    <div class="tlabel" style="color:var(--orange);font-size:10.5px;letter-spacing:.28em;font-weight:700">LESSON TIMELINE · 45 MIN</div>
+    <div class="lrow" style="margin-top:8px">
+      <div class="lstage" id="lStage">الدرس لم يبدأ<small>اضغط «ابدأ الدرس» عند دخولك الصف</small></div>
+      <div class="ltime" id="lTime"></div>
+    </div>
+    <div class="barwrap">
+      <div class="bar" id="lBar"></div>
+      <div class="pointer" id="lPointer" style="inset-inline-start:0;display:none"></div>
+    </div>
+    <div class="steps" id="lSteps"></div>
+    <div class="lbtns">
+      <button class="lbtn start" id="lStart">▶ ابدأ الدرس</button>
+      <button class="lbtn end" id="lEnd" style="display:none">إنهاء الدرس</button>
+    </div>
+  </div>
   <div id="list"></div>
   <div class="foot">أداة خاصة بالمعلّم · تُحدَّث عن بُعد</div>
 </div>
@@ -102,6 +144,53 @@ render(fallback);
 window.applyNewTracks=function(d){try{if(typeof d==='string')d=JSON.parse(d);if(d&&d.tracks&&d.tracks.length)render(d);}catch(e){}};
 try{if(window.AndroidPlayer){const t=AndroidPlayer.getTracks();if(t){const d=JSON.parse(t);if(d&&d.tracks&&d.tracks.length)render(d);}}}catch(e){}
 fetch('tracks.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{const playing=[...document.querySelectorAll('audio')].some(a=>!a.paused);if(d&&d.tracks&&d.tracks.length&&!playing)render(d);}).catch(()=>{});
+</script>
+<script>
+/* ===== خط زمن الدرس: 45 دقيقة، يبدأ بزر ويُحفظ وقت البدء في localStorage ===== */
+const STAGES=[
+ {en:'Warm-up',ar:'التهيئة',min:5},
+ {en:'Activity 1',ar:'النشاط الأول',min:8},
+ {en:'Activity 2',ar:'النشاط الثاني',min:8},
+ {en:'Activity 3',ar:'النشاط الثالث',min:8},
+ {en:'Formative Assessment',ar:'التقويم التكويني',min:6},
+ {en:'Final Assessment',ar:'التقويم الختامي',min:6},
+ {en:'Closure',ar:'الغلق والتلخيص',min:4}
+];
+const TOTAL_S=45*60, KEY='lesson_start_ts';
+const barEl=document.getElementById('lBar'), stepsEl=document.getElementById('lSteps'),
+      stageEl=document.getElementById('lStage'), timeEl=document.getElementById('lTime'),
+      ptrEl=document.getElementById('lPointer'),
+      startBtn=document.getElementById('lStart'), endBtn=document.getElementById('lEnd');
+barEl.innerHTML=STAGES.map(s=>`<div class="seg" style="flex-grow:${s.min}"><div class="fillseg" style="width:0%"></div></div>`).join('');
+stepsEl.innerHTML=STAGES.map((s,i)=>`<div class="step" data-i="${i}"><div class="dot">${i+1}</div><div>${s.ar} · <span dir="ltr">${s.en}</span></div><div class="mins">${s.min} د</div></div>`).join('');
+const bounds=[];{let acc=0;STAGES.forEach(s=>{bounds.push([acc,acc+s.min*60]);acc+=s.min*60;});}
+function fmtClock(ts){const d=new Date(ts);let h=d.getHours();const m=String(d.getMinutes()).padStart(2,'0');const ap=h<12?'صباحًا':'مساءً';h=h%12;if(h===0)h=12;return h+':'+m+' '+ap;}
+function fmtDur(s){s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function tick(){
+  const raw=localStorage.getItem(KEY);
+  const fills=barEl.querySelectorAll('.fillseg'), steps=stepsEl.querySelectorAll('.step');
+  if(!raw){
+    stageEl.innerHTML='الدرس لم يبدأ<small>اضغط «ابدأ الدرس» عند دخولك الصف</small>';
+    timeEl.innerHTML='';ptrEl.style.display='none';
+    fills.forEach(f=>f.style.width='0%');steps.forEach(s=>s.className='step');
+    startBtn.style.display='';endBtn.style.display='none';return;
+  }
+  const startTs=parseInt(raw,10);
+  const elapsed=Math.min(Math.max((Date.now()-startTs)/1000,0),TOTAL_S);
+  const over=elapsed>=TOTAL_S;
+  let cur=STAGES.length-1;
+  for(let i=0;i<bounds.length;i++){if(elapsed<bounds[i][1]){cur=i;break;}}
+  if(over){stageEl.innerHTML='انتهى الدرس<small>٤٥ دقيقة كاملة — اضغط «إنهاء الدرس» للتصفير</small>';}
+  else{stageEl.innerHTML=STAGES[cur].ar+'<small dir="ltr" style="text-align:right">'+STAGES[cur].en+' · المرحلة '+(cur+1)+' من '+STAGES.length+'</small>';}
+  timeEl.innerHTML='بدأ <b>'+fmtClock(startTs)+'</b><br>مرّ <b>'+fmtDur(elapsed)+'</b><br>باقي <b>'+fmtDur(TOTAL_S-elapsed)+'</b>';
+  fills.forEach((f,i)=>{const[a,b]=bounds[i];const p=elapsed<=a?0:elapsed>=b?100:(elapsed-a)/(b-a)*100;f.style.width=p+'%';});
+  steps.forEach((s,i)=>{s.className='step'+(over||i<cur?' done':i===cur?' now':'');if(over||i<cur)s.querySelector('.dot').textContent='✓';else s.querySelector('.dot').textContent=i+1;});
+  ptrEl.style.display='';ptrEl.style.insetInlineStart='calc('+(elapsed/TOTAL_S*100)+'% - 1px)';
+  startBtn.style.display='none';endBtn.style.display='';
+}
+startBtn.addEventListener('click',()=>{localStorage.setItem(KEY,String(Date.now()));tick();});
+endBtn.addEventListener('click',()=>{localStorage.removeItem(KEY);tick();});
+setInterval(tick,1000);tick();
 </script>
 </body>
 </html>
