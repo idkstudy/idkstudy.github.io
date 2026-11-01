@@ -14,9 +14,9 @@
   }
   :root {
     --bg1: #2b1607; --bg0: #170b02;
-    --ink: #f6ead9; --mute: #a98a63;
+    --ink: #f6ead9; --tan: #d9c3a5; --mute: #a98a63;
     --orange: #f07d1e; --line: rgba(240,125,30,.28);
-    --paper: #f4ead6; --paper2: #e9dcbf; --dark: #2b1607; --stamp: #c75b08;
+    --card: rgba(59,32,12,.42);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   html { color-scheme: dark; overflow-x: clip; }
@@ -24,18 +24,18 @@
     font-family: "AppFont", Georgia, serif;
     min-height: 100dvh; color: var(--ink); position: relative;
     background:
-      radial-gradient(900px 480px at 85% -10%, rgba(240,125,30,.10), transparent 60%),
-      linear-gradient(165deg, var(--bg1) 0%, var(--bg0) 78%) fixed;
+      radial-gradient(1000px 520px at 85% -10%, rgba(240,125,30,.10), transparent 60%),
+      linear-gradient(160deg, var(--bg1) 0%, var(--bg0) 76%) fixed;
     overflow-x: clip; touch-action: manipulation;
   }
   body::after {
-    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: .05;
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 40; opacity: .05;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
   }
-  .wrap { max-width: 560px; margin: 0 auto; padding: 26px 18px calc(26px + env(safe-area-inset-bottom)); }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 28px 18px calc(28px + env(safe-area-inset-bottom)); }
 
-  header { display: flex; flex-direction: column; align-items: center; padding: 6px 0 2px; }
-  .seal { position: relative; width: 132px; height: 132px; }
+  header { display: flex; flex-direction: column; align-items: center; }
+  .seal { position: relative; width: 128px; height: 128px; }
   .seal svg.ring { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 46s linear infinite; direction: ltr; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .seal svg.ring text {
@@ -45,90 +45,94 @@
   .seal .halo {
     position: absolute; inset: 17%; border-radius: 50%;
     border: 1px solid var(--line);
-    background: radial-gradient(circle at 50% 38%, rgba(240,125,30,.16), rgba(23,11,2,.12) 70%);
+    background: radial-gradient(circle at 50% 38%, rgba(240,125,30,.15), rgba(23,11,2,.12) 70%);
   }
   .seal .core {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-    font-size: 72px; font-weight: 900; line-height: 1; color: var(--ink);
+    font-size: 70px; font-weight: 900; line-height: 1; color: var(--ink);
     text-shadow: 0 10px 30px rgba(240,125,30,.35);
   }
   h1.word { margin-top: 12px; font-size: 30px; font-weight: 900; letter-spacing: 1px; line-height: 1.3; }
   .rule { width: 46px; height: 1px; background: rgba(240,125,30,.55); margin: 12px auto 0; }
 
   .sec-label {
-    display: flex; align-items: center; gap: 12px; margin: 30px 2px 18px;
+    display: flex; align-items: center; gap: 12px; margin: 30px 2px 16px;
     color: var(--orange); font-size: 12px; font-weight: 700; letter-spacing: 4px;
   }
   .sec-label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
 
-  .paper {
-    position: relative; cursor: pointer; user-select: none;
-    background: linear-gradient(168deg, var(--paper) 0%, var(--paper2) 100%);
-    color: var(--dark); border-radius: 8px 14px 12px 10px;
-    padding: 18px 18px 20px; margin-bottom: 20px;
-    box-shadow: 0 18px 34px rgba(0,0,0,.45), 0 3px 0 rgba(0,0,0,.25);
-    transition: transform .45s cubic-bezier(.2,.9,.25,1.2), box-shadow .45s ease;
+  .work {
+    position: relative; overflow: hidden;
+    background: var(--card); border: 1px solid var(--line); border-radius: 24px;
+    padding: 18px; margin-bottom: 14px;
+    box-shadow: inset 0 1px 0 rgba(246,234,217,.06), 0 12px 30px rgba(0,0,0,.28);
   }
-  .paper:nth-of-type(odd) { transform: rotate(-1.1deg); }
-  .paper:nth-of-type(even) { transform: rotate(.9deg); }
-  .paper.served {
-    transform: rotate(0deg) translateY(8px) scale(1.015) !important;
-    box-shadow: 0 30px 50px rgba(0,0,0,.55), 0 4px 0 rgba(0,0,0,.25);
-  }
-  .paper .head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .paper h2 { font-size: 19px; font-weight: 800; line-height: 1.45; }
+  .work .head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .work h2 { font-size: 19px; font-weight: 800; line-height: 1.45; }
   .chip {
     margin-inline-start: auto; flex: 0 0 auto;
-    font-size: 10.5px; font-weight: 800; letter-spacing: 1.5px; color: var(--dark);
-    border: 1.5px solid rgba(43,22,7,.55); border-radius: 999px; padding: 4px 10px; white-space: nowrap;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 2px; color: #ffb066;
+    border: 1px solid rgba(240,125,30,.5); border-radius: 999px; padding: 5px 11px;
+    background: rgba(23,11,2,.35); white-space: nowrap;
   }
-  .chip.live { background: var(--orange); border-color: var(--orange); color: #170b02; }
-  .art { height: 104px; border-radius: 8px; position: relative; overflow: hidden;
-    background: linear-gradient(150deg, rgba(43,22,7,.14), rgba(43,22,7,.05));
-    border: 1px solid rgba(43,22,7,.22);
+  .chip.live { color: #170b02; background: var(--orange); border-color: var(--orange); }
+  .art { height: 108px; border-radius: 16px; position: relative; overflow: hidden;
+    background: linear-gradient(150deg, rgba(23,11,2,.65), rgba(43,22,7,.35));
+    border: 1px solid rgba(240,125,30,.16);
     display: flex; align-items: center; justify-content: center;
   }
-  .pages i { position: absolute; width: 58px; height: 76px; border-radius: 5px 9px 9px 5px;
-    border: 1.5px solid rgba(43,22,7,.5); background: linear-gradient(160deg, #fdf6e3, #e9dcbf); }
-  .pages i:nth-child(1) { transform: rotate(-9deg) translate(-13px, 3px); opacity: .6; }
-  .pages i:nth-child(2) { transform: rotate(7deg) translate(13px, 2px); opacity: .85; }
+  .pages i { position: absolute; width: 60px; height: 78px; border-radius: 6px 10px 10px 6px;
+    border: 1px solid rgba(240,125,30,.4); background: linear-gradient(160deg, #3a1e0b, #241105); }
+  .pages i:nth-child(1) { transform: rotate(-9deg) translate(-13px, 3px); opacity: .55; }
+  .pages i:nth-child(2) { transform: rotate(7deg) translate(13px, 2px); opacity: .8; }
   .pages i:nth-child(3) { transform: none; display: flex; align-items: center; justify-content: center;
-    font-size: 34px; font-weight: 900; color: var(--dark); font-style: normal; }
+    font-size: 36px; font-weight: 900; color: var(--ink); font-style: normal; }
   .lines { flex-direction: column; gap: 9px; padding: 0 30px; align-items: stretch; }
-  .lines b { display: block; height: 6px; border-radius: 99px; background: rgba(43,22,7,.35); }
-  .lines b.o { background: var(--stamp); }
+  .lines b { display: block; height: 6px; border-radius: 99px; background: rgba(217,195,165,.35); }
+  .lines b.o { background: var(--orange); }
   .lines b:nth-child(1) { width: 62%; } .lines b:nth-child(2) { width: 88%; }
   .lines b:nth-child(3) { width: 74%; } .lines b:nth-child(4) { width: 46%; }
-  .phone { width: 58px; height: 88px; border-radius: 11px; border: 1.5px solid rgba(43,22,7,.6);
-    background: linear-gradient(165deg, #3a1e0b, #241105); padding: 8px 7px; box-shadow: 0 10px 22px rgba(43,22,7,.35); }
-  .phone u { display: block; text-decoration: none; height: 7px; border-radius: 99px; background: rgba(246,234,217,.3); margin-bottom: 6px; }
+  .phone { width: 58px; height: 88px; border-radius: 11px; border: 1.5px solid rgba(240,125,30,.55);
+    background: linear-gradient(165deg, #2b1607, #170b02); padding: 8px 7px; box-shadow: 0 12px 24px rgba(0,0,0,.4); }
+  .phone u { display: block; text-decoration: none; height: 7px; border-radius: 99px; background: rgba(246,234,217,.28); margin-bottom: 6px; }
   .phone u.o { background: var(--orange); width: 55%; }
-  .phone u.s { width: 70%; } .phone u.l { height: 18px; border-radius: 6px; background: rgba(240,125,30,.3); margin-top: 2px; }
+  .phone u.s { width: 70%; } .phone u.l { height: 18px; border-radius: 6px; background: rgba(240,125,30,.28); margin-top: 2px; }
 
   .stamp {
     position: absolute; z-index: 3; inset-inline-end: 14px; bottom: 12px;
-    width: 92px; height: 92px; pointer-events: none;
-    opacity: 0; transform: rotate(-14deg) scale(2.3);
+    width: 84px; height: 84px; pointer-events: none;
+    opacity: 0; transform: rotate(-12deg) scale(2.3);
   }
-  .paper.served .stamp { animation: slam .38s cubic-bezier(.2,.7,.3,1) forwards; }
+  .work.stamped .stamp { animation: slam .38s cubic-bezier(.2,.7,.3,1) forwards; }
   @keyframes slam {
-    0% { opacity: 0; transform: rotate(-26deg) scale(2.3); }
-    70% { opacity: 1; transform: rotate(-11deg) scale(.96); }
-    100% { opacity: .92; transform: rotate(-12deg) scale(1); }
+    0% { opacity: 0; transform: rotate(-24deg) scale(2.3); }
+    70% { opacity: 1; transform: rotate(-10deg) scale(.96); }
+    100% { opacity: .95; transform: rotate(-11deg) scale(1); }
   }
-  .stamp svg { width: 100%; height: 100%; }
-  .stamp .q { font-family: "AppFont", Georgia, serif; font-size: 38px; font-weight: 900; fill: var(--stamp); }
+  .stamp .q { font-family: "AppFont", Georgia, serif; font-size: 36px; font-weight: 900; fill: var(--orange); }
 
   .dl {
     display: none; margin-top: 14px; text-decoration: none;
     background: var(--orange); color: #170b02; font-weight: 800; font-size: 15px;
     border-radius: 12px; padding: 13px 18px; text-align: center;
-    box-shadow: 0 8px 20px rgba(199,91,8,.35);
   }
-  .paper.has-file .dl { display: block; }
+  .work.has-file .dl { display: block; }
 
-  footer { text-align: center; margin-top: 30px; font-size: 12px; letter-spacing: 3px; color: var(--mute); font-weight: 700; }
+  footer { text-align: center; margin-top: 28px; font-size: 12px; letter-spacing: 3px; color: var(--mute); font-weight: 700; }
   footer b { color: var(--orange); }
+
+  /* ---------- the creature ---------- */
+  #creature {
+    position: fixed; z-index: 60; left: 0; top: 0; width: 92px; height: 106px;
+    pointer-events: none; will-change: transform;
+    filter: drop-shadow(0 10px 14px rgba(0,0,0,.45));
+  }
+  #creature .bob { animation: bob 2.2s ease-in-out infinite; transform-origin: 50% 90%; }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3.5px); } }
+  #creature .leg { transform-box: fill-box; transform-origin: 50% 8%; }
+  #creature .arm { transform-box: fill-box; transform-origin: 50% 12%; }
+  #creature .eyes { transform-box: fill-box; transform-origin: center; transition: transform .07s; }
+  #creature.blink .eyes { transform: scaleY(.12); }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .001s !important; transition-duration: .001s !important; }
@@ -152,32 +156,32 @@
 
     <div class="sec-label">الأعمال</div>
 
-    <article class="paper" data-paper>
+    <article class="work" data-work>
       <div class="head"><h2>كتب وخطط دراسية</h2><span class="chip">قريبًا</span></div>
       <div class="art pages"><i></i><i></i><i>؟</i></div>
       <div class="stamp"><svg viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="45" fill="none" stroke="#c75b08" stroke-width="3"/>
-        <circle cx="50" cy="50" r="34" fill="none" stroke="#c75b08" stroke-width="1.4" opacity=".7"/>
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#f07d1e" stroke-width="3"/>
+        <circle cx="50" cy="50" r="34" fill="none" stroke="#f07d1e" stroke-width="1.4" opacity=".7"/>
         <text class="q" x="50" y="65" text-anchor="middle">؟</text>
       </svg></div>
     </article>
 
-    <article class="paper" data-paper>
+    <article class="work" data-work>
       <div class="head"><h2>ملخصات ومواضيع جاهزة</h2><span class="chip">قريبًا</span></div>
       <div class="art lines"><b></b><b class="o"></b><b></b><b></b></div>
       <div class="stamp"><svg viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="45" fill="none" stroke="#c75b08" stroke-width="3"/>
-        <circle cx="50" cy="50" r="34" fill="none" stroke="#c75b08" stroke-width="1.4" opacity=".7"/>
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#f07d1e" stroke-width="3"/>
+        <circle cx="50" cy="50" r="34" fill="none" stroke="#f07d1e" stroke-width="1.4" opacity=".7"/>
         <text class="q" x="50" y="65" text-anchor="middle">؟</text>
       </svg></div>
     </article>
 
-    <article class="paper" data-paper>
+    <article class="work" data-work>
       <div class="head"><h2>تطبيق وقت المعهد</h2><span class="chip live">متوفر</span></div>
       <div class="art"><div class="phone"><u class="o"></u><u></u><u class="s"></u><u></u><u class="l"></u></div></div>
       <div class="stamp"><svg viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="45" fill="none" stroke="#c75b08" stroke-width="3"/>
-        <circle cx="50" cy="50" r="34" fill="none" stroke="#c75b08" stroke-width="1.4" opacity=".7"/>
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#f07d1e" stroke-width="3"/>
+        <circle cx="50" cy="50" r="34" fill="none" stroke="#f07d1e" stroke-width="1.4" opacity=".7"/>
         <text class="q" x="50" y="65" text-anchor="middle">؟</text>
       </svg></div>
     </article>
@@ -185,15 +189,97 @@
     <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
   </div>
 
+  <!-- the ؟ creature -->
+  <div id="creature" aria-hidden="true">
+    <svg viewBox="0 0 120 132" width="92" height="106">
+      <g class="bob">
+        <g class="leg" id="legL"><rect x="40" y="104" width="13" height="24" rx="6.5" fill="#e8d3ae"/><rect x="38" y="121" width="18" height="9" rx="4.5" fill="#f07d1e"/></g>
+        <g class="leg" id="legR"><rect x="67" y="104" width="13" height="24" rx="6.5" fill="#e8d3ae"/><rect x="65" y="121" width="18" height="9" rx="4.5" fill="#f07d1e"/></g>
+        <g class="arm" id="armL"><path d="M25 64 Q6 74 14 90" fill="none" stroke="#e8d3ae" stroke-width="10" stroke-linecap="round"/></g>
+        <g class="arm" id="armR"><path d="M95 64 Q114 74 106 90" fill="none" stroke="#e8d3ae" stroke-width="10" stroke-linecap="round"/></g>
+        <text x="60" y="102" text-anchor="middle" font-size="104" font-weight="900" fill="#f6ead9" style="font-family:'AppFont',Georgia,serif">؟</text>
+        <g class="eyes" id="eyes">
+          <circle cx="47" cy="43" r="7.6" fill="#fff"/>
+          <circle cx="73" cy="43" r="7.6" fill="#fff"/>
+          <circle class="pupil" cx="47" cy="45" r="3.8" fill="#170b02"/>
+          <circle class="pupil" cx="73" cy="45" r="3.8" fill="#170b02"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
   <script>
-    document.querySelectorAll("[data-paper]").forEach(function (p) {
-      p.addEventListener("click", function () {
-        if (!p.classList.contains("served")) {
-          p.classList.add("served");
-          if (navigator.vibrate) navigator.vibrate(25);
+    (function () {
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var c = document.getElementById("creature");
+      var legL = document.getElementById("legL"), legR = document.getElementById("legR");
+      var armL = document.getElementById("armL"), armR = document.getElementById("armR");
+      var eyes = document.getElementById("eyes");
+      var pupils = c.querySelectorAll(".pupil");
+      var W = 92, H = 106;
+      var x = window.innerWidth - W - 18, y = 120;
+      var tx = x, ty = y, pendingCard = null, hopUntil = 0;
+      var lastTapAt = 0, nextBlink = performance.now() + 2200;
+
+      function render(px, py, tilt, legPhase, speedNorm) {
+        c.style.transform = "translate(" + px + "px," + py + "px) rotate(" + tilt + "deg)";
+        var sw = speedNorm > 0.12 ? Math.sin(legPhase) * 30 * Math.min(1, speedNorm) : 0;
+        legL.style.transform = "rotate(" + sw + "deg)";
+        legR.style.transform = "rotate(" + (-sw) + "deg)";
+        armL.style.transform = "rotate(" + (-sw * 0.7) + "deg)";
+        armR.style.transform = "rotate(" + (sw * 0.7) + "deg)";
+      }
+      render(x, y, 0, 0, 0);
+      if (reduced) return;
+
+      window.addEventListener("pointerdown", function (e) {
+        tx = Math.min(Math.max(e.clientX - W / 2, 2), window.innerWidth - W - 2);
+        ty = Math.min(Math.max(e.clientY - H + 14, 2), window.innerHeight - H - 2);
+        var card = e.target.closest ? e.target.closest("[data-work]") : null;
+        pendingCard = card;
+        lastTapAt = performance.now();
+      }, { passive: true });
+
+      var phase = 0, last = performance.now();
+      function frame(now) {
+        var dt = Math.min(50, now - last); last = now;
+        var dx = tx - x, dy = ty - y;
+        var dist = Math.hypot(dx, dy);
+        var speedNorm = Math.min(1, dist / 130);
+        if (dist > 2) {
+          var step = Math.min(dist, (0.25 + dist * 0.012) * dt);
+          x += dx / dist * step; y += dy / dist * step;
+          phase += dt * 0.045 * (0.4 + speedNorm);
+        } else if (pendingCard) {
+          if (!pendingCard.classList.contains("stamped")) {
+            pendingCard.classList.add("stamped");
+            if (navigator.vibrate) navigator.vibrate(20);
+          }
+          pendingCard = null;
+          hopUntil = now + 260;
         }
-      });
-    });
+        var hop = now < hopUntil ? -Math.sin((hopUntil - now) / 260 * Math.PI) * 13 : 0;
+        var tilt = Math.max(-9, Math.min(9, dx * 0.05));
+        // pupils look toward the target
+        var lx = Math.max(-3.2, Math.min(3.2, dx * 0.02));
+        var ly = Math.max(-2.4, Math.min(2.8, dy * 0.02));
+        pupils.forEach(function (p) { p.setAttribute("transform", "translate(" + lx + "," + ly + ")"); });
+        render(x, y + hop, tilt, phase, dist > 2 ? Math.max(speedNorm, 0.35) : 0);
+        if (now > nextBlink) {
+          c.classList.add("blink");
+          setTimeout(function () { c.classList.remove("blink"); }, 130);
+          nextBlink = now + 1900 + Math.random() * 2600;
+        }
+        // idle wander: toddle somewhere new every few seconds
+        if (!pendingCard && dist <= 2 && now - lastTapAt > 6000) {
+          lastTapAt = now;
+          tx = 14 + Math.random() * (window.innerWidth - W - 28);
+          ty = 90 + Math.random() * (window.innerHeight - H - 160);
+        }
+        requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    })();
   </script>
 </body>
 </html>
