@@ -15,7 +15,8 @@
 <style>
   html.mxb #bgRing, html.mxb .glow, html.mxb .kicker, html.mxb h1.word,
   html.mxb h1.shelf, html.mxb .tickrule, html.mxb .sec-label, html.mxb .gcard,
-  html.mxb #backBtn, html.mxb footer { opacity: 0; }
+  html.mxb .acard, html.mxb #backBtn, html.mxb #backBtnA, html.mxb #backBtnG,
+  html.mxb footer { opacity: 0; }
   @font-face {
     font-family: "AppFont";
     src: url("https://omrhmza.github.io/myschedulejson/assets/font.ttf") format("truetype");
@@ -148,6 +149,67 @@
   }
   .dl .arr { font-size: 15px; line-height: 1; }
 
+  /* ---------- emar audio: folded lesson cards ---------- */
+  .acard {
+    position: relative; border: 1px solid var(--line); border-radius: 18px;
+    background: var(--card); margin-top: 12px; overflow: hidden;
+    will-change: transform, opacity;
+  }
+  .acard::before {
+    content: ""; position: absolute; inset-inline: 12px; top: 0; height: 6px; opacity: .55;
+    background: repeating-linear-gradient(90deg, rgba(240,125,30,.55) 0 1px, transparent 1px 9px);
+  }
+  .ahead {
+    width: 100%; display: flex; align-items: center; gap: 11px;
+    padding: 13px 13px 12px; background: none; border: 0; cursor: pointer;
+    font: inherit; color: inherit; text-align: inherit;
+  }
+  .ahead:active { transform: scale(.985); }
+  .ahead .dial { position: relative; width: 40px; height: 40px; flex: none; }
+  .ahead .dial svg { position: absolute; inset: 0; width: 100%; height: 100%; direction: ltr; }
+  .ahead .dial .core {
+    position: absolute; inset: 9px; border-radius: 50%;
+    border: 1.5px solid rgba(240,125,30,.7);
+    background: radial-gradient(circle at 50% 35%, rgba(240,125,30,.2), rgba(23,11,2,.4) 78%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 900; color: var(--orange);
+  }
+  .ahead .ttl { flex: 1; min-width: 0; }
+  .ahead .ttl b { display: block; font-size: 16.5px; font-weight: 800; line-height: 1.35; }
+  .ahead .ttl span { display: block; color: var(--mute); font-size: 11px; letter-spacing: .4px; margin-top: 1px; direction: ltr; text-align: right; unicode-bidi: isolate; }
+  .ahead .cnt {
+    flex: none; font-size: 10.5px; font-weight: 800; letter-spacing: .6px; color: #ffb066;
+    border: 1.5px solid rgba(240,125,30,.55); border-radius: 999px; padding: 4px 9px;
+    background: rgba(23,11,2,.35);
+  }
+  .ahead .chev { flex: none; width: 18px; height: 18px; color: var(--orange); transition: transform .4s cubic-bezier(.25,.6,.35,1); }
+  .acard.open .ahead .chev { transform: rotate(180deg); }
+  .abody { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s cubic-bezier(.25,.6,.35,1); }
+  .acard.open .abody { grid-template-rows: 1fr; }
+  .ainner { overflow: hidden; min-height: 0; }
+  .bgroup { padding: 2px 13px 13px; }
+  .bgroup + .bgroup { border-top: 1px dashed rgba(240,125,30,.18); padding-top: 10px; }
+  .blab { color: var(--orange); font-size: 11.5px; font-weight: 800; letter-spacing: 2.5px; margin-bottom: 8px; }
+  .trow {
+    display: flex; align-items: center; gap: 10px; width: 100%;
+    padding: 7px 6px; border-radius: 12px; cursor: pointer; background: none; border: 0;
+    font: inherit; color: inherit; text-align: inherit;
+  }
+  .trow:active { background: rgba(240,125,30,.08); }
+  .pbtn {
+    flex: none; width: 38px; height: 38px; border-radius: 50%;
+    border: 1.5px solid rgba(240,125,30,.65); background: rgba(23,11,2,.4);
+    display: flex; align-items: center; justify-content: center; color: var(--orange);
+  }
+  .pbtn svg { width: 15px; height: 15px; fill: currentColor; }
+  .pbtn .ic-pause { display: none; }
+  .trow.playing .pbtn { background: var(--orange); color: #170b02; border-color: var(--orange); }
+  .trow.playing .pbtn .ic-play { display: none; }
+  .trow.playing .pbtn .ic-pause { display: block; }
+  .trow.on .tlab { color: var(--orange); }
+  .tlab { flex: 1; font-size: 14.5px; font-weight: 700; direction: ltr; text-align: right; unicode-bidi: isolate; }
+  .tdur { flex: none; color: var(--mute); font-size: 11.5px; direction: ltr; unicode-bidi: isolate; }
+
   footer { text-align: center; margin-top: 30px; font-size: 11px; letter-spacing: 3px; color: var(--mute); font-weight: 700; direction: ltr; unicode-bidi: isolate; }
   footer b { color: var(--orange); }
   [hidden] { display: none !important; }
@@ -205,6 +267,10 @@
         <span class="dial"><svg viewBox="0 0 58 58"><g class="dticks"></g></svg><span class="core">٠٣</span></span>
         <h2>تطبيق وقت المعهد</h2><span class="st live">متوفر</span>
       </button>
+      <button class="gcard" type="button" data-work="audio">
+        <span class="dial"><svg viewBox="0 0 58 58"><g class="dticks"></g></svg><span class="core">٠٤</span></span>
+        <h2>صوتيات إيمار</h2><span class="st live">متوفر</span>
+      </button>
     </div>
     <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
   </main>
@@ -219,6 +285,55 @@
     <div class="grid" id="fileGrid" style="margin-top:14px"></div>
     <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
   </section>
+
+  <!-- emar audio: grades view -->
+  <section class="wrap" id="audioView" hidden>
+    <div class="hero-spacer">
+      <div class="spacer-tools"><button class="back" id="backBtnA" type="button">رجوع</button></div>
+    </div>
+    <h1 class="shelf">صوتيات إيمار</h1>
+    <div class="tickrule"></div>
+    <div class="grid" id="gradeGrid" style="margin-top:14px">
+      <button class="gcard" type="button" id="grade1Card">
+        <span class="dial"><svg viewBox="0 0 58 58"><g class="dticks"></g></svg><span class="core">٠١</span></span>
+        <h2>الصف الأول</h2><span class="meta">١٣٦ مقطعًا · الكتابان</span><span class="st live">متوفر</span>
+      </button>
+      <div class="gcard">
+        <span class="dial"><svg viewBox="0 0 58 58"><g class="dticks"></g></svg><span class="core">٠٢</span></span>
+        <h2>الصف الثاني</h2><span class="st">قريبًا</span>
+      </div>
+      <div class="gcard">
+        <span class="dial"><svg viewBox="0 0 58 58"><g class="dticks"></g></svg><span class="core">٠٣</span></span>
+        <h2>الصف الثالث</h2><span class="st">قريبًا</span>
+      </div>
+      <div class="gcard">
+        <span class="dial"><svg viewBox="0 0 58 58"><g class="dticks"></g></svg><span class="core">٠٤</span></span>
+        <h2>الصف الرابع</h2><span class="st">قريبًا</span>
+      </div>
+      <div class="gcard">
+        <span class="dial"><svg viewBox="0 0 58 58"><g class="dticks"></g></svg><span class="core">٠٥</span></span>
+        <h2>الصف الخامس</h2><span class="st">قريبًا</span>
+      </div>
+      <div class="gcard">
+        <span class="dial"><svg viewBox="0 0 58 58"><g class="dticks"></g></svg><span class="core">٠٦</span></span>
+        <h2>الصف السادس</h2><span class="st">قريبًا</span>
+      </div>
+    </div>
+    <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
+  </section>
+
+  <!-- emar audio: grade 1 lessons view -->
+  <section class="wrap" id="g1View" hidden>
+    <div class="hero-spacer">
+      <div class="spacer-tools"><button class="back" id="backBtnG" type="button">رجوع</button></div>
+    </div>
+    <h1 class="shelf">الصف الأول</h1>
+    <div class="tickrule"></div>
+    <div id="lessonList"></div>
+    <footer>DESIGNED BY <b>¿IDKSTUDY?</b></footer>
+  </section>
+
+  <audio id="player" preload="none"></audio>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -422,11 +537,127 @@
       return URL.createObjectURL(new Blob([pdf], { type: "application/pdf" }));
     }
 
+    /* ===== emar audio — grade 1 (data generated from the official CD set) ===== */
+    var EMAR_G1 = {"lessons": [{"n": 1, "sb": [["sb-u01-emar.mp3", "Emar", "0:07"], ["sb-u01-ex1.mp3", "Ex. 1", "0:29"], ["sb-u01-ex2.mp3", "Ex. 2", "0:18"], ["sb-u01-ex3-song.mp3", "Ex. 3 · Song", "0:44"], ["sb-u01-ex4.mp3", "Ex. 4", "0:15"]], "wb": [["wb-u01-ex3.mp3", "Ex. 3", "0:29"]]}, {"n": 2, "sb": [["sb-u02-ex1.mp3", "Ex. 1", "0:37"], ["sb-u02-ex2.mp3", "Ex. 2", "0:19"], ["sb-u02-ex5-song.mp3", "Ex. 5 · Song", "1:44"]], "wb": [["wb-u02-ex2.mp3", "Ex. 2", "0:32"], ["wb-u02-ex3.mp3", "Ex. 3", "0:38"]]}, {"n": 3, "sb": [["sb-u03-ex1.mp3", "Ex. 1", "0:27"], ["sb-u03-ex2.mp3", "Ex. 2", "0:12"], ["sb-u03-ex3.mp3", "Ex. 3", "0:17"], ["sb-u03-ex5-song.mp3", "Ex. 5 · Song", "0:46"], ["sb-u03-ex6.mp3", "Ex. 6", "0:13"]], "wb": [["wb-u03-ex1.mp3", "Ex. 1", "0:43"], ["wb-u03-ex5.mp3", "Ex. 5", "0:32"]]}, {"n": 4, "sb": [["sb-u04-ex1.mp3", "Ex. 1", "0:23"], ["sb-u04-ex3.mp3", "Ex. 3", "0:19"], ["sb-u04-ex6.mp3", "Ex. 6", "0:14"]], "wb": [["wb-u04-ex5.mp3", "Ex. 5", "0:35"]]}, {"n": 5, "sb": [["sb-u05-ex1.mp3", "Ex. 1", "0:25"], ["sb-u05-ex3.mp3", "Ex. 3", "0:27"]], "wb": [["wb-u05-rev1-ex1.mp3", "Revision 1 · Ex. 1", "0:34"]]}, {"n": 6, "sb": [["sb-u06-ex1.mp3", "Ex. 1", "0:36"], ["sb-u06-ex2.mp3", "Ex. 2", "0:21"], ["sb-u06-ex3.mp3", "Ex. 3", "0:20"], ["sb-u06-ex5.mp3", "Ex. 5", "0:11"], ["sb-u06-ex7-song.mp3", "Ex. 7 · Song", "1:20"]], "wb": [["wb-u06-ex3.mp3", "Ex. 3", "0:32"], ["wb-u06-ex5.mp3", "Ex. 5", "0:38"]]}, {"n": 7, "sb": [["sb-u07-ex1.mp3", "Ex. 1", "0:41"], ["sb-u07-ex2.mp3", "Ex. 2", "0:28"], ["sb-u07-ex4.mp3", "Ex. 4", "1:15"], ["sb-u07-ex4-song.mp3", "Ex. 4 · Song", "1:15"], ["sb-u07-ex6.mp3", "Ex. 6", "0:11"]], "wb": [["wb-u07-ex1.mp3", "Ex. 1", "0:44"], ["wb-u07-ex3.mp3", "Ex. 3", "0:58"]]}, {"n": 8, "sb": [["sb-u08-ex1.mp3", "Ex. 1", "0:34"], ["sb-u08-ex2.mp3", "Ex. 2", "0:29"], ["sb-u08-ex4-song.mp3", "Ex. 4 · Song", "1:12"], ["sb-u08-ex5.mp3", "Ex. 5", "0:13"]], "wb": [["wb-u08-ex1.mp3", "Ex. 1", "0:47"], ["wb-u08-ex3.mp3", "Ex. 3", "0:44"]]}, {"n": 9, "sb": [["sb-u09-ex1.mp3", "Ex. 1", "0:42"], ["sb-u09-ex2.mp3", "Ex. 2", "0:18"], ["sb-u09-ex4-song.mp3", "Ex. 4 · Song", "1:10"], ["sb-u09-ex5.mp3", "Ex. 5", "0:12"]], "wb": [["wb-u09-ex2.mp3", "Ex. 2", "0:34"]]}, {"n": 10, "sb": [["sb-u10-ex1.mp3", "Ex. 1", "0:18"], ["sb-u10-ex2.mp3", "Ex. 2", "0:26"]], "wb": [["wb-u10-rev2-ex1.mp3", "Revision 2 · Ex. 1", "0:35"], ["wb-u10-rev2-ex2.mp3", "Revision 2 · Ex. 2", "0:42"]]}, {"n": 11, "sb": [["sb-u11-ex1.mp3", "Ex. 1", "0:29"], ["sb-u11-ex2.mp3", "Ex. 2", "0:20"], ["sb-u11-ex3.mp3", "Ex. 3", "0:14"], ["sb-u11-ex5.mp3", "Ex. 5", "0:13"]], "wb": [["wb-u11-ex1.mp3", "Ex. 1", "0:33"]]}, {"n": 12, "sb": [["sb-u12-ex1.mp3", "Ex. 1", "0:36"], ["sb-u12-ex2.mp3", "Ex. 2", "0:20"], ["sb-u12-ex4.mp3", "Ex. 4", "0:22"], ["sb-u12-ex5.mp3", "Ex. 5", "0:13"], ["sb-u12-ex7-song.mp3", "Ex. 7 · Song", "0:27"]], "wb": [["wb-u12-ex1.mp3", "Ex. 1", "0:31"]]}, {"n": 13, "sb": [["sb-u13-ex1.mp3", "Ex. 1", "0:38"], ["sb-u13-ex2.mp3", "Ex. 2", "0:27"], ["sb-u13-ex5song.mp3", "Ex. 5 · Song", "0:48"], ["sb-u13-ex6.mp3", "Ex. 6", "0:18"]], "wb": [["wb-u13-ex1.mp3", "Ex. 1", "1:05"]]}, {"n": 14, "sb": [["sb-u14-ex1.mp3", "Ex. 1", "0:42"], ["sb-u14-ex2.mp3", "Ex. 2", "0:20"], ["sb-u14-ex6.mp3", "Ex. 6", "0:19"]], "wb": [["wb-u14-ex2.mp3", "Ex. 2", "0:31"], ["wb-u14-ex4.mp3", "Ex. 4", "0:32"]]}, {"n": 15, "sb": [["sb-u15-ex3.mp3", "Ex. 3", "0:33"], ["sb-u15-ex4.mp3", "Ex. 4", "0:33"]], "wb": [["wb-u15-rev3-ex3.mp3", "Revision 3 · Ex. 3", "0:43"], ["wb-u15-rev3-ex5.mp3", "Revision 3 · Ex. 5", "0:34"]]}, {"n": 16, "sb": [["sb-u16-ex1.mp3", "Ex. 1", "0:49"], ["sb-u16-ex2.mp3", "Ex. 2", "0:24"], ["sb-u16-ex3.mp3", "Ex. 3", "0:20"], ["sb-u16-ex5.mp3", "Ex. 5", "0:17"]], "wb": [["wb-u16-ex3.mp3", "Ex. 3", "0:44"]]}, {"n": 17, "sb": [["sb-u17-ex1.mp3", "Ex. 1", "1:01"], ["sb-u17-ex2.mp3", "Ex. 2", "0:22"], ["sb-u17-ex4.mp3", "Ex. 4", "1:57"], ["sb-u17-ex4-song.mp3", "Ex. 4 · Song", "1:57"], ["sb-u17-ex5.mp3", "Ex. 5", "0:20"], ["sb-u17-ex6.mp3", "Ex. 6", "0:16"], ["sb-u17-ex7.mp3", "Ex. 7", "0:20"]], "wb": [["wb-u17-ex1.mp3", "Ex. 1", "0:30"], ["wb-u17-ex6.mp3", "Ex. 6", "0:27"]]}, {"n": 18, "sb": [["sb-u18-ex1.mp3", "Ex. 1", "0:27"], ["sb-u18-ex2.mp3", "Ex. 2", "0:24"], ["sb-u18-ex5.mp3", "Ex. 5", "0:16"]], "wb": [["wb-u18-ex3.mp3", "Ex. 3", "1:01"]]}, {"n": 19, "sb": [["sb-u19-ex1.mp3", "Ex. 1", "0:49"], ["sb-u19-ex2.mp3", "Ex. 2", "0:20"], ["sb-u19-ex3.mp3", "Ex. 3", "0:16"], ["sb-u19-ex5.mp3", "Ex. 5", "0:16"]], "wb": [["wb-u19-ex3.mp3", "Ex. 3", "0:44"]]}, {"n": 20, "sb": [["sb-u20-ex2.mp3", "Ex. 2", "0:28"]], "wb": [["wb-u20-rev4-ex4.mp3", "Revision 4 · Ex. 4", "0:40"]]}, {"n": 21, "sb": [["sb-u21-ex1.mp3", "Ex. 1", "1:10"], ["sb-u21-ex2.mp3", "Ex. 2", "0:22"], ["sb-u21-ex6.mp3", "Ex. 6", "0:13"]], "wb": [["wb-u21-ex2.mp3", "Ex. 2", "0:36"]]}, {"n": 22, "sb": [["sb-u22-ex1.mp3", "Ex. 1", "0:37"], ["sb-u22-ex2.mp3", "Ex. 2", "0:19"], ["sb-u22-ex4-song.mp3", "Ex. 4 · Song", "0:51"], ["sb-u22-ex5.mp3", "Ex. 5", "0:17"]], "wb": [["wb-u22-ex1.mp3", "Ex. 1", "0:43"]]}, {"n": 23, "sb": [["sb-u23-ex1.mp3", "Ex. 1", "0:36"], ["sb-u23-ex2.mp3", "Ex. 2", "0:25"], ["sb-u23-ex5.mp3", "Ex. 5", "0:16"]], "wb": [["wb-u23-ex1.mp3", "Ex. 1", "0:29"]]}, {"n": 24, "sb": [["sb-u24-ex1.mp3", "Ex. 1", "0:29"], ["sb-u24-ex2.mp3", "Ex. 2", "0:20"], ["sb-u24-ex5.mp3", "Ex. 5", "0:25"], ["sb-u24-ex6-song.mp3", "Ex. 6 · Song", "0:50"]], "wb": [["wb-u24-ex3.mp3", "Ex. 3", "0:34"]]}, {"n": 25, "sb": [["sb-u25-ex1.mp3", "Ex. 1", "0:30"], ["sb-u25-ex5-song.mp3", "Ex. 5 · Song", "1:08"]], "wb": [["wb-u25-rev5-ex1.mp3", "Revision 5 · Ex. 1", "0:38"]]}], "phonics": [{"k": 1, "tracks": [["sb-phonics1-ex1.mp3", "Ex. 1", "0:13"], ["sb-phonics1-ex2.mp3", "Ex. 2", "0:30"]]}, {"k": 2, "tracks": [["sb-phonics2-ex1.mp3", "Ex. 1", "0:15"], ["sb-phonics2-ex2.mp3", "Ex. 2", "0:33"]]}, {"k": 3, "tracks": [["sb-phonics3-ex1.mp3", "Ex. 1", "0:14"], ["sb-phonics3-ex2.mp3", "Ex. 2", "0:24"]]}, {"k": 4, "tracks": [["sb-phonics4-ex1.mp3", "Ex. 1", "0:14"], ["sb-phonics4-ex2.mp3", "Ex. 2", "0:32"]]}], "stories": [["sb-story1-bumbo.mp3", "Story 1 · Bumbo", "2:58"], ["sb-story2-little-red-riding-hood.mp3", "Story 2 · Little Red Riding Hood", "3:36"]], "wbIntro": ["wb-intro.mp3", "Intro", "0:08"]};
+    var AUDIO_BASE = "audio/emar/g1/";
+    var player = document.getElementById("player");
+    var curRow = null;
+
+    function trackRow(t) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "trow";
+      b.setAttribute("data-src", AUDIO_BASE + t[0]);
+      b.innerHTML = '<span class="pbtn"><svg class="ic-play" viewBox="0 0 16 16"><path d="M4 2.2v11.6c0 .8.9 1.3 1.6.9l8.4-5.8c.6-.4.6-1.4 0-1.8L5.6 1.3C4.9.9 4 1.4 4 2.2z"/></svg>' +
+        '<svg class="ic-pause" viewBox="0 0 16 16"><rect x="3.4" y="2.4" width="3.4" height="11.2" rx="1"/><rect x="9.2" y="2.4" width="3.4" height="11.2" rx="1"/></svg></span>' +
+        '<span class="tlab"></span><span class="tdur"></span>';
+      b.querySelector(".tlab").textContent = t[1];
+      b.querySelector(".tdur").textContent = t[2];
+      b.addEventListener("click", function () { toggleRow(b); });
+      return b;
+    }
+    function bookGroup(label, tracks) {
+      if (!tracks.length) return null;
+      var g = document.createElement("div");
+      g.className = "bgroup";
+      var l = document.createElement("div");
+      l.className = "blab"; l.textContent = label;
+      g.appendChild(l);
+      tracks.forEach(function (t) { g.appendChild(trackRow(t)); });
+      return g;
+    }
+    function lessonCard(num, title, sub, groups) {
+      var total = 0;
+      groups.forEach(function (g) { if (g) total += g.querySelectorAll(".trow").length; });
+      var card = document.createElement("div");
+      card.className = "acard";
+      var head = document.createElement("button");
+      head.type = "button"; head.className = "ahead";
+      head.innerHTML = dialHTML(num) +
+        '<span class="ttl"><b></b><span></span></span>' +
+        '<span class="cnt">' + arNum(total) + ' مقاطع</span>' +
+        '<svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M4 7.5 10 13.5 16 7.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      head.querySelector(".ttl b").textContent = title;
+      head.querySelector(".ttl span").textContent = sub;
+      head.addEventListener("click", function () {
+        var was = card.classList.contains("open");
+        document.querySelectorAll("#lessonList .acard.open").forEach(function (c) { c.classList.remove("open"); });
+        if (!was) card.classList.add("open");
+      });
+      var body = document.createElement("div");
+      body.className = "abody";
+      var inner = document.createElement("div");
+      inner.className = "ainner";
+      groups.forEach(function (g) { if (g) inner.appendChild(g); });
+      body.appendChild(inner);
+      card.appendChild(head); card.appendChild(body);
+      return card;
+    }
+    function renderLessons() {
+      var list = document.getElementById("lessonList");
+      if (!EMAR_G1 || list.childNodes.length) return;
+      EMAR_G1.lessons.forEach(function (L) {
+        var wb = L.wb.slice();
+        if (L.n === 1 && EMAR_G1.wbIntro) wb.unshift(EMAR_G1.wbIntro);
+        list.appendChild(lessonCard(L.n, "الدرس " + arNum(L.n), "Unit " + L.n, [
+          bookGroup("كتاب الطالب", L.sb),
+          bookGroup("كتاب الأنشطة", wb)
+        ]));
+      });
+      var phGroups = EMAR_G1.phonics.map(function (p) {
+        return bookGroup("الركن " + arNum(p.k), p.tracks);
+      });
+      list.appendChild(lessonCard(EMAR_G1.lessons.length + 1, "أركان الفونكس", "Phonics Corners", phGroups));
+      list.appendChild(lessonCard(EMAR_G1.lessons.length + 2, "القصص", "Stories", [
+        bookGroup("كتاب الطالب", EMAR_G1.stories)
+      ]));
+      spinDials(list);
+    }
+
+    /* one shared player: a single track sounds at a time */
+    function setRow(row) {
+      if (curRow) curRow.classList.remove("on", "playing");
+      curRow = row;
+      if (curRow) curRow.classList.add("on");
+    }
+    function toggleRow(row) {
+      if (curRow === row) {
+        if (player.paused) player.play();
+        else player.pause();
+        return;
+      }
+      setRow(row);
+      player.src = row.getAttribute("data-src");
+      player.play();
+    }
+    function stopPlayer() {
+      try { player.pause(); } catch (e) {}
+      setRow(null);
+    }
+    player.addEventListener("play", function () { if (curRow) curRow.classList.add("playing"); });
+    player.addEventListener("pause", function () { if (curRow) curRow.classList.remove("playing"); });
+    player.addEventListener("ended", function () {
+      var card = curRow ? curRow.closest(".acard") : null;
+      var next = null;
+      if (card) {
+        var rows = Array.prototype.slice.call(card.querySelectorAll(".trow"));
+        var i = rows.indexOf(curRow);
+        if (i >= 0 && i < rows.length - 1) next = rows[i + 1];
+      }
+      if (next) toggleRow(next);
+      else if (curRow) curRow.classList.remove("playing");
+    });
+
     /* ===== views ===== */
     var mainView = document.getElementById("mainView");
     var shelfView = document.getElementById("shelfView");
+    var audioView = document.getElementById("audioView");
+    var g1View = document.getElementById("g1View");
     var shelfTitle = document.getElementById("shelfTitle");
     var fileGrid = document.getElementById("fileGrid");
+    function hideAllViews() {
+      mainView.hidden = true; shelfView.hidden = true;
+      audioView.hidden = true; g1View.hidden = true;
+    }
 
     Object.keys(SHELVES).forEach(function (key) {
       var shelf = SHELVES[key];
@@ -460,24 +691,52 @@
         fileGrid.appendChild(div);
       });
       spinDials(fileGrid);
-      mainView.hidden = true;
+      hideAllViews();
       shelfView.hidden = false;
       window.scrollTo(0, 0);
     }
     function showMain() {
-      shelfView.hidden = true;
+      hideAllViews();
       mainView.hidden = false;
       window.scrollTo(0, 0);
     }
+    function openAudio() {
+      hideAllViews();
+      audioView.hidden = false;
+      window.scrollTo(0, 0);
+    }
+    function openG1() {
+      renderLessons();
+      hideAllViews();
+      g1View.hidden = false;
+      window.scrollTo(0, 0);
+    }
     function route() {
-      var m = location.hash.match(/^#\/(\w+)$/);
+      stopPlayer();
+      var m = location.hash.match(/^#\/([\w-]+)$/);
       if (m && SHELVES[m[1]]) openShelf(m[1]);
+      else if (m && m[1] === "audio") openAudio();
+      else if (m && m[1] === "emar-g1") openG1();
       else showMain();
     }
     window.addEventListener("hashchange", route);
     document.getElementById("backBtn").addEventListener("click", function () {
       if (history.length > 1) history.back();
       else { location.hash = ""; showMain(); }
+    });
+    document.getElementById("backBtnA").addEventListener("click", function () {
+      if (history.length > 1) history.back();
+      else { location.hash = ""; showMain(); }
+    });
+    document.getElementById("backBtnG").addEventListener("click", function () {
+      if (history.length > 1) history.back();
+      else location.hash = "#/audio";
+    });
+    document.querySelector('[data-work="audio"]').addEventListener("click", function () {
+      location.hash = "#/audio";
+    });
+    document.getElementById("grade1Card").addEventListener("click", function () {
+      location.hash = "#/emar-g1";
     });
     route();
   </script>
@@ -660,7 +919,7 @@
       var a = el.animate([{ opacity: 0 }, { opacity: target }],
         { duration: 1000, easing: "ease-out", fill: "both" });
       a.onfinish = function () { try { a.cancel(); } catch (e) {} el.style.opacity = ""; };
-    } else if (el.classList.contains("gcard")) {
+    } else if (el.classList.contains("gcard") || el.classList.contains("acard")) {
       Array.prototype.forEach.call(el.children, function (kid) { kid.style.opacity = ""; });
       fadeIn(el, 10, 300);
     } else if (el.tagName === "H1") {
@@ -692,6 +951,18 @@
       document.querySelectorAll(".sec-label").forEach(function (el) { push(el, "fade"); });
       document.querySelectorAll("#worksGrid .gcard").forEach(function (el) { push(el, "box"); });
       push(document.querySelector("#mainView footer"), "fade");
+    } else if (view === "audio") {
+      push(document.getElementById("backBtnA"), "box");
+      push(document.querySelector("#audioView h1.shelf"), "title");
+      document.querySelectorAll("#audioView .tickrule").forEach(function (el) { push(el, "sweep"); });
+      document.querySelectorAll("#gradeGrid .gcard").forEach(function (el) { push(el, "box"); });
+      push(document.querySelector("#audioView footer"), "fade");
+    } else if (view === "emar") {
+      push(document.getElementById("backBtnG"), "box");
+      push(document.querySelector("#g1View h1.shelf"), "title");
+      document.querySelectorAll("#g1View .tickrule").forEach(function (el) { push(el, "sweep"); });
+      document.querySelectorAll("#lessonList .acard").forEach(function (el) { push(el, "box"); });
+      push(document.querySelector("#g1View footer"), "fade");
     } else {
       push(document.getElementById("backBtn"), "box");
       push(document.getElementById("shelfTitle"), "title");
@@ -785,7 +1056,7 @@
     pulses.push({ x: p.x, y: p.y, t0: performance.now(), color: c.color });
     if (Math.random() < prof(c).doubleP)
       pulses.push({ x: p.x, y: p.y, t0: performance.now() + rnd(110, 190), color: c.color });
-    if (kind === "box" && el.classList.contains("gcard")) fillCard(el);
+    if (kind === "box" && (el.classList.contains("gcard") || el.classList.contains("acard"))) fillCard(el);
     else if (kind === "box") { built.add(el); pending.delete(el); fadeIn(el, 8, 320); }
     else revealPlain(el);
     c.job = null;
@@ -944,6 +1215,10 @@
 
   /* ---------- triggers ---------- */
   function currentView() {
+    var g1 = document.getElementById("g1View");
+    if (g1 && !g1.hidden) return "emar";
+    var av = document.getElementById("audioView");
+    if (av && !av.hidden) return "audio";
     var shelf = document.getElementById("shelfView");
     return (shelf && !shelf.hidden) ? "shelf" : "main";
   }
