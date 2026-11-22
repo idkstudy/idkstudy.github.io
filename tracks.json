@@ -1,5 +1,5 @@
 {
- "subtitle": "الصف السادس — الوحدة الخامسة",
+ "subtitle": "الصف الرابع — الوحدة التاسعة · الصف السادس — الوحدة الخامسة",
  "title": "مشغّل الإصغاء",
  "tracks": [
   {
@@ -73,6 +73,58 @@
    ],
    "title_ar": "بول وعائلته",
    "title_en": "Paul and His Family"
+  },
+  {
+   "audio": "https://idkstudy.github.io/audio/g4_u9_ex1_answers_only.mp3",
+   "duration": "0:06",
+   "id": "g4u9-ex1-answers",
+   "label": "EXERCISE 1 · ANSWERS ONLY",
+   "meta": "كتاب الطالب · ص ٣٠ · الإجابات فقط — بدون نص السؤال",
+   "no": 3,
+   "segments": [
+    {
+     "ar": "انعطف يسارًا.",
+     "en": "Turn left."
+    },
+    {
+     "ar": "مرّ بجانبه وتجاوزه.",
+     "en": "Go past."
+    }
+   ],
+   "title_ar": "الإجابات فقط",
+   "title_en": "Answers Only"
+  },
+  {
+   "audio": "https://idkstudy.github.io/audio/g4_u9_ex1_answer_turn_left.mp3",
+   "duration": "0:02",
+   "id": "g4u9-ex1-a1",
+   "label": "ANSWER 1",
+   "meta": "كتاب الطالب · ص ٣٠ · التمرين الأول — الجواب الأول",
+   "no": 4,
+   "segments": [
+    {
+     "ar": "انعطف يسارًا.",
+     "en": "Turn left."
+    }
+   ],
+   "title_ar": "الجواب الأول",
+   "title_en": "Turn Left"
+  },
+  {
+   "audio": "https://idkstudy.github.io/audio/g4_u9_ex1_answer_go_past.mp3",
+   "duration": "0:02",
+   "id": "g4u9-ex1-a2",
+   "label": "ANSWER 2",
+   "meta": "كتاب الطالب · ص ٣٠ · التمرين الأول — الجواب الثاني",
+   "no": 5,
+   "segments": [
+    {
+     "ar": "مرّ بجانبه وتجاوزه.",
+     "en": "Go past."
+    }
+   ],
+   "title_ar": "الجواب الثاني",
+   "title_en": "Go Past"
   }
  ],
  "version": 2
