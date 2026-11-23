@@ -40,6 +40,12 @@ h1{font-size:40px;font-weight:900;text-align:center;margin-top:8px;line-height:1
 .track.open .body{display:block}
 audio{width:100%;height:44px;margin-bottom:8px}
 .ratebar{display:flex;gap:8px;margin-bottom:10px}
+.groupbox{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;margin-bottom:16px;backdrop-filter:blur(4px)}
+.ghead{padding-bottom:6px}
+.ghead .gen{font-size:19px;font-weight:700;color:var(--cream)}
+.ghead .gar{font-size:15px;color:var(--orange)}
+.groupbox .track{background:transparent;border:none;border-radius:0;padding:14px 2px;margin:0;border-top:1px dashed var(--line)}
+.groupbox .track:first-of-type{border-top:none}
 .rbtn{flex:1;padding:9px 0;border-radius:12px;border:1px solid var(--line);background:rgba(246,234,217,.06);color:var(--cream);font-family:inherit;font-size:14px;cursor:pointer}
 .rbtn.on{background:var(--orange);color:#170b02;border-color:var(--orange);font-weight:700}
 .seg{padding:11px 2px;border-bottom:1px dashed rgba(246,234,217,.12)}
@@ -193,14 +199,22 @@ audio{width:100%;height:44px;margin-bottom:8px}
   <div id="list"></div>
   <div class="foot">أداة خاصة بالمعلّم · تُحدَّث عن بُعد</div>
 </div>
-<script type="application/json" id="fallback">{"subtitle":"الصف الرابع — الوحدة التاسعة · الصف السادس — الوحدة الخامسة","title":"مشغّل الإصغاء","tracks":[{"audio":"https://idkstudy.github.io/audio/g6_u5_ex1_tv_guide_slow.mp3","duration":"0:38","id":"g6u5-ex1","label":"EXERCISE 1 · LISTENING","meta":"كتاب الطالب · ص ٢٤ · النسخة البطيئة","no":1,"segments":[{"ar":"أطفالنا الأعزّاء، شاهدوا برنامجكم المفضّل على القناة الأولى في الساعة الرابعة مساءً.","en":"Our dear children, watch your favourite programme on channel 1 at 4 pm."},{"ar":"إذا كنتم تحبّون الإجابة عن الأسئلة والفوز بالجوائز، فشاهدونا على القناة الثانية في الساعة السابعة مساءً.","en":"If you like to answer questions and win prizes, watch us on channel 2 at 7 pm."},{"ar":"ولمعرفة ما يحدث في العالم، يمكنكم مشاهدتنا في الساعة الثامنة مساءً.","en":"And to know what's happening in the world, you can watch us at 8 pm."},{"ar":"وللاستمتاع ببرنامج عن الطبيعة، انضمّوا إلينا في الساعة التاسعة مساءً.","en":"To enjoy a programme about nature, join us at 9 pm."},{"ar":"ولمشاهدة مباراة كرة سلّة مباشرة، انضمّوا إلينا في الساعة العاشرة مساءً.","en":"And for a live basketball match, join us at 10 pm."},{"ar":"أمّا الآن، فأنتم تشاهدون فيلمًا لمستر بين.","en":"For now, you're watching a Mr Bean film."}],"title_ar":"دليل البرامج التلفزيونية","title_en":"The TV Guide"},{"audio":"https://idkstudy.github.io/audio/g6_u5_ex2_paul_slow.mp3","duration":"0:28","id":"g6u5-ex2","label":"EXERCISE 2 · LISTENING","meta":"كتاب الطالب · ص ٢٤ · النسخة البطيئة","no":2,"segments":[{"ar":"مرحبًا، اسمي بول، وأحبّ مشاهدة البرامج الرياضية.","en":"Hi, my name's Paul and I like watching sports programmes."},{"ar":"أختي ساندي تعشق أفلام ديزني.","en":"My sister Sandy loves Disney films."},{"ar":"أمّي تحبّ برامج المسابقات.","en":"My mother likes quiz shows."},{"ar":"أبي لا يشاهد إلا الأخبار.","en":"My father only watches the news."},{"ar":"أخي كين يعشق مشاهدة الأفلام الوثائقية.","en":"My brother, Ken, loves watching documentaries."},{"ar":"لكنّنا في هذه اللحظة جميعًا نشاهد مسلسلنا التلفزيوني المفضّل.","en":"But at the moment we're all watching our favourite TV series."}],"title_ar":"بول وعائلته","title_en":"Paul and His Family"},{"audio":"https://idkstudy.github.io/audio/g4_u9_ex1_answers_only.mp3","duration":"0:06","id":"g4u9-ex1-answers","label":"EXERCISE 1 · ANSWERS ONLY","meta":"كتاب الطالب · ص ٣٠ · الإجابات فقط — بدون نص السؤال","no":3,"segments":[{"ar":"انعطف يسارًا.","en":"Turn left."},{"ar":"مرّ بجانبه وتجاوزه.","en":"Go past."}],"title_ar":"الإجابات فقط","title_en":"Answers Only"},{"audio":"https://idkstudy.github.io/audio/g4_u9_ex1_answer_turn_left.mp3","duration":"0:02","id":"g4u9-ex1-a1","label":"ANSWER 1","meta":"كتاب الطالب · ص ٣٠ · التمرين الأول — الجواب الأول","no":4,"segments":[{"ar":"انعطف يسارًا.","en":"Turn left."}],"title_ar":"الجواب الأول","title_en":"Turn Left"},{"audio":"https://idkstudy.github.io/audio/g4_u9_ex1_answer_go_past.mp3","duration":"0:02","id":"g4u9-ex1-a2","label":"ANSWER 2","meta":"كتاب الطالب · ص ٣٠ · التمرين الأول — الجواب الثاني","no":5,"segments":[{"ar":"مرّ بجانبه وتجاوزه.","en":"Go past."}],"title_ar":"الجواب الثاني","title_en":"Go Past"}],"version":2}</script>
+<script type="application/json" id="fallback">{"groups":[{"label":"EXERCISE 1 · LISTEN AND TICK","title_ar":"التمرين الأول — الإجابات","title_en":"Exercise 1 — Answers","tracks":[{"audio":"https://idkstudy.github.io/audio/g4_u9_ex1_answers_only.mp3","duration":"0:06","id":"g4u9-ex1-answers","label":"ANSWERS ONLY","meta":"كتاب الطالب · ص ٣٠ · الإجابات فقط — بدون نص السؤال","no":1,"segments":[{"ar":"انعطف يسارًا.","en":"Turn left."},{"ar":"مرّ بجانبه وتجاوزه.","en":"Go past."}],"title_ar":"الإجابات فقط","title_en":"Answers Only"},{"audio":"https://idkstudy.github.io/audio/g4_u9_ex1_answer_turn_left.mp3","duration":"0:02","id":"g4u9-ex1-a1","label":"ANSWER 1","meta":"كتاب الطالب · ص ٣٠ · التمرين الأول — الجواب الأول","no":2,"segments":[{"ar":"انعطف يسارًا.","en":"Turn left."}],"title_ar":"الجواب الأول","title_en":"Turn Left"},{"audio":"https://idkstudy.github.io/audio/g4_u9_ex1_answer_go_past.mp3","duration":"0:02","id":"g4u9-ex1-a2","label":"ANSWER 2","meta":"كتاب الطالب · ص ٣٠ · التمرين الأول — الجواب الثاني","no":3,"segments":[{"ar":"مرّ بجانبه وتجاوزه.","en":"Go past."}],"title_ar":"الجواب الثاني","title_en":"Go Past"}]},{"label":"EXERCISE 2 · LISTEN, POINT AND REPEAT","title_ar":"التمرين الثاني — العبارات","title_en":"Exercise 2 — The Phrases","tracks":[{"audio":"https://idkstudy.github.io/audio/g4_u9_ex2_phrases_only.mp3","duration":"0:18","id":"g4u9-ex2-phrases","label":"PHRASES ONLY","meta":"كتاب الطالب · ص ٣٠ · العبارات فقط — بدون نص السؤال","no":1,"segments":[{"ar":"امضِ إلى الأمام مباشرةً.","en":"Go straight on."},{"ar":"انعطف يسارًا.","en":"Turn left."},{"ar":"انعطف يمينًا.","en":"Turn right."},{"ar":"مرّ بجانبه وتجاوزه.","en":"Go past."},{"ar":"اعبر.","en":"Cross."}],"title_ar":"العبارات فقط","title_en":"Phrases Only"},{"audio":"https://idkstudy.github.io/audio/g4_u9_ex2_phrase_go_straight_on.mp3","duration":"0:03","id":"g4u9-ex2-p1","label":"PHRASE 1","meta":"كتاب الطالب · ص ٣٠ · التمرين الثاني — العبارة الأولى","no":2,"segments":[{"ar":"امضِ إلى الأمام مباشرةً.","en":"Go straight on."}],"title_ar":"العبارة الأولى","title_en":"Go Straight On"},{"audio":"https://idkstudy.github.io/audio/g4_u9_ex2_phrase_turn_left.mp3","duration":"0:03","id":"g4u9-ex2-p2","label":"PHRASE 2","meta":"كتاب الطالب · ص ٣٠ · التمرين الثاني — العبارة الثانية","no":3,"segments":[{"ar":"انعطف يسارًا.","en":"Turn left."}],"title_ar":"العبارة الثانية","title_en":"Turn Left"},{"audio":"https://idkstudy.github.io/audio/g4_u9_ex2_phrase_turn_right.mp3","duration":"0:03","id":"g4u9-ex2-p3","label":"PHRASE 3","meta":"كتاب الطالب · ص ٣٠ · التمرين الثاني — العبارة الثالثة","no":4,"segments":[{"ar":"انعطف يمينًا.","en":"Turn right."}],"title_ar":"العبارة الثالثة","title_en":"Turn Right"},{"audio":"https://idkstudy.github.io/audio/g4_u9_ex2_phrase_go_past.mp3","duration":"0:03","id":"g4u9-ex2-p4","label":"PHRASE 4","meta":"كتاب الطالب · ص ٣٠ · التمرين الثاني — العبارة الرابعة","no":5,"segments":[{"ar":"مرّ بجانبه وتجاوزه.","en":"Go past."}],"title_ar":"العبارة الرابعة","title_en":"Go Past"},{"audio":"https://idkstudy.github.io/audio/g4_u9_ex2_phrase_cross.mp3","duration":"0:02","id":"g4u9-ex2-p5","label":"PHRASE 5","meta":"كتاب الطالب · ص ٣٠ · التمرين الثاني — العبارة الخامسة","no":6,"segments":[{"ar":"اعبر.","en":"Cross."}],"title_ar":"العبارة الخامسة","title_en":"Cross"}]}],"subtitle":"الصف الرابع — الوحدة التاسعة · إعطاء الاتجاهات","title":"مشغّل الإصغاء","version":3}</script>
 <script>
 const listEl=document.getElementById('list');
 function render(data){
   document.getElementById('ptitle').textContent=data.title||'مشغّل الإصغاء';
   document.getElementById('psub').textContent=data.subtitle||'';
   listEl.innerHTML='';
-  data.tracks.forEach(tr=>{
+  const groups=(data.groups&&data.groups.length)?data.groups:[{label:'',title_en:'',title_ar:'',tracks:data.tracks||[]}];
+  groups.forEach(g=>{
+    const box=document.createElement('div');box.className='groupbox';
+    if(g.label||g.title_en||g.title_ar){
+      const gh=document.createElement('div');gh.className='ghead';
+      gh.innerHTML=`<div class="tlabel">${g.label||''}</div><div class="gen" dir="ltr" style="text-align:right">${g.title_en||''}</div><div class="gar">${g.title_ar||''}</div>`;
+      box.appendChild(gh);
+    }
+    (g.tracks||[]).forEach(tr=>{
     const card=document.createElement('div');card.className='track';
     const segs=tr.segments.map(s=>`<div class="seg"><div class="en">${s.en}</div><div class="ar">${s.ar}</div></div>`).join('');
     card.innerHTML=`
@@ -232,15 +246,17 @@ function render(data){
     audio.addEventListener('play',()=>btn.textContent='⏸');
     audio.addEventListener('pause',()=>btn.textContent='▶');
     audio.addEventListener('ended',()=>btn.textContent='▶');
-    listEl.appendChild(card);
+    box.appendChild(card);
+    });
+    listEl.appendChild(box);
   });
 }
 let fallback={};
 try{fallback=JSON.parse(document.getElementById('fallback').textContent);}catch(e){}
 render(fallback);
-window.applyNewTracks=function(d){try{if(typeof d==='string')d=JSON.parse(d);if(d&&d.tracks&&d.tracks.length)render(d);}catch(e){}};
-try{if(window.AndroidPlayer){const t=AndroidPlayer.getTracks();if(t){const d=JSON.parse(t);if(d&&d.tracks&&d.tracks.length)render(d);}}}catch(e){}
-fetch('tracks.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{const playing=[...document.querySelectorAll('audio')].some(a=>!a.paused);if(d&&d.tracks&&d.tracks.length&&!playing)render(d);}).catch(()=>{});
+window.applyNewTracks=function(d){try{if(typeof d==='string')d=JSON.parse(d);if(d&&((d.groups&&d.groups.length)||(d.tracks&&d.tracks.length)))render(d);}catch(e){}};
+try{if(window.AndroidPlayer){const t=AndroidPlayer.getTracks();if(t){const d=JSON.parse(t);if(d&&((d.groups&&d.groups.length)||(d.tracks&&d.tracks.length)))render(d);}}}catch(e){}
+fetch('tracks.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{const playing=[...document.querySelectorAll('audio')].some(a=>!a.paused);if(d&&((d.groups&&d.groups.length)||(d.tracks&&d.tracks.length))&&!playing)render(d);}).catch(()=>{});
 </script>
 <script>
 /* ===== خط زمن الدرس: 45 دقيقة، يبدأ بزر ويُحفظ وقت البدء في localStorage ===== */
