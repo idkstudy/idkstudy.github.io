@@ -39,6 +39,10 @@ h1{font-size:40px;font-weight:900;text-align:center;margin-top:8px;line-height:1
 .body{display:none;margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
 .track.open .body{display:block}
 audio{width:100%;height:44px;margin-bottom:8px}
+.qtimers{display:flex;gap:8px;align-items:center;margin-top:12px}
+.qbtn{flex:1;padding:10px 0;border-radius:12px;border:1px solid var(--orange);background:rgba(240,125,30,.1);color:var(--orange2);font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.qbtn.run{background:var(--orange);color:#170b02}
+.qdisp{min-width:70px;text-align:center;font-size:22px;font-weight:900;color:var(--cream);font-variant-numeric:tabular-nums}
 .ratebar{display:flex;gap:8px;margin-bottom:10px}
 .groupbox{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;margin-bottom:16px;backdrop-filter:blur(4px)}
 .ghead{padding-bottom:6px}
@@ -54,7 +58,7 @@ audio{width:100%;height:44px;margin-bottom:8px}
 .ar{direction:rtl;text-align:right;font-size:15.5px;line-height:1.7;color:var(--cream70);margin-top:3px}
 .foot{text-align:center;color:var(--cream45);font-size:12.5px;margin-top:26px;letter-spacing:.12em}
 .err{text-align:center;color:var(--cream70);padding:30px 0}
-/* ===== خط زمن الدرس — 45 دقيقة ===== */
+/* ===== خط زمن الدرس — 40 دقيقة ===== */
 .lesson{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;margin-bottom:18px}
 .lrow{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .lstage{font-size:25px;font-weight:900;line-height:1.2}
@@ -107,7 +111,7 @@ audio{width:100%;height:44px;margin-bottom:8px}
   <div class="sub" id="psub"></div>
   <div class="rule"></div>
   <div class="lesson" id="lessonCard">
-    <div class="tlabel" style="color:var(--orange);font-size:10.5px;letter-spacing:.28em;font-weight:700">LESSON TIMELINE · 45 MIN</div>
+    <div class="tlabel" style="color:var(--orange);font-size:10.5px;letter-spacing:.28em;font-weight:700">LESSON TIMELINE · 40 MIN</div>
     <div class="lrow" style="margin-top:8px">
       <div class="lstage" id="lStage">الدرس لم يبدأ<small>اضغط «ابدأ الدرس» عند دخولك الصف</small></div>
       <div class="ltime" id="lTime"></div>
@@ -121,17 +125,22 @@ audio{width:100%;height:44px;margin-bottom:8px}
       <button class="lbtn start" id="lStart">▶ ابدأ الدرس</button>
       <button class="lbtn end" id="lEnd" style="display:none">إنهاء الدرس</button>
     </div>
+    <div class="qtimers">
+      <button class="qbtn" id="q60">⏱ مؤقت دقيقة</button>
+      <button class="qbtn" id="q120">⏱ مؤقت دقيقتين</button>
+      <div class="qdisp" id="qDisp"></div>
+    </div>
   </div>
   <button class="sheetbtn" id="sheetBtn">📋 ورقة الخطوات — ما سأفعله خطوة خطوة</button>
   <div class="sheet" id="sheet">
     <div class="stage">
-      <div class="shead"><div class="sname">Warm-up<small>التمهيد</small></div><div class="min">4 د</div></div>
+      <div class="shead"><div class="sname">Warm-up<small>التمهيد</small></div><div class="min">2 د</div></div>
       <p class="do">أدخل وأحيّي الطلاب وأعرّف بنفسي، أعرض صورة اللافتة وأسأل عنها، ثم أعلّق بطاقة العنوان على اللوح.</p>
       <div class="cmds"><span class="cmd">Hello! I am your English teacher for today.</span><span class="cmd">What is this?</span><span class="cmd">This is directions.</span><span class="cmd">Our lesson today is about directions.</span></div>
     </div>
 
     <div class="stage">
-      <div class="shead"><div class="sname">Activity 1 · Directions<small>النشاط الأول — الاتجاهات · كتاب الطالب ص30 ت1</small></div><div class="min">12 د</div></div>
+      <div class="shead"><div class="sname">Activity 1 · Directions<small>النشاط الأول — الاتجاهات · كتاب الطالب ص30 ت1</small></div><div class="min">7 د</div></div>
       <p class="do">أقدّم العبارات بالطلاب أنفسهم: طالب لكل عبارة من الثلاث الأولى — أقول العبارة فينفّذ الحركة وأعلّق بطاقتها فوقه، ثم أكرّر ويكرّر الصفّ ويقلّد من أشير إليه. <b>Go past:</b> طالبان — واحد يقف بالوسط معلَمًا وأسأل عن اسمه، والثاني يمرّ من أمامه. <b>Cross:</b> ثلاثة طلاب بجانب بعضهم — الأوسط يعبر من الأول إلى الثاني. كل طالب يطلع يسمع «Excellent!» والصف يصفّق له. ثم يفتحون الكتاب ويقرؤون التمرين، وأحدّد مهمّة السماع الأول قبل تشغيله (اسمع واعمل الحركة)، ومهمّة السماع الثاني قبل تشغيله (اسمع وعلّم)، ثم تصحيح جماعي.</p>
       <div class="cmds"><span class="cmd">Turn left.</span><span class="cmd">Turn right.</span><span class="cmd">Go straight on.</span><span class="cmd">Go past…</span><span class="cmd">Cross.</span><span class="cmd">Excellent!</span><span class="cmd">Listen and do the movement.</span><span class="cmd">Listen and tick the sign you hear.</span></div>
       <div class="ans"><b>الإجابات:</b> turn left · go past</div>
@@ -139,27 +148,27 @@ audio{width:100%;height:44px;margin-bottom:8px}
     </div>
 
     <div class="stage">
-      <div class="shead"><div class="sname">Activity 2 · Point and Repeat<small>النشاط الثاني — أشر وكرّر · كتاب الطالب ص30 ت2</small></div><div class="min">12 د</div></div>
+      <div class="shead"><div class="sname">Activity 2 · Point and Repeat<small>النشاط الثاني — أشر وكرّر · كتاب الطالب ص30 ت2</small></div><div class="min">7 د</div></div>
       <p class="do">أشغّل صوت التمرين الثاني من المشغّل: يشيرون إلى الإشارة التي يسمعونها ويكرّرون بعد الصوت. ألصق أسهم الاتجاهات على الجدران الأربعة ويمشون نحو السهم الذي أقوله، ثم عمل ثنائي بأعواد المثلجات.</p>
       <div class="cmds"><span class="cmd">Listen, point and repeat.</span><span class="cmd">Go straight on.</span><span class="cmd">Turn left.</span><span class="cmd">Turn right.</span><span class="cmd">Go past.</span><span class="cmd">Cross.</span></div>
       <div class="ans"><b>التكويني:</b> كتاب الأنشطة ص31 ت2a.</div>
     </div>
 
     <div class="stage">
-      <div class="shead"><div class="sname">Activity 3 · The Town Map<small>النشاط الثالث — خريطة البلدة · كتاب الطالب ص30 ت3</small></div><div class="min">9 د</div></div>
+      <div class="shead"><div class="sname">Activity 3 · The Town Map<small>النشاط الثالث — خريطة البلدة · كتاب الطالب ص30 ت3</small></div><div class="min">7 د</div></div>
       <p class="do">أبني خريطة البلدة على اللوح من بطاقات الأماكن، أحرّك الشخص وأعطي الاتجاهات مثالًا، ثم خريطة بشرية وعمل ثنائي. بعدها <b>لعبة البطاقات المرقّمة</b>: ست مجموعات (A–F)، كل طالب يكتب سؤال الطريق كاملًا على بطاقته بنفسه، والنقاط أعمدة من الملصقات الملوّنة على اللوح تحت حرف كل مجموعة — أطول عمود يفوز.</p>
       <div class="cmds"><span class="cmd">How can I get to the school?</span><span class="cmd">Ask about the way to the zoo.</span><span class="cmd">Go straight on. Turn left.</span></div>
       <div class="ans"><b>التكويني:</b> بطاقات الأسئلة المرقّمة — ست مجموعات × 8 بطاقات.</div>
     </div>
 
     <div class="stage">
-      <div class="shead"><div class="sname">Final Assessment<small>التقويم النهائي — فردي · عند خريطة اللوح</small></div><div class="min">5 د</div></div>
+      <div class="shead"><div class="sname">Final Assessment<small>التقويم النهائي — فردي · عند خريطة اللوح</small></div><div class="min">15 د</div></div>
       <p class="do">كل طالب وحده عند خريطة البلدة على اللوح: يسأل عن مكان ويعطي الاتجاهات إليه بنفسه وهو يحرّك الشخص على الخريطة.</p>
       <div class="cmds"><span class="cmd">How can I get to the cinema?</span><span class="cmd">Go straight on. Turn right. Go past the hospital.</span></div>
     </div>
 
     <div class="stage">
-      <div class="shead"><div class="sname">Closure<small>الخاتمة</small></div><div class="min">3 د</div></div>
+      <div class="shead"><div class="sname">Closure<small>الخاتمة</small></div><div class="min">2 د</div></div>
       <ol class="beats">
         <li><b>مراجعة بالحركات:</b> أقول العبارات الخمس والصفّ ينفّذ كل واحدة بحركتها.</li>
         <li><b>سؤال وجواب جماعي:</b> طالب يسأل «How can I get to the cinema?» والصفّ كلّه يجيب بالاتجاهات.</li>
@@ -236,16 +245,16 @@ try{if(window.AndroidPlayer){const t=AndroidPlayer.getTracks();if(t){const d=JSO
 fetch('tracks.json',{cache:'no-store'}).then(r=>r.json()).then(d=>{const playing=[...document.querySelectorAll('audio')].some(a=>!a.paused);if(d&&((d.groups&&d.groups.length)||(d.tracks&&d.tracks.length))&&!playing)render(d);}).catch(()=>{});
 </script>
 <script>
-/* ===== خط زمن الدرس: 45 دقيقة، يبدأ بزر ويُحفظ وقت البدء في localStorage ===== */
+/* ===== خط زمن الدرس: 40 دقيقة، يبدأ بزر ويُحفظ وقت البدء في localStorage ===== */
 const STAGES=[
- {en:'Warm-up',min:4},
- {en:'Objective 1',min:12},
- {en:'Objective 2',min:12},
- {en:'Objective 3',min:9},
- {en:'Final Assessment',min:5},
- {en:'Closure',min:3}
+ {en:'Warm-up',min:2},
+ {en:'Objective 1',min:7},
+ {en:'Objective 2',min:7},
+ {en:'Objective 3',min:7},
+ {en:'Final Assessment',min:15},
+ {en:'Closure',min:2}
 ];
-const TOTAL_S=45*60, KEY='lesson_start_ts';
+const TOTAL_S=40*60, KEY='lesson_start_ts';
 const barEl=document.getElementById('lBar'), stepsEl=document.getElementById('lSteps'),
       stageEl=document.getElementById('lStage'), timeEl=document.getElementById('lTime'),
       ptrEl=document.getElementById('lPointer'),
@@ -282,6 +291,45 @@ endBtn.addEventListener('click',()=>{localStorage.removeItem(KEY);tick();});
 setInterval(tick,1000);tick();
 </script>
 <script>
+/* ===== مؤقتات سريعة: دقيقة / دقيقتان — بصوت عند الانتهاء ===== */
+const qDisp=document.getElementById('qDisp');
+let qInt=null,qEnd=0,qAC=null;
+function qBeep(){
+  try{
+    qAC=qAC||new (window.AudioContext||window.webkitAudioContext)();
+    if(qAC.state==='suspended')qAC.resume();
+    const t0=qAC.currentTime;
+    [0,0.28,0.56].forEach(off=>{
+      const o=qAC.createOscillator(),g=qAC.createGain();
+      o.type='sine';o.frequency.value=880;
+      g.gain.setValueAtTime(0.0001,t0+off);
+      g.gain.exponentialRampToValueAtTime(0.5,t0+off+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t0+off+0.22);
+      o.connect(g);g.connect(qAC.destination);
+      o.start(t0+off);o.stop(t0+off+0.24);
+    });
+  }catch(e){}
+  if(navigator.vibrate)navigator.vibrate([200,100,200]);
+}
+function qStop(txt){
+  if(qInt){clearInterval(qInt);qInt=null;}
+  document.querySelectorAll('.qbtn').forEach(b=>b.classList.remove('run'));
+  if(txt!==undefined)qDisp.textContent=txt;
+}
+function qStart(sec,btn){
+  qStop();
+  btn.classList.add('run');
+  qEnd=Date.now()+sec*1000;
+  const tick=()=>{
+    const left=Math.max(0,Math.ceil((qEnd-Date.now())/1000));
+    qDisp.textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');
+    if(left<=0){qStop('⏰');qBeep();}
+  };
+  tick();qInt=setInterval(tick,200);
+}
+document.getElementById('q60').addEventListener('click',function(){qStart(60,this);});
+document.getElementById('q120').addEventListener('click',function(){qStart(120,this);});
+qDisp.addEventListener('click',()=>qStop(''));
 document.getElementById('sheetBtn').addEventListener('click',function(){
   var s=document.getElementById('sheet');
   s.classList.toggle('open');
