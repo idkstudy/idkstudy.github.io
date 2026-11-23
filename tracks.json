@@ -1,131 +1,185 @@
 {
- "subtitle": "الصف الرابع — الوحدة التاسعة · الصف السادس — الوحدة الخامسة",
- "title": "مشغّل الإصغاء",
- "tracks": [
+ "groups": [
   {
-   "audio": "https://idkstudy.github.io/audio/g6_u5_ex1_tv_guide_slow.mp3",
-   "duration": "0:38",
-   "id": "g6u5-ex1",
-   "label": "EXERCISE 1 · LISTENING",
-   "meta": "كتاب الطالب · ص ٢٤ · النسخة البطيئة",
-   "no": 1,
-   "segments": [
+   "label": "EXERCISE 1 · LISTEN AND TICK",
+   "title_ar": "التمرين الأول — الإجابات",
+   "title_en": "Exercise 1 — Answers",
+   "tracks": [
     {
-     "ar": "أطفالنا الأعزّاء، شاهدوا برنامجكم المفضّل على القناة الأولى في الساعة الرابعة مساءً.",
-     "en": "Our dear children, watch your favourite programme on channel 1 at 4 pm."
+     "audio": "https://idkstudy.github.io/audio/g4_u9_ex1_answers_only.mp3",
+     "duration": "0:06",
+     "id": "g4u9-ex1-answers",
+     "label": "ANSWERS ONLY",
+     "meta": "كتاب الطالب · ص ٣٠ · الإجابات فقط — بدون نص السؤال",
+     "no": 1,
+     "segments": [
+      {
+       "ar": "انعطف يسارًا.",
+       "en": "Turn left."
+      },
+      {
+       "ar": "مرّ بجانبه وتجاوزه.",
+       "en": "Go past."
+      }
+     ],
+     "title_ar": "الإجابات فقط",
+     "title_en": "Answers Only"
     },
     {
-     "ar": "إذا كنتم تحبّون الإجابة عن الأسئلة والفوز بالجوائز، فشاهدونا على القناة الثانية في الساعة السابعة مساءً.",
-     "en": "If you like to answer questions and win prizes, watch us on channel 2 at 7 pm."
+     "audio": "https://idkstudy.github.io/audio/g4_u9_ex1_answer_turn_left.mp3",
+     "duration": "0:02",
+     "id": "g4u9-ex1-a1",
+     "label": "ANSWER 1",
+     "meta": "كتاب الطالب · ص ٣٠ · التمرين الأول — الجواب الأول",
+     "no": 2,
+     "segments": [
+      {
+       "ar": "انعطف يسارًا.",
+       "en": "Turn left."
+      }
+     ],
+     "title_ar": "الجواب الأول",
+     "title_en": "Turn Left"
     },
     {
-     "ar": "ولمعرفة ما يحدث في العالم، يمكنكم مشاهدتنا في الساعة الثامنة مساءً.",
-     "en": "And to know what's happening in the world, you can watch us at 8 pm."
-    },
-    {
-     "ar": "وللاستمتاع ببرنامج عن الطبيعة، انضمّوا إلينا في الساعة التاسعة مساءً.",
-     "en": "To enjoy a programme about nature, join us at 9 pm."
-    },
-    {
-     "ar": "ولمشاهدة مباراة كرة سلّة مباشرة، انضمّوا إلينا في الساعة العاشرة مساءً.",
-     "en": "And for a live basketball match, join us at 10 pm."
-    },
-    {
-     "ar": "أمّا الآن، فأنتم تشاهدون فيلمًا لمستر بين.",
-     "en": "For now, you're watching a Mr Bean film."
+     "audio": "https://idkstudy.github.io/audio/g4_u9_ex1_answer_go_past.mp3",
+     "duration": "0:02",
+     "id": "g4u9-ex1-a2",
+     "label": "ANSWER 2",
+     "meta": "كتاب الطالب · ص ٣٠ · التمرين الأول — الجواب الثاني",
+     "no": 3,
+     "segments": [
+      {
+       "ar": "مرّ بجانبه وتجاوزه.",
+       "en": "Go past."
+      }
+     ],
+     "title_ar": "الجواب الثاني",
+     "title_en": "Go Past"
     }
-   ],
-   "title_ar": "دليل البرامج التلفزيونية",
-   "title_en": "The TV Guide"
+   ]
   },
   {
-   "audio": "https://idkstudy.github.io/audio/g6_u5_ex2_paul_slow.mp3",
-   "duration": "0:28",
-   "id": "g6u5-ex2",
-   "label": "EXERCISE 2 · LISTENING",
-   "meta": "كتاب الطالب · ص ٢٤ · النسخة البطيئة",
-   "no": 2,
-   "segments": [
+   "label": "EXERCISE 2 · LISTEN, POINT AND REPEAT",
+   "title_ar": "التمرين الثاني — العبارات",
+   "title_en": "Exercise 2 — The Phrases",
+   "tracks": [
     {
-     "ar": "مرحبًا، اسمي بول، وأحبّ مشاهدة البرامج الرياضية.",
-     "en": "Hi, my name's Paul and I like watching sports programmes."
+     "audio": "https://idkstudy.github.io/audio/g4_u9_ex2_phrases_only.mp3",
+     "duration": "0:18",
+     "id": "g4u9-ex2-phrases",
+     "label": "PHRASES ONLY",
+     "meta": "كتاب الطالب · ص ٣٠ · العبارات فقط — بدون نص السؤال",
+     "no": 1,
+     "segments": [
+      {
+       "ar": "امضِ إلى الأمام مباشرةً.",
+       "en": "Go straight on."
+      },
+      {
+       "ar": "انعطف يسارًا.",
+       "en": "Turn left."
+      },
+      {
+       "ar": "انعطف يمينًا.",
+       "en": "Turn right."
+      },
+      {
+       "ar": "مرّ بجانبه وتجاوزه.",
+       "en": "Go past."
+      },
+      {
+       "ar": "اعبر.",
+       "en": "Cross."
+      }
+     ],
+     "title_ar": "العبارات فقط",
+     "title_en": "Phrases Only"
     },
     {
-     "ar": "أختي ساندي تعشق أفلام ديزني.",
-     "en": "My sister Sandy loves Disney films."
+     "audio": "https://idkstudy.github.io/audio/g4_u9_ex2_phrase_go_straight_on.mp3",
+     "duration": "0:03",
+     "id": "g4u9-ex2-p1",
+     "label": "PHRASE 1",
+     "meta": "كتاب الطالب · ص ٣٠ · التمرين الثاني — العبارة الأولى",
+     "no": 2,
+     "segments": [
+      {
+       "ar": "امضِ إلى الأمام مباشرةً.",
+       "en": "Go straight on."
+      }
+     ],
+     "title_ar": "العبارة الأولى",
+     "title_en": "Go Straight On"
     },
     {
-     "ar": "أمّي تحبّ برامج المسابقات.",
-     "en": "My mother likes quiz shows."
+     "audio": "https://idkstudy.github.io/audio/g4_u9_ex2_phrase_turn_left.mp3",
+     "duration": "0:03",
+     "id": "g4u9-ex2-p2",
+     "label": "PHRASE 2",
+     "meta": "كتاب الطالب · ص ٣٠ · التمرين الثاني — العبارة الثانية",
+     "no": 3,
+     "segments": [
+      {
+       "ar": "انعطف يسارًا.",
+       "en": "Turn left."
+      }
+     ],
+     "title_ar": "العبارة الثانية",
+     "title_en": "Turn Left"
     },
     {
-     "ar": "أبي لا يشاهد إلا الأخبار.",
-     "en": "My father only watches the news."
+     "audio": "https://idkstudy.github.io/audio/g4_u9_ex2_phrase_turn_right.mp3",
+     "duration": "0:03",
+     "id": "g4u9-ex2-p3",
+     "label": "PHRASE 3",
+     "meta": "كتاب الطالب · ص ٣٠ · التمرين الثاني — العبارة الثالثة",
+     "no": 4,
+     "segments": [
+      {
+       "ar": "انعطف يمينًا.",
+       "en": "Turn right."
+      }
+     ],
+     "title_ar": "العبارة الثالثة",
+     "title_en": "Turn Right"
     },
     {
-     "ar": "أخي كين يعشق مشاهدة الأفلام الوثائقية.",
-     "en": "My brother, Ken, loves watching documentaries."
+     "audio": "https://idkstudy.github.io/audio/g4_u9_ex2_phrase_go_past.mp3",
+     "duration": "0:03",
+     "id": "g4u9-ex2-p4",
+     "label": "PHRASE 4",
+     "meta": "كتاب الطالب · ص ٣٠ · التمرين الثاني — العبارة الرابعة",
+     "no": 5,
+     "segments": [
+      {
+       "ar": "مرّ بجانبه وتجاوزه.",
+       "en": "Go past."
+      }
+     ],
+     "title_ar": "العبارة الرابعة",
+     "title_en": "Go Past"
     },
     {
-     "ar": "لكنّنا في هذه اللحظة جميعًا نشاهد مسلسلنا التلفزيوني المفضّل.",
-     "en": "But at the moment we're all watching our favourite TV series."
+     "audio": "https://idkstudy.github.io/audio/g4_u9_ex2_phrase_cross.mp3",
+     "duration": "0:02",
+     "id": "g4u9-ex2-p5",
+     "label": "PHRASE 5",
+     "meta": "كتاب الطالب · ص ٣٠ · التمرين الثاني — العبارة الخامسة",
+     "no": 6,
+     "segments": [
+      {
+       "ar": "اعبر.",
+       "en": "Cross."
+      }
+     ],
+     "title_ar": "العبارة الخامسة",
+     "title_en": "Cross"
     }
-   ],
-   "title_ar": "بول وعائلته",
-   "title_en": "Paul and His Family"
-  },
-  {
-   "audio": "https://idkstudy.github.io/audio/g4_u9_ex1_answers_only.mp3",
-   "duration": "0:06",
-   "id": "g4u9-ex1-answers",
-   "label": "EXERCISE 1 · ANSWERS ONLY",
-   "meta": "كتاب الطالب · ص ٣٠ · الإجابات فقط — بدون نص السؤال",
-   "no": 3,
-   "segments": [
-    {
-     "ar": "انعطف يسارًا.",
-     "en": "Turn left."
-    },
-    {
-     "ar": "مرّ بجانبه وتجاوزه.",
-     "en": "Go past."
-    }
-   ],
-   "title_ar": "الإجابات فقط",
-   "title_en": "Answers Only"
-  },
-  {
-   "audio": "https://idkstudy.github.io/audio/g4_u9_ex1_answer_turn_left.mp3",
-   "duration": "0:02",
-   "id": "g4u9-ex1-a1",
-   "label": "ANSWER 1",
-   "meta": "كتاب الطالب · ص ٣٠ · التمرين الأول — الجواب الأول",
-   "no": 4,
-   "segments": [
-    {
-     "ar": "انعطف يسارًا.",
-     "en": "Turn left."
-    }
-   ],
-   "title_ar": "الجواب الأول",
-   "title_en": "Turn Left"
-  },
-  {
-   "audio": "https://idkstudy.github.io/audio/g4_u9_ex1_answer_go_past.mp3",
-   "duration": "0:02",
-   "id": "g4u9-ex1-a2",
-   "label": "ANSWER 2",
-   "meta": "كتاب الطالب · ص ٣٠ · التمرين الأول — الجواب الثاني",
-   "no": 5,
-   "segments": [
-    {
-     "ar": "مرّ بجانبه وتجاوزه.",
-     "en": "Go past."
-    }
-   ],
-   "title_ar": "الجواب الثاني",
-   "title_en": "Go Past"
+   ]
   }
  ],
- "version": 2
+ "subtitle": "الصف الرابع — الوحدة التاسعة · إعطاء الاتجاهات",
+ "title": "مشغّل الإصغاء",
+ "version": 3
 }
